@@ -6,7 +6,9 @@ const Login = () => {
       {" "}
       <div>
         {/* Navigation using Link component */}
-        <Link to="/">Home</Link>
+        <Link className="" to="/">
+          Home
+        </Link>
         <Link to="/register">Register</Link>
       </div>
     </main>
