@@ -1,6 +1,35 @@
+@import url("./assets/styles.css");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bkg: rgb(230, 230, 230);
+    --color-content: black;
+    --color-accent1: #00a3ff;
+    --input-fill: #f2f2f2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-bkg: black;
+      --color-content: white;
+      --color-accent1: #00a3ff;
+      --input-fill: transparent;
+    }
+  }
+  :root[data-theme="dark"] {
+    --color-bkg: black;
+    --color-content: white;
+    --input-fill: transparent;
+  }
+  :root[data-theme="light"] {
+    --color-bkg: rgb(184, 184, 184);
+    --color-content: black;
+    --input-fill: #f2f2f2;
+  }
+}
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
