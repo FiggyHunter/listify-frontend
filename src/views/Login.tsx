@@ -1,15 +1,16 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/login/LoginForm.tsx";
 
 const Login = () => {
+  const navigate = useNavigate();
   return (
     <main className="h-screen w-screen grid items-center bg-bkg">
       <img
-        className="place-self-center sm:w-36 md:w-72"
+        className="place-self-center sm:w-36 md:w-44 lg:w-64"
         src="/logo.svg"
         alt="logo for the app"
       />
-      <LoginForm />
+      <LoginForm navigate={navigate} />
       <section className="flex flex-row items-center gap-2 justify-center ">
         <p className="text-content w-max ">Powered by </p>
         <svg
