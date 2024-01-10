@@ -10,24 +10,36 @@
     --color-content: black;
     --color-accent1: #00a3ff;
     --input-fill: #f2f2f2;
+    --bkg-contrast: black;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --color-bkg: black;
       --color-content: white;
+      --bkg-contrast: white;
       --color-accent1: #00a3ff;
       --input-fill: transparent;
     }
   }
+
   :root[data-theme="dark"] {
     --color-bkg: black;
     --color-content: white;
+    --bkg-contrast: #1b1f23;
+    --color-accent1: #00a3ff;
     --input-fill: transparent;
+    --label-fill: white;
+    --label-bkg: white;
   }
   :root[data-theme="light"] {
-    --color-bkg: rgb(184, 184, 184);
+    --color-bkg: rgb(230, 230, 230);
     --color-content: black;
+    --color-accent1: #00a3ff;
     --input-fill: #f2f2f2;
+
+    --bkg-contrast: white;
+    --label-fill: white;
+    --label-bkg: white;
   }
 }
 
@@ -57,10 +69,6 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
 }
 
 h1 {
@@ -79,23 +87,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
-button:hover {
-  border-color: #646cff;
-}
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 2px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+nav {
+  transition: top 200ms ease-in-out, bottom 200ms ease-in-out;
 }
