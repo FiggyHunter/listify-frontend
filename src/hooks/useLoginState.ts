@@ -19,11 +19,6 @@ const useLoginState = () => {
     }));
   };
 
-  setLoginErrors({
-    email: null,
-    password: null,
-  });
-
   // const handleLogin = async (
   //   e: React.MouseEvent<HTMLButtonElement>,
   //   navigate: Function,
