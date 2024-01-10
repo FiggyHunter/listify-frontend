@@ -9,7 +9,7 @@ interface Props {
 }
 
 const LoginForm: React.FC<Props> = ({ navigate }) => {
-  const { loginFormData, handleInputChange, loginErrors } = useLoginState();
+  const { loginFormData, loginErrors, handleInputChange } = useLoginState();
 
   return (
     <>
@@ -25,7 +25,7 @@ const LoginForm: React.FC<Props> = ({ navigate }) => {
             name="email"
             error={loginErrors.email ? true : false}
             value={loginFormData.email}
-            helperText={loginErrors.email ? loginErrors.email.message : ``}
+            helperText={loginErrors.email ? loginErrors.email : ``}
             sx={sxFormTheme}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               handleInputChange(event);
@@ -39,9 +39,7 @@ const LoginForm: React.FC<Props> = ({ navigate }) => {
             value={loginFormData.password}
             variant="outlined"
             error={loginErrors.password ? true : false}
-            helperText={
-              loginErrors.password ? loginErrors.password.message : ``
-            }
+            helperText={loginErrors.password ? loginErrors.password : ``}
             sx={sxFormTheme}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               handleInputChange(event);
