@@ -24,9 +24,9 @@ const RegisterForm: React.FC<Props> = ({ navigate }) => {
             label="Email"
             variant="outlined"
             name={"email"}
-            error={false}
+            error={true}
             value={registerFormData.email}
-            helperText={registerErrors.email ? `Incorrect entry.` : ``}
+            helperText={!registerErrors.email ? `Incorrect entry.` : ``}
             sx={sxFormTheme}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               handleInputChange(event);
@@ -47,7 +47,6 @@ const RegisterForm: React.FC<Props> = ({ navigate }) => {
           />{" "}
           <TextField
             id="outlined-basic"
-            type={"password"}
             label="Last Name"
             value={registerFormData.lastName}
             variant="outlined"

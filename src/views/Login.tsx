@@ -1,7 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/login/LoginForm.tsx";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Login = () => {
+  useEffect(() => {
+    console.log(
+      axios.post("https://listify-backend-vl8t.onrender.com/api/users/login", {
+        email: "test.test@gmail.com",
+        password: "AuTo-#123",
+      })
+    );
+  }, []);
+
   const navigate = useNavigate();
   return (
     <main className="h-screen w-screen grid items-center bg-bkg">

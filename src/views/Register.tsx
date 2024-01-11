@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import "../App.css";
 import RegisterForm from "../components/register/RegisterForm.tsx";
 
 const Register = () => {
