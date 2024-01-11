@@ -21,7 +21,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-dist/
-dist/index.html
 .gitignore
 .env*

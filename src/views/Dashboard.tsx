@@ -30,9 +30,17 @@ const Dashboard = () => {
     <>
       {isAddCompanyOpen && (
         <div
+          onClick={() => {
+            setIsAddCompanyOpen(false);
+          }}
           className={`z-20 h-full w-full fixed top-0 bg-black bg-opacity-80 grid place-items-center`}
         >
-          <div className="w-1/3 h-fit bg-bkgContrast grid grid-cols-2 custom-rows px-8 gap-10 rounded-2xl">
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            className="w-1/3 sm:w-2/3 lg:w-2/3 h-fit bg-bkgContrast grid grid-cols-2 custom-rows px-8 gap-10 rounded-2xl"
+          >
             <div className="w-full mx-auto flex justify-between mt-4 border-b-1 pb-2 border-content col-span-2 font-bold text-content">
               <p className="text-xl">ADD A NEW COMPANY</p>
               <svg
@@ -102,6 +110,12 @@ const Dashboard = () => {
       )}
       <Navigation />
       <main className="w-full h-my-screen bg-bkg pt-28">
+        <div
+          onClick={() => setIsAddCompanyOpen(!isAddCompanyOpen)}
+          className="bg-red-500 fixed bottom-4 right-4 text-white grid place-content-center text-3xl rounded-3xl h-12 w-12"
+        >
+          +
+        </div>
         <div className="mx-auto w-4/5">
           <section className="flex flex-col gap-2 mb-6 text-content">
             <h1 className="sm:text-center sm:text-3xl md:text-5xl md:text-right font-bold">
@@ -115,7 +129,7 @@ const Dashboard = () => {
             <div className="sticky top-24 h-fit">
               <button
                 onClick={() => setIsAddCompanyOpen(!isAddCompanyOpen)}
-                className="mx-auto w-full mb-4 w-5/6 my-auto bg-crimson hover:bg-crimsonHover transition-all duration-200"
+                className="mx-auto w-full mb-4 w-5/6 my-auto bg-crimson hover:bg-crimsonHover transition-all duration-200 sm:hidden md:block lg:block"
               >
                 ADD A COMPANY
               </button>{" "}
