@@ -1,7 +1,6 @@
 import create from "zustand";
 import { persist } from "zustand/middleware";
 
-
 export const useJwtStore = create(
   persist(
     (set, get) => ({
@@ -17,7 +16,6 @@ export const useJwtStore = create(
   )
 );
 
-
 export const useDarkModeStore = create(
   persist(
     (set, get) => ({
@@ -26,9 +24,6 @@ export const useDarkModeStore = create(
     }),
     {
       name: "darkModeStore",
-      onRehydrateStorage: (state) => {
-        console.log("Rehydrated darkModeStore:", state);
-      },
     }
   )
 );
