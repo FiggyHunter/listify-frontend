@@ -17,6 +17,20 @@ const Dashboard = () => {
     { title: "12 Angry Men", year: 1957 },
     { title: "Schindler's List", year: 1993 },
     { title: "Pulp Fiction", year: 1994 },
+    { title: "The Shawshank Redemption", year: 1994 },
+    { title: "The Godfather", year: 1972 },
+    { title: "The Godfather: Part II", year: 1974 },
+    { title: "The Dark Knight", year: 2008 },
+    { title: "12 Angry Men", year: 1957 },
+    { title: "Schindler's List", year: 1993 },
+    { title: "Pulp Fiction", year: 1994 },
+    { title: "The Shawshank Redemption", year: 1994 },
+    { title: "The Godfather", year: 1972 },
+    { title: "The Godfather: Part II", year: 1974 },
+    { title: "The Dark Knight", year: 2008 },
+    { title: "12 Angry Men", year: 1957 },
+    { title: "Schindler's List", year: 1993 },
+    { title: "Pulp Fiction", year: 1994 },
   ];
   const [isAddCompanyOpen, setIsAddCompanyOpen] = useState(false);
 
@@ -39,7 +53,7 @@ const Dashboard = () => {
             onClick={(e) => {
               e.stopPropagation();
             }}
-            className="w-1/3 sm:w-2/3 lg:w-2/3 h-fit bg-bkgContrast grid grid-cols-2 custom-rows px-8 gap-10 rounded-2xl"
+            className="sm:w-2/3 lg:w-1/3 h-fit bg-bkgContrast grid grid-cols-2 custom-rows px-8 gap-10 rounded-2xl"
           >
             <div className="w-full mx-auto flex justify-between mt-4 border-b-1 pb-2 border-content col-span-2 font-bold text-content">
               <p className="text-xl">ADD A NEW COMPANY</p>
@@ -112,7 +126,7 @@ const Dashboard = () => {
       <main className="w-full h-my-screen bg-bkg pt-28">
         <div
           onClick={() => setIsAddCompanyOpen(!isAddCompanyOpen)}
-          className="bg-red-500 fixed bottom-4 right-4 text-white grid place-content-center text-3xl rounded-3xl h-12 w-12"
+          className="bg-red-500 fixed bottom-4 right-4 text-white grid place-content-center text-3xl rounded-3xl h-12 w-12 md:hidden"
         >
           +
         </div>
@@ -124,6 +138,41 @@ const Dashboard = () => {
             <h2 className="sm:text-center md:text-right">
               It's 3PM on a Monday
             </h2>
+            <div className="flex flex-col gap-2 sm:flex md:hidden lg:hidden">
+              <Autocomplete
+                multiple
+                id="tags-outlined"
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                defaultValue={[top100Films[1]]}
+                filterSelectedOptions
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Category"
+                    placeholder="Start typing a location"
+                  />
+                )}
+              />
+              <Autocomplete
+                multiple
+                id="tags-outlined"
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                defaultValue={[top100Films[1]]}
+                filterSelectedOptions
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Locations"
+                    placeholder="Start typing a location"
+                  />
+                )}
+              />{" "}
+              <button className="mx-auto w-full my-auto bg-crimson font-bold hover:bg-crimsonHover transition-all duration-200">
+                CLEAR FILTERS
+              </button>{" "}
+            </div>
           </section>
           <section className="grid sm:block md:grid lg:grid custom-cols-dash gap-8">
             <div className="sticky top-24 h-fit">
@@ -179,19 +228,18 @@ const Dashboard = () => {
                 </>
               ) : (
                 <>
-                  {" "}
-                  <CompanyCard />
-                  <CompanyCard />
-                  <CompanyCard />
-                  <CompanyCard />
-                  <CompanyCard />
-                  <CompanyCard />
-                  <CompanyCard />
-                  <CompanyCard />
-                  <CompanyCard />
-                  <CompanyCard />
-                  <CompanyCard />
-                  <CompanyCard />
+                  <CompanyCard navigate={navigate} />
+                  <CompanyCard navigate={navigate} />
+                  <CompanyCard navigate={navigate} />
+                  <CompanyCard navigate={navigate} />
+                  <CompanyCard navigate={navigate} />
+                  <CompanyCard navigate={navigate} />
+                  <CompanyCard navigate={navigate} />
+                  <CompanyCard navigate={navigate} />
+                  <CompanyCard navigate={navigate} />
+                  <CompanyCard navigate={navigate} />
+                  <CompanyCard navigate={navigate} />
+                  <CompanyCard navigate={navigate} />
                 </>
               )}
             </section>
