@@ -2,18 +2,21 @@ import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/login/LoginForm.tsx";
 import { useEffect } from "react";
 import axios from "axios";
+import { useJwt } from "react-jwt";
+import { useJwtStore } from "@/stores/useUserStore.ts";
 
 const Login = () => {
-  useEffect(() => {
-    console.log(
-      axios.post("https://listify-backend-vl8t.onrender.com/api/users/login", {
-        email: "test.test@gmail.com",
-        password: "AuTo-#123",
-      })
-    );
-  }, []);
-
+  const { jwt, setJwt } = useJwtStore();
+  const token = useJwt(jwt) || null;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (token.decodedToken && !token.isExpired) {
+      navigate("/dashboard");
+      return;
+    }
+  }, [token.decodedToken, navigate]);
+
   return (
     <main className="h-screen w-screen grid items-center bg-bkg">
       <img
