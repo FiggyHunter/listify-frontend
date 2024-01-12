@@ -42,7 +42,7 @@ const Navigation = () => {
         <div className="h-full md:ml-auto lg:ml-auto sm:w-full  md:w-1/3  items-center md:mr-4 lg:mr-4 flex flex-row border-darkBlue border-3 rounded-lg bg-transparent overflow-hidden gap-1 focus-within:border-crimsonHover  transition-all duration-250">
           <img className="w-4 ml-2 " src="/magnifying-glass.svg" alt="" />
           <input
-            className="inline-block text-black w-full text-md placeholder:font-normal sm:placeholder:text-xsm placeholder:text-sm py-1  focus:outline-none bg-bkgContrast "
+            className="inline-block text-black w-full text-md placeholder:font-normal sm:placeholder:text-xsm placeholder:text-sm py-1.5 focus:outline-none bg-bkgContrast "
             placeholder="Search a company here..."
             type="text"
           />
