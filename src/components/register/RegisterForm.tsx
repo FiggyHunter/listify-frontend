@@ -9,8 +9,12 @@ interface Props {
 }
 
 const RegisterForm: React.FC<Props> = ({ navigate }) => {
-  const { registerFormData, registerErrors, handleInputChange } =
-    useRegisterState();
+  const {
+    registerFormData,
+    registerErrors,
+    handleInputChange,
+    handleRegister,
+  } = useRegisterState();
 
   return (
     <>
@@ -24,9 +28,9 @@ const RegisterForm: React.FC<Props> = ({ navigate }) => {
             label="Email"
             variant="outlined"
             name={"email"}
-            error={true}
+            error={registerErrors.email}
             value={registerFormData.email}
-            helperText={!registerErrors.email ? `Incorrect entry.` : ``}
+            helperText={registerErrors.email ? registerErrors.email : ``}
             sx={sxFormTheme}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               handleInputChange(event);
@@ -38,8 +42,10 @@ const RegisterForm: React.FC<Props> = ({ navigate }) => {
             name={"firstName"}
             value={registerFormData.firstName}
             variant="outlined"
-            error={false}
-            helperText={registerErrors.firstName ? `Incorrect entry.` : ``}
+            error={registerErrors.firstName}
+            helperText={
+              registerErrors.firstName ? registerErrors.firstName : ``
+            }
             sx={sxFormTheme}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               handleInputChange(event);
@@ -51,8 +57,8 @@ const RegisterForm: React.FC<Props> = ({ navigate }) => {
             value={registerFormData.lastName}
             variant="outlined"
             name={"lastName"}
-            error={false}
-            helperText={registerErrors.lastName ? `Incorrect entry.` : ``}
+            error={registerErrors.lastName}
+            helperText={registerErrors.lastName ? registerErrors.lastName : ``}
             sx={sxFormTheme}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               handleInputChange(event);
@@ -65,8 +71,8 @@ const RegisterForm: React.FC<Props> = ({ navigate }) => {
             name={"password"}
             value={registerFormData.password}
             variant="outlined"
-            error={true}
-            helperText={registerErrors.password ? `Incorrect entry.` : ``}
+            error={registerErrors.password}
+            helperText={registerErrors.password ? registerErrors.password : ``}
             sx={sxFormTheme}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               handleInputChange(event);
@@ -79,8 +85,10 @@ const RegisterForm: React.FC<Props> = ({ navigate }) => {
             name={"repeatPassword"}
             value={registerFormData.repeatPassword}
             variant="outlined"
-            error={false}
-            helperText={registerErrors.repeatPassword ? `Incorrect entry.` : ``}
+            error={registerErrors.repeatPassword}
+            helperText={
+              registerErrors.repeatPassword ? registerErrors.repeatPassword : ``
+            }
             sx={sxFormTheme}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               handleInputChange(event);
@@ -93,7 +101,10 @@ const RegisterForm: React.FC<Props> = ({ navigate }) => {
         >
           Already have an account?
         </p>
-        <button className="px-12 rounded-lg bg-darkBlue transition-all duration-250 font-semibold hover:outline-0 border-none hover:bg-darkBlueHover font-inter text-white ">
+        <button
+          onClick={(e) => handleRegister(e, navigate)}
+          className="px-12 rounded-lg bg-darkBlue transition-all duration-250 font-semibold hover:outline-0 border-none hover:bg-darkBlueHover font-inter text-white "
+        >
           REGISTER
         </button>
       </div>
