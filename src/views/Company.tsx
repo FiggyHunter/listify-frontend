@@ -9,8 +9,8 @@ const Company = () => {
       <Navigation />
       <main className="h-my-screen bg-bkg pt-28">
         <div className="mx-auto w-4/5">
-          <section className="grid sm:block md:grid lg:grid custom-cols-company">
-            <aside className="min-h-96 h-fill h-fit sticky top-24 bg-bkgContrast rounded-tl-2xl  flex flex-col gap-1 pt-2 sm:hidden md:flex lg:flex">
+          <section className="grid sm:grid-cols-1 md:custom-cols-company">
+            <aside className=" sm:blcok md:sticky top-24 bg-bkgContrast rounded-tl-2xl  flex flex-col gap-1 pt-2 ">
               <img
                 src={
                   "https://www.google.com/s2/favicons?domain=www.ministryofprogramming.com"
@@ -55,17 +55,17 @@ const Company = () => {
                 </svg>
               </button>
             </aside>
-            <section className="pl-16 min-h-96 bg-bkgContrast border-r-4 rounded-tr-2xl flex flex-col py-6 mb-6 gap-12 sm:w-full md:w-auto lg:w-auto">
+            <section className="md:pl-16 min-h-96 bg-bkgContrast text-center border-r-4 rounded-tr-2xl flex flex-col py-6 mb-6 gap-12 sm:w-full md:w-auto lg:w-auto">
               <div>
-                <h1 className="text-black font-inter font-bold">
+                <h1 className="text-black font-inter font-bold text-2xl sm:text-center md:text-left lg:text-4xl">
                   COMPANY NAME
                 </h1>
-                <h2 className="text-black text-xl font-normal">
+                <h2 className="text-black text-xl font-normal md:text-left sm:text-center">
                   <span className="font-bold">HQ:</span> Sarajevo
                 </h2>
               </div>
               <p
-                className={`text-black font-normal w-5/6 ${
+                className={`text-black font-normal text-justify px-2 sm:w-full md:w-5/6 ${
                   displayDescription ? "" : "line-clamp-2"
                 }`}
               >
@@ -76,7 +76,7 @@ const Company = () => {
                 Iusto facilis totam, quod qui beatae laboriosam, nostrum eius
                 fuga ad laborum quos eligendi cum est quae?
               </p>
-              <div className="block flex text-black items-center">
+              <div className="flex text-black items-center">
                 <span className="relative top-1 w-full h-1 border-gray-400 border-t-1"></span>
                 <p
                   onClick={() =>
@@ -86,9 +86,9 @@ const Company = () => {
                 >
                   Read More
                 </p>
-                <span className="relative top-1 w-full h-1 border-gray-400 border-t-1 mr-6"></span>
+                <span className="relative top-1 w-full h-1 border-gray-400 border-t-1"></span>
               </div>
-              <article className="flex flex-col gap-2">
+              <article className="flex flex-col gap-2 sm:items-center md:items-baseline">
                 <div className="flex items-center gap-2 ">
                   <svg
                     className="fill-darkBlue"
