@@ -9,7 +9,8 @@ interface Props {
 }
 
 const LoginForm: React.FC<Props> = ({ navigate }) => {
-  const { loginFormData, loginErrors, handleInputChange } = useLoginState();
+  const { loginFormData, loginErrors, handleInputChange, handleLogin } =
+    useLoginState();
 
   return (
     <>
@@ -46,7 +47,10 @@ const LoginForm: React.FC<Props> = ({ navigate }) => {
             }}
           />{" "}
         </ThemeProvider>
-        <div className="flex items-center justify-between border-b-2 border-gray-400 pb-4 sm:flex-col sm:gap-2 md:flex-row ">
+        <div
+          onClick={(e) => handleLogin(e, navigate)}
+          className="flex items-center justify-between border-b-2 border-gray-400 pb-4 sm:flex-col sm:gap-2 md:flex-row "
+        >
           <p className="text-black">Forgot your password?</p>
           <button className="px-14  rounded-lg hover:bg-crimsonHover hover:outline-0 border-none transition-all duration-250 bg-crimson font-semibold text-white">
             LOGIN
