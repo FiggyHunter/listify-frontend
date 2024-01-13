@@ -34,7 +34,7 @@ const useLoginState = () => {
       await loginValidation(loginFormData, setLoginErrors);
       const token = await logInUser(loginFormData);
       console.log(token);
-      await setJwt(token.data);
+      await setJwt(token);
       navigate("/dashboard");
       // setButtonLoading(buttonId, false);
     } catch (e) {
