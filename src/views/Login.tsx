@@ -9,7 +9,6 @@ const Login = () => {
   const { jwt, setJwt } = useJwtStore();
   const token = useJwt(jwt) || null;
   const navigate = useNavigate();
-
   useEffect(() => {
     if (token.decodedToken && !token.isExpired) {
       navigate("/dashboard");

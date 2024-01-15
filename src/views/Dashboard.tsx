@@ -6,6 +6,8 @@ import CompanyCard from "@/components/dashboard/CompanyCard.tsx";
 import SkeletonCompanyCard from "@/components/dashboard/SkeletonCompanyCard.tsx";
 import sxFormTheme from "@/themes/sxFormTheme.ts";
 import { useEffect, useState } from "react";
+import { useJwtStore } from "@/stores/useUserStore.ts";
+import { useJwt } from "react-jwt";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -33,12 +35,20 @@ const Dashboard = () => {
     { title: "Pulp Fiction", year: 1994 },
   ];
   const [isAddCompanyOpen, setIsAddCompanyOpen] = useState(false);
+  const { jwt, setJwt } = useJwtStore();
+  const token = useJwt(jwt) || null;
 
+  console.log(token);
   useEffect(() => {
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") setIsAddCompanyOpen(false);
     });
   }, []);
+
+  if (!jwt || jwt === "" || jwt === "noToken") {
+    navigate("/login");
+    return;
+  }
 
   return (
     <>
