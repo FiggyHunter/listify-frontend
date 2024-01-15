@@ -1,8 +1,21 @@
 import Navigation from "@/components/shared/Navigation";
-import React, { useState } from "react";
+import { useJwtStore } from "@/stores/useUserStore";
+import { useEffect, useState } from "react";
+import { useJwt } from "react-jwt";
+import { useNavigate } from "react-router-dom";
 
 const Company = () => {
   const [displayDescription, setDisplayDescription] = useState(false);
+  const { jwt, setJwt } = useJwtStore();
+  const token = useJwt(jwt) || null;
+  const navigate = useNavigate();
+  console.log(token);
+  useEffect(() => {
+    if (!jwt || jwt === "" || jwt === "noToken") {
+      navigate("/login");
+      return;
+    }
+  }, [token.decodedToken, navigate]);
 
   return (
     <>

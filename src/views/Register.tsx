@@ -11,6 +11,8 @@ const Register = () => {
   const token = useJwt(jwt) || null;
   const navigate = useNavigate();
 
+  console.log(token);
+
   useEffect(() => {
     if (token.decodedToken && !token.isExpired) {
       navigate("/dashboard");
