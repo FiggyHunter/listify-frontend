@@ -1,21 +1,29 @@
+import { getCompanyById } from "@/api/company";
 import Navigation from "@/components/shared/Navigation";
 import { useJwtStore } from "@/stores/useUserStore";
 import { useEffect, useState } from "react";
 import { useJwt } from "react-jwt";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Company = () => {
+  const params = useParams();
+  const { companyId } = params;
   const [displayDescription, setDisplayDescription] = useState(false);
   const { jwt, setJwt } = useJwtStore();
   const token = useJwt(jwt) || null;
   const navigate = useNavigate();
-  console.log(token);
+  const [company, setCompany] = useState(null);
+
   useEffect(() => {
     if (!jwt || jwt === "" || jwt === "noToken") {
       navigate("/login");
       return;
     }
   }, [token.decodedToken, navigate]);
+
+  useEffect(() => {
+    getCompanyById(jwt, setCompany, companyId);
+  }, [jwt]);
 
   return (
     <>
@@ -71,10 +79,10 @@ const Company = () => {
             <section className="md:pl-16 min-h-96 bg-bkgContrast text-center border-r-4 rounded-tr-2xl flex flex-col py-6 mb-6 gap-12 sm:w-full md:w-auto lg:w-auto">
               <div>
                 <h1 className="text-black font-inter font-bold text-2xl sm:text-center md:text-left lg:text-4xl">
-                  COMPANY NAME
+                  {company?.name}
                 </h1>
                 <h2 className="text-black text-xl font-normal md:text-left sm:text-center">
-                  <span className="font-bold">HQ:</span> Sarajevo
+                  <span className="font-bold">HQ:</span> {company?.hq}
                 </h2>
               </div>
               <p
@@ -82,12 +90,7 @@ const Company = () => {
                   displayDescription ? "" : "line-clamp-2"
                 }`}
               >
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Possimus eum placeat esse id saepe tempora quos quia voluptates
-                pariatur nesciunt nihil perspiciatis doloribus facilis quidem,
-                nostrum architecto accusantium at quis vero adipisci laborum.
-                Iusto facilis totam, quod qui beatae laboriosam, nostrum eius
-                fuga ad laborum quos eligendi cum est quae?
+                {company?.description}
               </p>
               <div className="flex text-black items-center">
                 <span className="relative top-1 w-full h-1 border-gray-400 border-t-1"></span>
@@ -113,7 +116,7 @@ const Company = () => {
                     <path d="M216,24H40A16,16,0,0,0,24,40V216a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V40A16,16,0,0,0,216,24Zm0,192H40V40H216V216ZM96,112v64a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Zm88,28v36a8,8,0,0,1-16,0V140a20,20,0,0,0-40,0v36a8,8,0,0,1-16,0V112a8,8,0,0,1,15.79-1.78A36,36,0,0,1,184,140ZM100,84A12,12,0,1,1,88,72,12,12,0,0,1,100,84Z"></path>
                   </svg>
                   <a className="text-black underline underline-offset-2 cursor-pointer">
-                    linkedin.com/mop
+                    {company?.linkedinURL}
                   </a>
                 </div>
                 <div className="pl-1 flex gap-3">
@@ -136,7 +139,7 @@ const Company = () => {
                       </clipPath>
                     </defs>
                   </svg>
-                  <p className="text-black">Headquarters in: </p>
+                  <p className="text-black">Headquarters in: {company?.hq} </p>
                 </div>
                 <div className="flex gap-2 items-center">
                   <svg
@@ -148,7 +151,11 @@ const Company = () => {
                   >
                     <path d="M240,208H224V96a16,16,0,0,0-16-16H144V32a16,16,0,0,0-24.88-13.32L39.12,72A16,16,0,0,0,32,85.34V208H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM208,96V208H144V96ZM48,85.34,128,32V208H48ZM112,112v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm-32,0v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm0,56v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Zm32,0v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Z"></path>
                   </svg>{" "}
-                  <p className="text-black">Other offices: </p>
+                  <p className="text-black">
+                    Other offices:{" "}
+                    {company &&
+                      company.countries.map((country) => country.name)}
+                  </p>
                 </div>
 
                 <div className="flex gap-2 items-center">
