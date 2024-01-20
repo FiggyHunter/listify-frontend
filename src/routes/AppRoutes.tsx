@@ -4,6 +4,7 @@ import Register from "../views/Register.tsx";
 import Dashboard from "@/views/Dashboard.tsx";
 import Company from "@/views/Company.tsx";
 import Account from "@/views/Account.tsx";
+import Admin from "@/views/Admin.tsx";
 
 const AppRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const AppRoutes = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/company/:companyId" element={<Company />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </>
   );
