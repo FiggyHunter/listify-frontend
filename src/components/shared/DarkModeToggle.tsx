@@ -16,7 +16,7 @@ const DarkModeToggle = () => {
     >
       {darkMode ? (
         <svg
-          className="fill-black"
+          className="fill-content"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"
@@ -27,6 +27,7 @@ const DarkModeToggle = () => {
         </svg>
       ) : (
         <svg
+          className="fill-content"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"
