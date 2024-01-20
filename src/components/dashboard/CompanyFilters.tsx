@@ -99,7 +99,7 @@ const CompanyFilters = ({ setFilters, locations }) => {
           });
           setFilters({ category: null, location: null });
         }}
-        className="mx-auto w-5/6 my-auto bg-crimson hover:bg-crimsonHover transition-all duration-200"
+        className="mx-auto w-5/6 my-auto bg-darkBlue hover:bg-crimsonHover transition-all duration-200"
       >
         CLEAR FILTERS
       </button>{" "}

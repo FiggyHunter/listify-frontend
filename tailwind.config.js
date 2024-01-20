@@ -27,6 +27,10 @@ export default {
         "70p": "70%",
         "75p": "75%",
       },
+      spacing: {
+        18: "4.5rem",
+        23: "5.625rem",
+      },
       colors: {
         accent: {
           1: "var(--color-accent1)",
