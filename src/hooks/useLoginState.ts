@@ -1,6 +1,7 @@
 import { useJwtStore } from "./../stores/useUserStore";
 import { logInUser } from "@/api/loginUser";
 import { LoginErrorData, LoginFormData } from "@/types/LoginForm.ts";
+import { handleResponseError } from "@/utilities/ResponseErrors";
 import loginValidation from "@/utilities/validators/LoginValidation";
 import { useState } from "react";
 import { NavigateFunction } from "react-router-dom";
@@ -39,11 +40,16 @@ const useLoginState = () => {
       // setButtonLoading(buttonId, false);
     } catch (e) {
       // setButtonLoading(buttonId, false);
-      if (e.message === "Incorrect Credentials")
+      if (e.message === "Validation Failed") return;
+      if (e.message === "Incorrect Credentials") {
         setLoginErrors({
           email: "Invalid creditentials",
           password: "Invalid creditentials",
         });
+        return;
+      }
+      if (e.message === "401" || e.message === "404")
+        handleResponseError("Login", setLoginErrors);
       // setButtonLoading(false);
     }
   };

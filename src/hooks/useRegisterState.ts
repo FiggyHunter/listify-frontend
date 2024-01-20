@@ -1,5 +1,6 @@
 import { registerUser } from "@/api/registerUser";
 import { RegisterErrorData, RegisterFormData } from "@/types/RegisterForm";
+import { handleResponseError } from "@/utilities/ResponseErrors";
 import registerValidation from "@/utilities/validators/RegisterValidation";
 import { useState } from "react";
 import { NavigateFunction } from "react-router-dom";
@@ -63,6 +64,8 @@ const useRegisterState = () => {
       await notify();
     } catch (error) {
       console.log(error);
+      if (error.message === "400")
+        handleResponseError("Register", setRegisterErrors);
       // setButtonLoading(buttonId, false);
     }
 
