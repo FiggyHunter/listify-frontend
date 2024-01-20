@@ -13,7 +13,7 @@ export const registerUser = async (
       setRegisterError((prevData: RegisterErrorData) => {
         return { ...prevData, email: "Email Already Exists" };
       });
-    console.log(error);
-    throw new Error(error.message);
+
+    throw new Error(error.response.status);
   }
 };
