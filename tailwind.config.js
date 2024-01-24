@@ -46,6 +46,8 @@ export default {
         darkBlueHover: "#1D3550",
         labelFill: "var(--text-label-fill)",
         labelBkg: "var(--label-bkg)",
+        popupBkg: "var(--popup-bkg)",
+        popupBtn: "var(--popup-btn)",
       },
       fontFamily: {
         inter: ["Inter", "sans-serif"],
