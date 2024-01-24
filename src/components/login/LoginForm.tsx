@@ -3,14 +3,20 @@ import theme from "@/themes/FormTheme";
 import sxFormTheme from "@/themes/sxFormTheme";
 import useLoginState from "@/hooks/useLoginState.ts";
 import { NavigateFunction } from "react-router-dom";
+import loginValidation from "@/utilities/validators/LoginValidation";
 
 interface Props {
   navigate: NavigateFunction;
 }
 
 const LoginForm: React.FC<Props> = ({ navigate }) => {
-  const { loginFormData, loginErrors, handleInputChange, handleLogin } =
-    useLoginState();
+  const {
+    loginFormData,
+    loginErrors,
+    handleInputChange,
+    handleLogin,
+    setLoginErrors,
+  } = useLoginState();
 
   return (
     <>
@@ -31,6 +37,7 @@ const LoginForm: React.FC<Props> = ({ navigate }) => {
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               handleInputChange(event);
             }}
+            onBlur={() => loginValidation(loginFormData, setLoginErrors)}
           />{" "}
           <TextField
             id="outlined-basic"
@@ -45,6 +52,10 @@ const LoginForm: React.FC<Props> = ({ navigate }) => {
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               handleInputChange(event);
             }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleLogin(e, navigate);
+            }}
+            onBlur={() => loginValidation(loginFormData, setLoginErrors)}
           />{" "}
         </ThemeProvider>
         <div
