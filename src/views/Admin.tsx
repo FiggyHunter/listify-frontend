@@ -14,7 +14,7 @@ const Admin = () => {
             Access Requests
           </h2>
         </section>
-        <section className=" bg-bkgContrast w-4/5 mx-auto min-h-96 rounded-tr-xl bg-gray-300 ">
+        <section className=" bg-bkgContrast w-4/5 mx-auto min-h-96 rounded-tr-xl bg-gray-300 mb-20 ">
           <div className="flex bg-gray-300">
             <h3 className="text-content sm:text-md lg:text-2xl p-4 font-bold w-full bg-bkgContrast rounded-tr-3xl">
               List of Users
