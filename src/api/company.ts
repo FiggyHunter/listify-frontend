@@ -99,6 +99,6 @@ export const CreateCompany = async (companyData, jwt) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
