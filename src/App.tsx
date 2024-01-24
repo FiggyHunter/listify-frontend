@@ -25,7 +25,7 @@ const App = () => {
         <meta name="twitter:image" content="https://example.com/image.jpg" />
         <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
-      <div className="h-screen bg-bkg w-full overflow-y-scroll ">
+      <div className="h-my-screen bg-bkg w-full ">
         <BrowserRouter>
           <AppRoutes />
         </BrowserRouter>
