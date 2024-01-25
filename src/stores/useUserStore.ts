@@ -27,3 +27,13 @@ export const useDarkModeStore = create(
     }
   )
 );
+
+export const useSearchStore = create(
+  (set, get) => ({
+    searchTerm: "",
+    setSearchTerm: (searchTerm) => set({ searchTerm }),
+  }),
+  {
+    name: "searchStore",
+  }
+);

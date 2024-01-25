@@ -3,6 +3,7 @@ import theme from "@/themes/FormTheme";
 import sxFormTheme from "@/themes/sxFormTheme";
 import useRegisterState from "@/hooks/useRegisterState";
 import { NavigateFunction } from "react-router-dom";
+import registerValidation from "@/utilities/validators/RegisterValidation";
 
 interface Props {
   navigate: NavigateFunction;
@@ -14,6 +15,7 @@ const RegisterForm: React.FC<Props> = ({ navigate }) => {
     registerErrors,
     handleInputChange,
     handleRegister,
+    setRegisterErrors,
   } = useRegisterState();
 
   return (
@@ -35,6 +37,9 @@ const RegisterForm: React.FC<Props> = ({ navigate }) => {
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               handleInputChange(event);
             }}
+            onBlur={() =>
+              registerValidation(registerFormData, setRegisterErrors)
+            }
           />{" "}
           <TextField
             id="outlined-basic"
@@ -50,6 +55,9 @@ const RegisterForm: React.FC<Props> = ({ navigate }) => {
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               handleInputChange(event);
             }}
+            onBlur={() =>
+              registerValidation(registerFormData, setRegisterErrors)
+            }
           />{" "}
           <TextField
             id="outlined-basic"
@@ -63,6 +71,9 @@ const RegisterForm: React.FC<Props> = ({ navigate }) => {
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               handleInputChange(event);
             }}
+            onBlur={() =>
+              registerValidation(registerFormData, setRegisterErrors)
+            }
           />
           <TextField
             id="outlined-basic"
@@ -77,6 +88,9 @@ const RegisterForm: React.FC<Props> = ({ navigate }) => {
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               handleInputChange(event);
             }}
+            onBlur={() =>
+              registerValidation(registerFormData, setRegisterErrors)
+            }
           />
           <TextField
             id="outlined-basic"
@@ -92,6 +106,12 @@ const RegisterForm: React.FC<Props> = ({ navigate }) => {
             sx={sxFormTheme}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               handleInputChange(event);
+            }}
+            onBlur={() =>
+              registerValidation(registerFormData, setRegisterErrors)
+            }
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleRegister(e, navigate);
             }}
           />
         </ThemeProvider>

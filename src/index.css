@@ -11,6 +11,8 @@
     --color-accent1: #00a3ff;
     --input-fill: #f2f2f2;
     --bkg-contrast: black;
+    --popup-bkg: #414244;
+    --popup-btn: #343434;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -19,6 +21,8 @@
       --bkg-contrast: white;
       --color-accent1: #00a3ff;
       --input-fill: transparent;
+      --popup-bkg: #414244;
+      --popup-btn: #343434;
     }
   }
 
@@ -30,16 +34,19 @@
     --input-fill: transparent;
     --label-fill: white;
     --label-bkg: white;
+    --popup-bkg: #414244;
+    --popup-btn: #343434;
   }
   :root[data-theme="light"] {
     --color-bkg: rgb(230, 230, 230);
     --color-content: black;
     --color-accent1: #00a3ff;
     --input-fill: #f2f2f2;
-
     --bkg-contrast: white;
     --label-fill: white;
     --label-bkg: white;
+    --popup-bkg: #414244;
+    --popup-btn: #343434;
   }
 }
 

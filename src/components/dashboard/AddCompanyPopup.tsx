@@ -1,44 +1,26 @@
-import { CreateCompany } from "@/api/company";
+import useCompanyState from "@/hooks/useCompanyState";
 import sxFormTheme from "@/themes/sxFormTheme";
 import { Autocomplete, TextField } from "@mui/material";
-import { useState } from "react";
 const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
-  const [companyData, setCompanyData] = useState({
-    companyName: "",
-    companyDescription: "",
-    companyHQ: "",
-    location: [""],
-    areasOfExperise: ["Software Development"],
-    category: ["HIRING"],
-    linkedinUrl: "",
-    websiteUrl: "",
-    locationId: "",
-    hqId: "",
-  });
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setCompanyData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleCompanyCreation = async () => {
-    await CreateCompany(companyData, jwt);
-  };
+  const {
+    companyData,
+    handleChange,
+    handleCompanyCreation,
+    setCompanyData,
+    errors,
+  } = useCompanyState();
   return (
     <div
       onClick={() => {
         setIsAddCompanyOpen(false);
       }}
-      className={`z-20 h-full w-full fixed top-0 bg-black bg-opacity-80 grid place-items-center overflow-scroll`}
+      className={`z-50 h-full w-full fixed top-0 bg-black bg-opacity-80 grid place-items-center overflow-scroll`}
     >
       <div
         onClick={(e) => {
           e.stopPropagation();
         }}
-        className="sm:w-2/3 lg:w-1/3 h-fit bg-bkgContrast grid grid-cols-2 custom-rows px-8 gap-10 rounded-2xl"
+        className="sm:w-5/6 lg:w-1/3 h-fit bg-bkgContrast grid grid-cols-2 custom-rows px-8 gap-5 rounded-2xl"
       >
         <div className="w-full mx-auto flex justify-between mt-4 border-b-1 pb-2 border-content col-span-2 font-bold text-content">
           <p className="text-xl">ADD A NEW COMPANY</p>
@@ -62,6 +44,8 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           sx={sxFormTheme}
           value={companyData.companyName}
           onChange={handleChange}
+          error={errors?.companyName ? true : false}
+          helperText={errors?.companyName}
         />
         <TextField
           className="col-span-2"
@@ -72,6 +56,8 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           sx={sxFormTheme}
           value={companyData.companyDescription}
           onChange={handleChange}
+          error={errors?.companyDescription ? true : false}
+          helperText={errors?.companyDescription}
         />
         <Autocomplete
           className="col-span-2"
@@ -80,17 +66,23 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           getOptionLabel={(option) => (option.country ? option.country : "")}
           options={locations.map((option) => option)}
           onChange={(_, selectedOption) => {
-            setCompanyData((prevValue) => {
-              console.log(selectedOption);
-              return {
-                ...prevValue,
-                companyHQ: selectedOption.country,
-                hqId: selectedOption.id,
-              };
-            });
+            setCompanyData((prevValue) => ({
+              ...prevValue,
+              companyHQ: selectedOption?.country,
+              hqId: selectedOption?.id,
+            }));
           }}
-          value={companyData.companyHQ.country}
-          renderInput={(params) => <TextField {...params} label="Company HQ" />}
+          value={
+            companyData?.companyHQ?.country ? companyData.companyHQ.country : ""
+          }
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Company HQ"
+              error={errors?.companyHQ ? true : false}
+              helperText={errors?.companyHQ}
+            />
+          )}
         />
         <Autocomplete
           className="col-span-2"
@@ -113,7 +105,9 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
             <TextField
               {...params}
               label="Location"
-              placeholder="Start typing an location"
+              placeholder="Start typing a location"
+              error={errors?.location ? true : false}
+              helperText={errors?.location}
             />
           )}
         />
@@ -135,12 +129,15 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           }}
           getOptionLabel={(option) => option}
           defaultValue={companyData.areasOfExperise}
+          value={companyData.areasOfExperise}
           filterSelectedOptions
           renderInput={(params) => (
             <TextField
               {...params}
               label="Areas of expertise"
               placeholder="Start typing an expertise"
+              error={errors?.areasOfExperise ? true : false}
+              helperText={errors?.areasOfExperise}
             />
           )}
         />
@@ -153,6 +150,8 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           sx={sxFormTheme}
           value={companyData.linkedinUrl}
           onChange={handleChange}
+          error={errors?.linkedinUrl ? true : false}
+          helperText={errors?.linkedinUrl}
         />
         <TextField
           className="sm:col-span-2 lg:col-span-1"
@@ -163,6 +162,8 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           sx={sxFormTheme}
           value={companyData.websiteUrl}
           onChange={handleChange}
+          error={errors?.websiteUrl ? true : false}
+          helperText={errors?.websiteUrl}
         />
         <Autocomplete
           className="col-span-2"
@@ -175,6 +176,7 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
               category: selectedOptions,
             }));
           }}
+          value={companyData.category}
           defaultValue={companyData.category}
           filterSelectedOptions
           renderInput={(params) => (
@@ -182,6 +184,8 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
               {...params}
               label="Category"
               placeholder="Start typing a location"
+              error={errors?.category ? true : false}
+              helperText={errors?.category}
             />
           )}
         />

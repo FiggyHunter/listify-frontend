@@ -28,7 +28,15 @@ const registerValidation = async (
   } catch (errors) {
     if (errors instanceof ValidationError) {
       errors.inner.forEach((error) => {
-        if (error.path) {
+        console.log(error);
+        if (
+          (error.path && error.path === "firstName") ||
+          error.path === "lastName"
+        ) {
+          handleErrorRegistration(error.path, error.message);
+          throw new Error(error.message);
+        }
+        if (error.path && error.value !== "") {
           handleErrorRegistration(error.path, error.message);
           throw new Error(error.message);
         }

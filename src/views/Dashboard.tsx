@@ -1,15 +1,18 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Navigation from "@/components/shared/Navigation.tsx";
 import { Autocomplete, Input, TextField } from "@mui/material";
 import CompanyCard from "@/components/dashboard/CompanyCard.tsx";
 import SkeletonCompanyCard from "@/components/dashboard/SkeletonCompanyCard.tsx";
 import { useEffect, useState } from "react";
-import { useJwtStore } from "@/stores/useUserStore.ts";
+import { useJwtStore, useSearchStore } from "@/stores/useUserStore.ts";
 import { useJwt } from "react-jwt";
 import { getAllCompanies } from "@/api/company";
 import AddCompanyPopup from "@/components/dashboard/AddCompanyPopup.tsx";
 import CompanyFilters from "@/components/dashboard/CompanyFilters.tsx";
 import { getAllCountries } from "@/api/country.ts";
+import Fuse from "fuse.js";
+import { fuseOptions } from "@/config/fuse";
+import MobileCompanyFilters from "@/components/dashboard/MobileCompanyFilters";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -21,6 +24,8 @@ const Dashboard = () => {
   const [displayedCompanies, setDisplayedCompanies] = useState(companies);
   const [locations, setLocations] = useState([]);
   const [filters, setFilters] = useState({ category: null, location: null });
+
+  const { searchTerm } = useSearchStore();
 
   function getCurrentDay() {
     const daysOfWeek = [
@@ -74,7 +79,14 @@ const Dashboard = () => {
           .filter((company) => filters.location.includes(company.hq))
       );
     }
-  }, [filters]);
+    if (searchTerm !== "") {
+      setDisplayedCompanies(
+        new Fuse(displayedCompanies, fuseOptions)
+          .search(searchTerm)
+          .map((searchResult) => searchResult.item)
+      );
+    }
+  }, [filters, searchTerm]);
 
   if (!jwt || jwt === "" || jwt === "noToken" || token.isExpired) {
     navigate("/login");
@@ -99,12 +111,12 @@ const Dashboard = () => {
           +
         </div>
         <div className="mx-auto w-4/5">
-          <section className="flex flex-col gap-2 mb-6 text-content">
-            <h1 className="sm:text-center sm:text-3xl md:text-5xl md:text-right font-bold">
+          <section className="flex flex-col gap-2 mb-6 text-content bg-bkgContrast p-6 rounded-2xl">
+            <h1 className="sm:text-center sm:text-3xl md:text-5xl md:text-right font-bold text-content ">
               Good afternoon {token.decodedToken ? token.decodedToken.name : ""}
               .
             </h1>
-            <h2 className="sm:text-center md:text-right">
+            <h2 className="sm:text-center md:text-right text-content">
               It's{" "}
               {`${new Date().getHours()}:${
                 new Date().getMinutes() > 0 && new Date().getMinutes() < 10
@@ -114,37 +126,11 @@ const Dashboard = () => {
               on a {currentDay}
             </h2>
             <div className="flex flex-col gap-2 sm:flex md:hidden lg:hidden">
-              <Autocomplete
-                multiple
-                id="tags-outlined"
-                options={locations}
-                getOptionLabel={(option) => option}
-                filterSelectedOptions
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Category"
-                    placeholder="Start typing a location"
-                  />
-                )}
+              {" "}
+              <MobileCompanyFilters
+                locations={locations}
+                setFilters={setFilters}
               />
-              <Autocomplete
-                multiple
-                id="tags-outlined"
-                options={locations}
-                getOptionLabel={(option) => option}
-                filterSelectedOptions
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Locations"
-                    placeholder="Start typing a location"
-                  />
-                )}
-              />{" "}
-              <button className="mx-auto w-full my-auto bg-crimson font-bold hover:bg-crimsonHover transition-all duration-200">
-                CLEAR FILTERS
-              </button>{" "}
             </div>
           </section>
           <section className="grid sm:block md:grid lg:grid custom-cols-dash gap-8">
@@ -161,14 +147,35 @@ const Dashboard = () => {
             <section className="min-h-96 bg-bkgContrast rounded-2xl flex flex-col py-6 mb-6 gap-12 sm:w-full md:w-auto lg:w-auto">
               {Object.entries(companies).length === 0 ? (
                 <>
-                  <SkeletonCompanyCard /> <SkeletonCompanyCard />{" "}
-                  <SkeletonCompanyCard /> <SkeletonCompanyCard />{" "}
+                  <SkeletonCompanyCard />
+                  <SkeletonCompanyCard />
+                  <SkeletonCompanyCard />
+                  <SkeletonCompanyCard />
                   <SkeletonCompanyCard />
                 </>
-              ) : (
+              ) : displayedCompanies.length !== 0 ? (
                 displayedCompanies?.map((company) => (
                   <CompanyCard navigate={navigate} company={company} />
                 ))
+              ) : (
+                <article className="flex flex-col gap-2 items-center">
+                  <img
+                    className="w-1/3"
+                    width={64}
+                    height={64}
+                    src={"/cat_search.webp"}
+                  />
+                  <p className="text-content font-bold">
+                    No results found for:
+                    <span className="text-content font-normal pl-1">
+                      " {searchTerm === "" ? "your given filters" : searchTerm}{" "}
+                      "
+                    </span>
+                  </p>
+                  <button className="bg-crimson px-8 font-bold">
+                    ADD A NEW COMPANY
+                  </button>
+                </article>
               )}
             </section>
           </section>

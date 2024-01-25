@@ -77,6 +77,7 @@ const useRegisterState = () => {
     registerErrors,
     handleInputChange,
     handleRegister,
+    setRegisterErrors,
   };
 };
 
