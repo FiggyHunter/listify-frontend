@@ -1,8 +1,6 @@
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes.tsx";
 import { Helmet } from "react-helmet";
-import { useEffect } from "react";
-import { useDarkModeStore } from "./stores/useUserStore.ts";
 const App = () => {
   return (
     <>
