@@ -44,7 +44,7 @@ const Navigation = () => {
   return (
     <header className="pt-4 z-30 mx-auto relative w-4/5  ">
       <nav
-        className={`sm:gap-2 md:gap-0 w-4/5 rounded-br-none justify-between ${
+        className={`sm:gap-2 md:gap-0 w-4/5  justify-between ${
           !show ? "-top-96" : "top-3"
         }  fixed  rounded-xl bg-bkgContrast py-2 flex items-center z-30 `}
       >
@@ -65,18 +65,31 @@ const Navigation = () => {
         />{" "}
         {location.pathname === "/dashboard" && (
           <div className="h-full md:ml-auto lg:ml-auto sm:w-full  md:w-1/3  items-center md:mr-4 lg:mr-4 flex flex-row border-content border-1 rounded-2xl bg-transparent overflow-hidden gap-1 focus-within:border-crimsonHover  transition-all duration-250">
-            <svg
-              className="fill-content ml-3"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 256 256"
-            >
-              <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
-            </svg>
+            {searchTerm === "" ? (
+              <svg
+                className="fill-content ml-3"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 256 256"
+              >
+                <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+              </svg>
+            ) : (
+              <svg
+                onClick={() => setSearchTerm("")}
+                className="fill-content ml-3 cursor-pointer"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 256 256"
+              >
+                <path d="M165.66,101.66,139.31,128l26.35,26.34a8,8,0,0,1-11.32,11.32L128,139.31l-26.34,26.35a8,8,0,0,1-11.32-11.32L116.69,128,90.34,101.66a8,8,0,0,1,11.32-11.32L128,116.69l26.34-26.35a8,8,0,0,1,11.32,11.32ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"></path>
+              </svg>
+            )}
 
             <input
-              className="inline-block text-black w-full text-md placeholder:font-medium sm:placeholder:text-xsm placeholder:text-sm py-1.5 focus:outline-none bg-bkgContrast "
+              className="inline-block text-content w-full text-md placeholder:font-medium sm:placeholder:text-xsm placeholder:text-sm py-1.5 focus:outline-none bg-bkgContrast "
               placeholder="Search a company here..."
               type="text"
               value={searchTerm}
@@ -136,7 +149,7 @@ const Navigation = () => {
               x
             </button>{" "}
             <p className="text-white font-light mt-4 text-center ">
-              leo@test.com
+              {token?.decodedToken?.email}
             </p>
             <div className="w-16 h-16 rounded-full bg-slate-50 mt-1 justify-self-center "></div>
             <p className="text-white font-medium text-center">
@@ -146,7 +159,10 @@ const Navigation = () => {
               Profile Details
             </button>
             <div className="w-4/5 mx-auto flex flex-col gap-1">
-              <button className="bg-popupBtn font-medium hover:bg-darkBlueHover transition-colors duration-150 py-1 text-white w-full rounded-b-none">
+              <button
+                onClick={() => navigate("/admin")}
+                className="bg-popupBtn font-medium hover:bg-darkBlueHover transition-colors duration-150 py-1 text-white w-full rounded-b-none"
+              >
                 Admin Panel
               </button>
               <button
