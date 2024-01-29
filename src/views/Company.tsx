@@ -1,11 +1,10 @@
 import { getCompanyById } from "@/api/company";
+import { getAllReviewsByCompany } from "@/api/review";
 import Employees from "@/components/company/Employees";
-import Employers from "@/components/company/Employees";
+import ReviewPopup from "@/components/company/ReviewPopup";
 import Reviews from "@/components/company/Reviews";
 import Navigation from "@/components/shared/Navigation";
 import { useJwtStore } from "@/stores/useUserStore";
-import { Rating, Input, TextField } from "@mui/material";
-
 import { useEffect, useState } from "react";
 import { useJwt } from "react-jwt";
 import { useNavigate, useParams } from "react-router-dom";
@@ -19,6 +18,18 @@ const Company = () => {
   const navigate = useNavigate();
   const [company, setCompany] = useState(null);
   const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
+  const [reviews, setReviews] = useState({});
+
+  console.log(company);
+
+  useEffect(() => {
+    const fetchCompanyReviews = async () =>
+      await getAllReviewsByCompany(companyId, jwt);
+
+    fetchCompanyReviews().then((reviews) => {
+      setReviews(reviews);
+    });
+  }, []);
 
   useEffect(() => {
     if (!jwt || jwt === "" || jwt === "noToken") {
@@ -38,71 +49,36 @@ const Company = () => {
         <main className="pt-28">
           <div
             role="status"
-            class="p-4 border border-gray-200 rounded shadow animate-pulse md:p-6 dark:border-gray-700 h-my-screen  w-4/5 mx-auto"
+            className="p-4 border border-gray-200 rounded shadow animate-pulse md:p-6 dark:border-gray-700 h-my-screen  w-4/5 mx-auto"
           >
-            <div class="flex  h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
-            <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-            <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
-            <div class="flex items-center mt-4">
+            <div className="flex  h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
+            <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+            <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+            <div className="flex items-center mt-4">
               <div>
-                <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32 mb-2"></div>
-                <div class="w-48 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32 mb-2"></div>
+                <div className="w-48 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
               </div>
             </div>{" "}
-            <div class="flex mt-4 h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>{" "}
-            <div class="flex mt-4 h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
-            <span class="sr-only">Loading...</span>
+            <div className="flex mt-4 h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>{" "}
+            <div className="flex mt-4 h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
+            <span className="sr-only">Loading...</span>
           </div>
         </main>
       ) : (
         <main className="h-my-screen bg-bkg pt-28">
           {isWriteReviewOpen && (
-            <div className="absolute top-0 grid place-content-center h-screen w-screen bg-slate-300 bg-opacity-80 z-10  ">
-              <div className="min-h-96 min-w-96 bg-bkgContrast flex flex-col justify-between px-4 py-4 rounded-3xl gap-2">
-                <div className="flex items-center justify-between w-full text-content   pt-4">
-                  <h3 className="text-2xl font-bold">WRITE A REVIEW</h3>
-                  <span
-                    onClick={() => setIsWriteReviewOpen(false)}
-                    className="text-lg cursor-pointer self-center font-bold block"
-                  >
-                    X
-                  </span>
-                </div>
-                <Rating
-                  className="self-center"
-                  name="half-rating"
-                  size="large"
-                  defaultValue={2.5}
-                  precision={0.5}
-                  sx={{
-                    fontSize: "3rem",
-                    "& .MuiRating-iconEmpty": {
-                      color: "#FF9393",
-                    },
-                    "& .MuiRating-iconFilled": {
-                      color: "#E56B6F",
-                    },
-                    "& .MuiRating-iconHover": {
-                      color: "#E56B6F",
-                    },
-                  }}
-                />
-                <TextField
-                  id="outlined-basic"
-                  label="Review text"
-                  variant="outlined"
-                  focused
-                  multiline
-                />
-
-                <button>PUBLISH </button>
-              </div>
-            </div>
+            <ReviewPopup
+              setIsWriteReviewOpen={setIsWriteReviewOpen}
+              companyId={companyId}
+              userId={token.decodedToken.user_id}
+              jwt={jwt}
+            />
           )}
           <div className="mx-auto w-4/5">
             <section className="grid sm:grid-cols-1 md:custom-cols-company gap-4 h-min">
               <aside className="sm:block md:sticky top-24 bg-bkgContrast rounded-tl-2xl bg-transparent  h-full pt-0   ">
-                <div className="flex flex-col bg-bkgContrast shadow-md rounded-xl">
+                <div className="flex flex-col bg-bkgContrast shadow-md rounded-xl pt-5">
                   <img
                     src={
                       "https://www.google.com/s2/favicons?domain=www.ministryofprogramming.com"
@@ -127,7 +103,7 @@ const Company = () => {
                     onClick={() =>
                       setIsWriteReviewOpen((prevValue) => !prevValue)
                     }
-                    className="w-5/6 group  mx-auto my-4 bg-transparent text-darkBlue border-darkBlue flex items-center gap-2 hover:bg-crimson transition-all duration-200 hover:text-white justify-center"
+                    className="w-5/6 group  mx-auto my-4 bg-transparent text-content border-darkBlue flex items-center gap-2 hover:bg-crimson transition-all duration-200 hover:text-white justify-center"
                   >
                     Write a review{" "}
                     <svg
@@ -155,7 +131,7 @@ const Company = () => {
                     onClick={() =>
                       setIsWriteReviewOpen((prevValue) => !prevValue)
                     }
-                    className="w-5/6 group  mx-auto mb-4 bg-transparent text-darkBlue border-darkBlue flex items-center gap-2 hover:bg-crimson transition-all duration-200 hover:text-white justify-center"
+                    className="w-5/6 group  mx-auto mb-4 bg-transparent  border-darkBlue flex items-center gap-2 hover:bg-crimson transition-all duration-200 hover:text-white justify-center text-content"
                   >
                     Request Changes{" "}
                     <svg
@@ -190,17 +166,17 @@ const Company = () => {
                   <Employees />
                 </div>
               </aside>
-              <section className="md:pl-16 min-h-96 h-full bg-bkgContrast text-center border-r-4 rounded-tr-2xl flex flex-col py-6 mb-6 gap-12 sm:w-full md:w-auto lg:w-auto">
+              <section className="md:pl-16 min-h-96 h-full bg-bkgContrast text-center rounded-tr-2xl flex flex-col py-6 mb-6 gap-12 sm:w-full md:w-auto lg:w-auto">
                 <div>
-                  <h1 className="text-black font-inter text-2xl sm:text-center md:text-left lg:text-6xl mb-4 font-extrabold">
+                  <h1 className="text-content font-inter text-2xl sm:text-center md:text-left lg:text-6xl mb-4 font-extrabold">
                     {company?.name}
                   </h1>
-                  <h2 className="text-black text-xl font-normal md:text-left sm:text-center">
+                  <h2 className="text-content text-xl font-normal md:text-left sm:text-center">
                     <span className="font-bold">HQ:</span> {company?.hq}
                   </h2>
                 </div>
                 <p
-                  className={`text-black font-normal text-justify px-2 sm:w-full md:w-5/6 ${
+                  className={`text-content font-normal text-justify px-2 sm:w-full md:w-5/6 ${
                     displayDescription ? "" : "line-clamp-2"
                   }`}
                 >
@@ -214,14 +190,14 @@ const Company = () => {
                         (prevDescription) => !prevDescription
                       )
                     }
-                    className="text-black block px-4 text-center whitespace-nowrap cursor-pointer"
+                    className="block px-4 text-center whitespace-nowrap cursor-pointer text-content"
                   >
                     READ MORE
                   </p>
                   <span className="relative top-1 w-full h-1 border-gray-400 border-t-1"></span>
                 </div>
-                <article className="flex flex-col gap-2 sm:items-center md:items-baseline">
-                  <div className="flex items-center gap-2 ">
+                <article className="flex flex-col gap-2 sm:items-center md:items-baseline ">
+                  <div className="flex items-center gap-2  ">
                     <svg
                       className="fill-darkBlue"
                       xmlns="http://www.w3.org/2000/svg"
@@ -231,11 +207,11 @@ const Company = () => {
                     >
                       <path d="M216,24H40A16,16,0,0,0,24,40V216a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V40A16,16,0,0,0,216,24Zm0,192H40V40H216V216ZM96,112v64a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Zm88,28v36a8,8,0,0,1-16,0V140a20,20,0,0,0-40,0v36a8,8,0,0,1-16,0V112a8,8,0,0,1,15.79-1.78A36,36,0,0,1,184,140ZM100,84A12,12,0,1,1,88,72,12,12,0,0,1,100,84Z"></path>
                     </svg>
-                    <a className="text-black underline underline-offset-2 cursor-pointer">
+                    <a className="text-content underline underline-offset-2 cursor-pointer">
                       {company?.linkedinURL}
                     </a>
                   </div>
-                  <div className="pl-1 flex gap-3">
+                  <div className="pl-1 flex gap-3 ">
                     <svg
                       width="26"
                       height="26"
@@ -255,11 +231,11 @@ const Company = () => {
                         </clipPath>
                       </defs>
                     </svg>
-                    <p className="text-black">
+                    <p className="text-content">
                       Headquarters in: {company?.hq}{" "}
                     </p>
                   </div>
-                  <div className="flex gap-2 items-center">
+                  <div className="flex gap-2 items-center ">
                     <svg
                       className="fill-darkBlue"
                       xmlns="http://www.w3.org/2000/svg"
@@ -269,10 +245,14 @@ const Company = () => {
                     >
                       <path d="M240,208H224V96a16,16,0,0,0-16-16H144V32a16,16,0,0,0-24.88-13.32L39.12,72A16,16,0,0,0,32,85.34V208H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM208,96V208H144V96ZM48,85.34,128,32V208H48ZM112,112v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm-32,0v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm0,56v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Zm32,0v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Z"></path>
                     </svg>{" "}
-                    <p className="text-black">
+                    <p className="text-content">
                       Other offices:{" "}
                       {company &&
-                        company.countries.map((country) => country.name)}
+                        company.countries.map((country, index) => {
+                          return index === company.countries.length - 1
+                            ? country.name
+                            : country.name + ",";
+                        })}
                     </p>
                   </div>
 
@@ -286,14 +266,24 @@ const Company = () => {
                     >
                       <path d="M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z"></path>
                     </svg>
-                    <p className="text-black">Categories: </p>
+                    <p className="text-content">Categories: </p>
+                    {company.categories.map((category) => (
+                      <p className="text-content">{category}</p>
+                    ))}
                   </div>
                 </article>
                 <article className="flex flex-col gap-2 overflow-y-scroll custom-overflow  h-96 ">
-                  <h3 className="text-content sm:text-center text-2xl mb-4 relative text-left  inline-block px-1 font-semibold after:absolute after:-bottom-2 after:left-1 after:h-1 after:w-10 after:-translate-y-1 after:bg-gray-300 after:content-[''] sticky top-0 bg-bkgContrast">
+                  <h3 className="text-content sm:text-center lg:text-left text-2xl mb-4  text-left  inline-block px-1 font-semibold after:absolute after:-bottom-2  sm:after:left-1/2 lg:after:left-1 after:h-1 after:w-12 after:-translate-y-1 after:bg-gray-300 after:content-[''] sticky top-0 bg-bkgContrast bg-bkg z-20">
                     Reviews
                   </h3>
-                  <Reviews /> <Reviews /> <Reviews />
+                  {reviews.map((review) => (
+                    <Reviews
+                      rating={review.rating}
+                      text={review.text}
+                      userId={review.userId}
+                      jwt={jwt}
+                    />
+                  ))}
                 </article>
               </section>
             </section>
