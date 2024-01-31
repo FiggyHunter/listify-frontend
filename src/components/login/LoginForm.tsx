@@ -4,6 +4,7 @@ import sxFormTheme from "@/themes/sxFormTheme";
 import useLoginState from "@/hooks/useLoginState.ts";
 import { NavigateFunction } from "react-router-dom";
 import loginValidation from "@/utilities/validators/LoginValidation";
+import LoginButton from "./LoginButton";
 
 interface Props {
   navigate: NavigateFunction;
@@ -53,21 +54,23 @@ const LoginForm: React.FC<Props> = ({ navigate }) => {
               handleInputChange(event);
             }}
             onKeyDown={(e) => {
-              if (e.key === "Enter") handleLogin(e, navigate);
+              if (e.key === "Enter") handleLogin("loginButton", e, navigate);
             }}
             onBlur={() => loginValidation(loginFormData, setLoginErrors)}
           />{" "}
         </ThemeProvider>
-        <div
-          onClick={(e) => handleLogin(e, navigate)}
-          className="flex items-center justify-between border-b-2 border-gray-400 pb-4 sm:flex-col sm:gap-2 md:flex-row "
-        >
-          <p className="text-black">Forgot your password?</p>
-          <button className="px-14  rounded-lg hover:bg-crimsonHover hover:outline-0 border-none transition-all duration-250 bg-crimson font-semibold text-white">
-            LOGIN
-          </button>
+        <div className="flex items-center justify-between border-b-2 border-gray-400 pb-4 sm:flex-col sm:gap-2 md:flex-row ">
+          <p
+            onClick={() => navigate("/reset-password")}
+            className="text-black cursor-pointer"
+          >
+            Forgot your password?
+          </p>
+          <LoginButton handleLogin={handleLogin} />
         </div>
-        <p className="text-black text-center">Don't have an account?</p>
+        <p className="text-black text-center cursor-default">
+          Don't have an account?
+        </p>
         <button
           onClick={() => navigate("/register")}
           className="px-12 rounded-lg bg-darkBlue transition-all duration-250 font-semibold hover:outline-0 border-none hover:bg-darkBlueHover font-inter text-white "
