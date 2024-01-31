@@ -1,30 +1,67 @@
-import { createTheme } from "@mui/material";
+export default {
+  input: {
+    color: "var(--color-content) !important",
+    backgroundColor: "transparent",
+    WebkitTextFillColor: "var(--color-content)",
+    WebkitBoxShadow: "0 0 0px 1000px transparent inset",
 
-export default createTheme({
-  components: {
-    // Inputs
-    MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          "& .MuiOutlinedInput-notchedOutline": {
-            border: `1px solid var(--color-content)`,
-          },
-          "&.Mui-focused": {
-            "& .MuiOutlinedInput-notchedOutline": {
-              border: `2px solid red`,
-            },
-          },
-          "&.Mui-error": {
-            "& .MuiOutlinedInput-notchedOutline": {
-              border: `2px solid red`,
-            },
-          },
-          "& .MuiInputBase-input": {
-            color: "var(--color-content) ",
-            placeholder: "white",
-          },
-        },
-      },
+    fontSize: "1rem !important",
+  },
+  label: {
+    color: "var(--color-content)",
+    fontFamily: "Inter, sans-serif !important",
+    fontWeight: "300",
+    backgroundColor: "var(--bkg-contrast)",
+  },
+  "#outlined-basic-helper-text": {
+    fontFamily: "Inter, sans-serif !important",
+  },
+  span: {
+    fontFamily: "Inter, sans-serif !important",
+  },
+
+  ".MuiOutlinedInput-root": {
+    border: "1px solid var(--color-content) !important",
+    ":hover": {
+      border: "1px solid red !important",
+    },
+    ":focus": {
+      outline: "none !important",
+      border: "1px solid red !important",
     },
   },
-});
+  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+    border: "1px solid #eee",
+  },
+
+  "& .MuiInputLabel-outlined.Mui-focused": {
+    color: "var(--color-content) ",
+  },
+
+  "&.MuiOutlinedInput-root.Mui-focused ": {
+    border: "3px solid purple !important",
+  },
+
+  ".MuiChip-root": {
+    backgroundColor: "var(--color-content)",
+    color: "var(--bkg-contrast)",
+  },
+  ".MuiChip-deleteIconFilledColorDefault": {
+    color: "red",
+  },
+  ".MuiAutocomplete-input": {
+    color: "red !important",
+  },
+  ".MuiSvgIcon-root": {
+    color: "red",
+  },
+  ".MuiInput-root.Mui-focused": {
+    border: "1px solid red !important",
+  },
+  ".MuiChip-deleteIcon": {
+    color: "red !important",
+    ":hover": {
+      color: "red !important",
+    },
+  },
+};
