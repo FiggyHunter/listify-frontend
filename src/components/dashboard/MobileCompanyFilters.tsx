@@ -1,3 +1,4 @@
+import InputTheme from "@/themes/InputTheme";
 import { Autocomplete, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 
@@ -31,6 +32,7 @@ const MobileCompanyFilters = ({ locations, setFilters }) => {
         getOptionLabel={(option) => option}
         filterSelectedOptions
         value={selectedFilters.category ? selectedFilters.category : ""}
+        sx={InputTheme}
         onChange={(_, selectedOption) => {
           console.log(selectedOption);
           setSelectedFilters((prevValue) => ({
@@ -51,6 +53,7 @@ const MobileCompanyFilters = ({ locations, setFilters }) => {
         multiple
         id="tags-outlined"
         options={locations}
+        sx={InputTheme}
         getOptionLabel={(option) => option.country}
         filterSelectedOptions
         value={locations.filter((location) =>
