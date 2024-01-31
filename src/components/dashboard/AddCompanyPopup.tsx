@@ -1,5 +1,5 @@
 import useCompanyState from "@/hooks/useCompanyState";
-import sxFormTheme from "@/themes/sxFormTheme";
+import InputTheme from "@/themes/InputTheme";
 import { Autocomplete, TextField } from "@mui/material";
 const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
   const {
@@ -14,7 +14,7 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
       onClick={() => {
         setIsAddCompanyOpen(false);
       }}
-      className={`z-50 h-full w-full fixed top-0 bg-black bg-opacity-80 grid place-items-center overflow-scroll`}
+      className={`z-50 h-full w-full fixed top-0 bg-black bg-opacity-80 grid place-items-center sm:overflow-auto lg:overflow-auto`}
     >
       <div
         onClick={(e) => {
@@ -41,11 +41,11 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           label="Company Name"
           name="companyName"
           variant="outlined"
-          sx={sxFormTheme}
           value={companyData.companyName}
           onChange={handleChange}
           error={errors?.companyName ? true : false}
           helperText={errors?.companyName}
+          sx={InputTheme}
         />
         <TextField
           className="col-span-2"
@@ -53,7 +53,7 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           label="Company Description"
           name="companyDescription"
           variant="outlined"
-          sx={sxFormTheme}
+          sx={InputTheme}
           value={companyData.companyDescription}
           onChange={handleChange}
           error={errors?.companyDescription ? true : false}
@@ -63,6 +63,7 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           className="col-span-2"
           freeSolo
           id="free-solo-demo"
+          sx={InputTheme}
           getOptionLabel={(option) => (option.country ? option.country : "")}
           options={locations.map((option) => option)}
           onChange={(_, selectedOption) => {
@@ -88,6 +89,7 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           className="col-span-2"
           multiple
           id="tags-outlined"
+          sx={InputTheme}
           options={locations.map((option) => option)}
           onChange={(_, selectedOption) => {
             const countries = selectedOption.map((country) => country.country);
@@ -103,6 +105,7 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           filterSelectedOptions
           renderInput={(params) => (
             <TextField
+              sx={InputTheme}
               {...params}
               label="Location"
               placeholder="Start typing a location"
@@ -115,6 +118,7 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           className="col-span-2"
           multiple
           id="tags-outlined"
+          sx={InputTheme}
           options={[
             "Software Development",
             "Product Development",
@@ -134,6 +138,7 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           renderInput={(params) => (
             <TextField
               {...params}
+              sx={InputTheme}
               label="Areas of expertise"
               placeholder="Start typing an expertise"
               error={errors?.areasOfExperise ? true : false}
@@ -147,7 +152,7 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           label="LinkedIn URL"
           name="linkedinUrl"
           variant="outlined"
-          sx={sxFormTheme}
+          sx={InputTheme}
           value={companyData.linkedinUrl}
           onChange={handleChange}
           error={errors?.linkedinUrl ? true : false}
@@ -159,7 +164,7 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           label="Website URL"
           name="websiteUrl"
           variant="outlined"
-          sx={sxFormTheme}
+          sx={InputTheme}
           value={companyData.websiteUrl}
           onChange={handleChange}
           error={errors?.websiteUrl ? true : false}
@@ -168,6 +173,7 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
         <Autocomplete
           className="col-span-2"
           freeSolo
+          sx={InputTheme}
           id="tags-outlined"
           options={["HIRING", "INTERVIEW", "MAN IN THE MIDDLE", "PARTNER"]}
           onChange={(_, selectedOptions) => {
