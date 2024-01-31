@@ -1,5 +1,6 @@
 import { useJwtStore } from "./../stores/useUserStore";
 import { logInUser } from "@/api/loginUser";
+import { useButtonLoadingStore } from "@/stores/useButtonLoadingStore";
 import { LoginErrorData, LoginFormData } from "@/types/LoginForm.ts";
 import { handleResponseError } from "@/utilities/ResponseErrors";
 import loginValidation from "@/utilities/validators/LoginValidation";
@@ -8,6 +9,7 @@ import { NavigateFunction } from "react-router-dom";
 
 const useLoginState = () => {
   const { jwt, setJwt } = useJwtStore();
+  const { setButtonLoading } = useButtonLoadingStore();
   const [loginFormData, setLoginFormData] = useState<LoginFormData>({
     email: "",
     password: "",
@@ -26,30 +28,36 @@ const useLoginState = () => {
   };
 
   const handleLogin = async (
+    buttonId: string,
     e: React.MouseEvent<HTMLButtonElement>,
     navigate: NavigateFunction
   ) => {
     try {
       e.preventDefault();
-      // setButtonLoading(buttonId, true);
+      setButtonLoading(buttonId, true);
       await loginValidation(loginFormData, setLoginErrors);
       const token = await logInUser(loginFormData);
       await setJwt(token);
       navigate("/dashboard");
-      // setButtonLoading(buttonId, false);
+      setButtonLoading(buttonId, false);
     } catch (e) {
-      // setButtonLoading(buttonId, false);
-      if (e.message === "Validation Failed") return;
-      if (e.message === "Incorrect Credentials") {
+      if (e.message === "Validation failed") {
+        setButtonLoading(buttonId, false);
+        return;
+      }
+      if (e.message === "400") {
+        setButtonLoading(buttonId, false);
         setLoginErrors({
           email: "Invalid creditentials",
           password: "Invalid creditentials",
         });
         return;
       }
-      if (e.message === "401" || e.message === "404")
+      if (e.message === "401" || e.message === "404") {
         handleResponseError("Login", setLoginErrors);
-      // setButtonLoading(false);
+        setButtonLoading(buttonId, false);
+      }
+      setButtonLoading(buttonId, false);
     }
   };
 
