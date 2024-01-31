@@ -4,6 +4,7 @@ import sxFormTheme from "@/themes/sxFormTheme";
 import useRegisterState from "@/hooks/useRegisterState";
 import { NavigateFunction } from "react-router-dom";
 import registerValidation from "@/utilities/validators/RegisterValidation";
+import RegisterButton from "./RegisterButton";
 
 interface Props {
   navigate: NavigateFunction;
@@ -121,12 +122,7 @@ const RegisterForm: React.FC<Props> = ({ navigate }) => {
         >
           Already have an account?
         </p>
-        <button
-          onClick={(e) => handleRegister(e, navigate)}
-          className="px-12 rounded-lg bg-darkBlue transition-all duration-250 font-semibold hover:outline-0 border-none hover:bg-darkBlueHover font-inter text-white "
-        >
-          REGISTER
-        </button>
+        <RegisterButton handleRegister={handleRegister} />
       </div>
     </>
   );
