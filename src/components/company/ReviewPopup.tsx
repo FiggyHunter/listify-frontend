@@ -1,4 +1,5 @@
 import { AddReview } from "@/api/review";
+import InputTheme from "@/themes/InputTheme";
 import { Rating, TextField } from "@mui/material";
 import { useState } from "react";
 
@@ -61,10 +62,13 @@ const ReviewPopup = ({ setIsWriteReviewOpen, companyId, userId, jwt }) => {
         <TextField
           id="outlined-basic"
           label="Review text"
+          sx={InputTheme}
           variant="outlined"
           focused
+          required
           multiline
           value={popupData.text}
+          inputProps={{ style: { color: "var(--color-content)" } }} // Set the input text color directly
           onChange={(e) =>
             setPopupData((prevData) => {
               return {
