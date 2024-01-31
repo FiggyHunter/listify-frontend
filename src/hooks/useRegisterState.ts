@@ -1,4 +1,5 @@
 import { registerUser } from "@/api/registerUser";
+import { useButtonLoadingStore } from "@/stores/useButtonLoadingStore";
 import { RegisterErrorData, RegisterFormData } from "@/types/RegisterForm";
 import { handleResponseError } from "@/utilities/ResponseErrors";
 import registerValidation from "@/utilities/validators/RegisterValidation";
@@ -7,6 +8,7 @@ import { NavigateFunction } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const useRegisterState = () => {
+  const { setButtonLoading } = useButtonLoadingStore();
   const notify = () =>
     toast(
       `User account ${registerFormData.email} is registered successfully. Proceed to login!`
@@ -26,6 +28,8 @@ const useRegisterState = () => {
     repeatPassword: null,
   });
 
+  console.log(registerErrors);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setRegisterFormData((prevData: RegisterFormData) => ({
@@ -35,12 +39,13 @@ const useRegisterState = () => {
   };
 
   const handleRegister = async (
+    buttonId: string,
     e: React.MouseEvent<HTMLButtonElement>,
     navigate: NavigateFunction
   ) => {
     e.preventDefault();
     try {
-      // setButtonLoading(buttonId, true);
+      setButtonLoading(buttonId, true);
       await registerValidation(registerFormData, setRegisterErrors);
       await registerUser(
         {
@@ -52,7 +57,7 @@ const useRegisterState = () => {
         },
         setRegisterErrors
       );
-      // setButtonLoading(buttonId, false);
+
       await setRegisterFormData({
         email: "",
         firstName: "",
@@ -60,13 +65,14 @@ const useRegisterState = () => {
         password: "",
         repeatPassword: "",
       });
+      setButtonLoading(buttonId, false);
 
       await notify();
     } catch (error) {
       console.log(error);
       if (error.message === "400")
         handleResponseError("Register", setRegisterErrors);
-      // setButtonLoading(buttonId, false);
+      setButtonLoading(buttonId, false);
     }
 
     return;
