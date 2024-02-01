@@ -1,6 +1,5 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/shared/Navigation.tsx";
-import { Autocomplete, Input, TextField } from "@mui/material";
 import CompanyCard from "@/components/dashboard/CompanyCard.tsx";
 import SkeletonCompanyCard from "@/components/dashboard/SkeletonCompanyCard.tsx";
 import { useEffect, useState } from "react";
@@ -20,6 +19,8 @@ const Dashboard = () => {
   const [isAddCompanyOpen, setIsAddCompanyOpen] = useState(false);
   const { jwt, setJwt } = useJwtStore();
   const token = useJwt(jwt) || null;
+
+  console.log(token.decodedToken);
   const [companies, setCompanies] = useState([]);
   const [displayedCompanies, setDisplayedCompanies] = useState(companies);
   const [locations, setLocations] = useState([]);
@@ -69,14 +70,14 @@ const Dashboard = () => {
       );
     if (filters.category && !filters.location) {
       setDisplayedCompanies(() =>
-        companies?.filter((company) => company.group === filters.category)
+        companies?.filter((company) => company?.group === filters?.category)
       );
     }
     if (filters.category && filters.location) {
       setDisplayedCompanies(() =>
         companies
           ?.filter((company) => company.group === filters.category)
-          .filter((company) => filters.location.includes(company.hq))
+          ?.filter((company) => filters.location.includes(company.hq))
       );
     }
     if (searchTerm !== "") {
@@ -103,7 +104,7 @@ const Dashboard = () => {
         />
       )}
       <Navigation />
-      <main className="w-full h-my-screen bg-bkg pt-28">
+      <main className="w-full h-my-screen bg-bkg pt-28 pb-12">
         <div
           onClick={() => setIsAddCompanyOpen(!isAddCompanyOpen)}
           className="bg-red-500 fixed bottom-4 right-4 text-white grid place-content-center text-3xl rounded-3xl h-12 w-12 md:hidden"
@@ -155,7 +156,11 @@ const Dashboard = () => {
                 </>
               ) : displayedCompanies.length !== 0 ? (
                 displayedCompanies?.map((company) => (
-                  <CompanyCard navigate={navigate} company={company} />
+                  <CompanyCard
+                    key={company._id}
+                    navigate={navigate}
+                    company={company}
+                  />
                 ))
               ) : (
                 <article className="flex flex-col gap-2 items-center">
