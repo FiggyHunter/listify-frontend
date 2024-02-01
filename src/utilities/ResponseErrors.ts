@@ -11,8 +11,11 @@ export const handleResponseError = (error, setter) => {
     return;
   }
 
-  setter({
-    email: "Invalid creditentials",
-    password: "Invalid creditentials",
-  });
+  if (error === "Login") {
+    setter({
+      email: "Invalid creditentials",
+      password: "Invalid creditentials",
+    });
+    return;
+  }
 };

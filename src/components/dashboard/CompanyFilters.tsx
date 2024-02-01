@@ -1,7 +1,7 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import FilterButtons from "../shared/FilterButton";
-import FormTheme from "@/themes/FormTheme";
+import FormTheme from "@/themes/InputTheme";
 
 const CompanyFilters = ({ setFilters, locations }) => {
   const [selectedFilters, setSelectedFilters] = useState({
