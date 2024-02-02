@@ -4,7 +4,6 @@ export default {
     backgroundColor: "transparent",
     WebkitTextFillColor: "var(--color-content)",
     WebkitBoxShadow: "0 0 0px 1000px transparent inset",
-
     fontSize: "1rem !important",
   },
   label: {
@@ -39,8 +38,13 @@ export default {
   },
 
   "&.MuiOutlinedInput-root.Mui-focused ": {
-    border: "3px solid purple !important",
+    border: "1px solid purple !important",
   },
+
+  ".css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
+    {
+      border: "none !important",
+    },
 
   ".MuiChip-root": {
     backgroundColor: "var(--color-content)",
