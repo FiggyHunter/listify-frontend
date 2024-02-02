@@ -155,16 +155,22 @@ const Navigation = () => {
             <p className="text-white font-medium text-center">
               Hi, {token?.decodedToken?.name}
             </p>{" "}
-            <button className="bg-popupBtn font-medium hover:bg-darkBlueHover transition-colors duration-150 w-4/5 text-white mx-auto">
+            <button
+              onClick={() => navigate("/profile")}
+              className="bg-popupBtn font-medium hover:bg-darkBlueHover transition-colors duration-150 w-4/5 text-white mx-auto"
+            >
               Profile Details
             </button>
             <div className="w-4/5 mx-auto flex flex-col gap-1">
-              <button
-                onClick={() => navigate("/admin")}
-                className="bg-popupBtn font-medium hover:bg-darkBlueHover transition-colors duration-150 py-1 text-white w-full rounded-b-none"
-              >
-                Admin Panel
-              </button>
+              {token?.decodedToken?.isAdmin === true && (
+                <button
+                  onClick={() => navigate("/admin")}
+                  className="bg-popupBtn font-medium hover:bg-darkBlueHover transition-colors duration-150 py-1 text-white w-full rounded-b-none"
+                >
+                  Admin Panel
+                </button>
+              )}
+
               <button
                 onClick={() => setJwt("")}
                 className="bg-popupBtn font-medium hover:bg-crimsonHover transition-colors duration-150 py-1 text-white w-full rounded-t-none"
