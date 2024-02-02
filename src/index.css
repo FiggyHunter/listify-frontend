@@ -133,3 +133,13 @@ nav {
 .custom-animation {
   transition: top 200ms ease-in-out;
 }
+
+.access-grid {
+  grid-template-columns: max-content 1fr auto auto;
+}
+
+@media screen and (max-width: 900px) {
+  .access-grid {
+    grid-template-columns: min-content 1fr;
+  }
+}
