@@ -1,19 +1,31 @@
+import { getUserById } from "@/api/user";
 import { Rating } from "@mui/material";
-import React from "react";
+import { useEffect, useState } from "react";
 
-const Reviews = () => {
+const Reviews = ({ rating, text, userId, jwt }) => {
+  const [user, setUser] = useState({});
+
+  const fetchUser = async () => {
+    return await getUserById(userId, jwt);
+  };
+
+  useEffect(() => {
+    fetchUser().then((user) => setUser(user));
+    console.log(userId);
+  }, []);
+
   return (
-    <div className="text-content text-left">
-      <div className="flex gap-2">
+    <div className="text-content text-left p-4 ">
+      <div className="flex gap-2 sm:justify-center lg:justify-stretch ">
         <div className="bg-gray-300 self-center w-12 h-12 rounded-full"></div>
         <div className="rac">
-          <h4>Name Nameson</h4>
+          <h4>{`${user.name} ${user.surname}`}</h4>
           <Rating
             className="self-center"
             name="half-rating"
             size="large"
             readOnly
-            value={4.5}
+            value={rating}
             precision={0.5}
             sx={{
               fontSize: "1.5rem",
@@ -30,13 +42,8 @@ const Reviews = () => {
           />
         </div>
       </div>{" "}
-      <p className="w-5/6 pl-1">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore ea
-        autem rem officia. Reiciendis, assumenda enim quo animi magnam minima id
-        ipsam nam harum quisquam voluptatibus ab? Sapiente officiis beatae
-        eligendi suscipit, ex maiores nobis saepe sequi voluptates, quasi
-        reiciendis soluta nihil vitae optio nostrum voluptatum alias corporis
-        animi neque!
+      <p className="w-5/6 sm:mx-auto lg:mx-0 mt-2 pl-1 sm:text-center lg:text-left">
+        {text}
       </p>
       <span className="w-full block mt-8 border-b-1 border-gray-500"></span>
     </div>

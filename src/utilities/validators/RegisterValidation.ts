@@ -36,7 +36,7 @@ const registerValidation = async (
           handleErrorRegistration(error.path, error.message);
           throw new Error(error.message);
         }
-        if (error.path && error.value !== "") {
+        if (error.path) {
           handleErrorRegistration(error.path, error.message);
           throw new Error(error.message);
         }

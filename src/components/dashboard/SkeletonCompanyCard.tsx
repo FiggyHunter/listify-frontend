@@ -11,7 +11,7 @@ const SkeletonCompanyCard = () => {
         <div className="flex flex-col items-center justify-between">
           <div className="w-full flex sm:flex-col md:flex-row justify-between text-black">
             <p className="font-inter text-lg mb-2">
-              <span className="font-black">HQ:</span>
+              <span className="font-black text-content">HQ:</span>
             </p>
             <div className="flex gap-2 mb-2">
               <div className="py-1 px-2 text-bkgContrast text-sm lg:w-20 sm:w-16 h-8 sm:h-6 bg-gray-200 rounded-full dark:bg-gray-700"></div>

@@ -36,6 +36,7 @@
     --label-bkg: white;
     --popup-bkg: #414244;
     --popup-btn: #343434;
+    --scroller: #ffffff;
   }
   :root[data-theme="light"] {
     --color-bkg: rgb(230, 230, 230);
@@ -47,6 +48,7 @@
     --label-bkg: white;
     --popup-bkg: #414244;
     --popup-btn: #343434;
+    --scroller: #1a365d;
   }
 }
 
@@ -104,11 +106,11 @@ nav {
 }
 
 .custom-overflow {
-  overflow-y: scroll; /* Enable vertical scrolling */
+  overflow-y: auto; /* Enable vertical scrolling */
   scrollbar-width: auto; /* Set the width of the scrollbar */
 
   /* WebKit browsers (Chrome, Safari, etc.) */
-  scrollbar-color: #1a365d #f0f0f0;
+  scrollbar-color: var(--scroller) var(--color-bkg);
 }
 
 /* WebKit browsers (Chrome, Safari, etc.) */
@@ -117,17 +119,27 @@ nav {
 }
 
 .custom-overflow::-webkit-scrollbar-thumb {
-  background-color: #ffffff;
+  background-color: var(--color-bkg);
   border: 0.5px solid #b3b3b3; /* Set the color of the scrollbar thumb */
   border-radius: 10rem;
 }
 
 .custom-overflow::-webkit-scrollbar-track {
-  background-color: #7c7c7c;
+  background-color: var(--color-bkg);
   border: 0.5px solid #b3b3b3;
   border-radius: 10rem; /* Set the color of the scrollbar track */
 }
 
 .custom-animation {
   transition: top 200ms ease-in-out;
+}
+
+.access-grid {
+  grid-template-columns: max-content 1fr auto auto;
+}
+
+@media screen and (max-width: 900px) {
+  .access-grid {
+    grid-template-columns: min-content 1fr;
+  }
 }

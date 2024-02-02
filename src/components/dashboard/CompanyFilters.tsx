@@ -1,6 +1,7 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import FilterButtons from "../shared/FilterButton";
+import FormTheme from "@/themes/InputTheme";
 
 const CompanyFilters = ({ setFilters, locations }) => {
   const [selectedFilters, setSelectedFilters] = useState({
@@ -64,6 +65,7 @@ const CompanyFilters = ({ setFilters, locations }) => {
           options={locations}
           getOptionLabel={(option) => option.country}
           filterSelectedOptions
+          sx={FormTheme}
           onChange={(_, selectedOptions) => {
             const selectedLocations = selectedOptions.map(
               (location) => location.country

@@ -35,10 +35,9 @@ const useCompanyState = () => {
       await CreateCompany(companyData, jwt);
       setErrors({});
     } catch (error) {
-      console.log(error.response.data.error);
       if (
-        error.code === "ERR_BAD_REQUEST" &&
-        error.response.data.error === "Company Already Exists"
+        error.response &&
+        error?.response?.data?.error === "Company Already Exists"
       )
         setErrors({ companyName: "Company with that name already exists!" });
       const validationErrors = {};

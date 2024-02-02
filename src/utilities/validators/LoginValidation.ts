@@ -18,11 +18,12 @@ const loginValidation = async (
   } catch (errors) {
     if (errors instanceof ValidationError) {
       errors.inner.forEach((error) => {
-        if (error.path && error.value !== "")
+        if ((error.path && error.value !== "") || error.value === "") {
           handleErrorRegistration(error.path, error.message);
+          throw new Error(error);
+        }
       });
     }
-    throw new Error("Validation failed");
   }
 };
 

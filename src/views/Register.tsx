@@ -58,8 +58,8 @@ const Register = () => {
                 className="fill-content"
               />
               <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M12.9085 10.2495L3.24874 0.589722L0.0707485 3.76772L6.62758 10.3245L0.0707397 16.8814L3.24873 20.0594L12.9085 10.3996L12.8335 10.3246L12.9085 10.2495Z"
                 className="fill-content"
               />
