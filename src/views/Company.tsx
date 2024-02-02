@@ -125,12 +125,7 @@ const Company = () => {
                       </defs>
                     </svg>
                   </button>
-                  <button
-                    onClick={() =>
-                      setIsWriteReviewOpen((prevValue) => !prevValue)
-                    }
-                    className="w-5/6 group  mx-auto mb-4 bg-transparent  border-darkBlue flex items-center gap-2 hover:bg-crimson transition-all duration-200 hover:text-white justify-center text-content"
-                  >
+                  <button className="w-5/6 group  mx-auto mb-4 bg-transparent  border-darkBlue flex items-center gap-2 hover:bg-crimson transition-all duration-200 hover:text-white justify-center text-content">
                     Request Changes{" "}
                     <svg
                       className="fill-crimson group-hover:fill-white"
