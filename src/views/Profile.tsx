@@ -66,13 +66,24 @@ const Account = () => {
                 </button>
               </div>{" "}
             </aside>
-            <section className="md:pl-16 min-h-96 h-full bg-bkgContrast text-center rounded-tr-2xl flex flex-col py-6 mb-6 gap-12 sm:w-full md:w-auto lg:w-auto">
+            <section className="md:pl-16 min-h-96 h-full bg-bkgContrast text-center rounded-tr-2xl flex flex-col py-6 mb-6 gap-3 sm:w-full md:w-auto lg:w-auto">
               <div>
                 <h1 className="text-content font-inter text-2xl sm:text-center md:text-left lg:text-6xl mb-4 font-extrabold">
                   {`${token?.decodedToken?.name}  ${token?.decodedToken?.surname}`}
                 </h1>
                 <h2 className="text-content text-xl font-normal md:text-left sm:text-center">
-                  {token?.decodedToken?.email}
+                  <div className="flex gap-2 lg:justify-normal items-center sm:justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="32"
+                      height="32"
+                      fill="#000000"
+                      viewBox="0 0 256 256"
+                    >
+                      <path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48Zm-96,85.15L52.57,64H203.43ZM98.71,128,40,181.81V74.19Zm11.84,10.85,12,11.05a8,8,0,0,0,10.82,0l12-11.05,58,53.15H52.57ZM157.29,128,216,74.18V181.82Z"></path>
+                    </svg>
+                    {token?.decodedToken?.email}
+                  </div>
                 </h2>
               </div>
               <p
@@ -81,95 +92,11 @@ const Account = () => {
               >
                 {/* {company?.description} */}
               </p>
-              <div className="flex text-black items-center">
+              <div className="flex text-black items-center pr-6">
                 <span className="relative top-1 w-full h-1 border-gray-400 border-t-1"></span>
-                <p
-                  // onClick={() =>
-                  //   setDisplayDescription((prevDescription) => !prevDescription)
-                  // }
-                  className="block px-4 text-center whitespace-nowrap cursor-pointer text-content"
-                >
-                  READ MORE
-                </p>
-                <span className="relative top-1 w-full h-1 border-gray-400 border-t-1"></span>
+                <span className="relative top-1 w-full h-1 border-gray-400 border-t-1 "></span>
               </div>
-              <article className="flex flex-col gap-2 sm:items-center md:items-baseline ">
-                <div className="flex items-center gap-2  ">
-                  <svg
-                    className="fill-darkBlue"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="32"
-                    height="32"
-                    viewBox="0 0 256 256"
-                  >
-                    <path d="M216,24H40A16,16,0,0,0,24,40V216a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V40A16,16,0,0,0,216,24Zm0,192H40V40H216V216ZM96,112v64a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Zm88,28v36a8,8,0,0,1-16,0V140a20,20,0,0,0-40,0v36a8,8,0,0,1-16,0V112a8,8,0,0,1,15.79-1.78A36,36,0,0,1,184,140ZM100,84A12,12,0,1,1,88,72,12,12,0,0,1,100,84Z"></path>
-                  </svg>
-                  <a className="text-content underline underline-offset-2 cursor-pointer">
-                    {/* {company?.linkedinURL} */}
-                  </a>
-                </div>
-                <div className="pl-1 flex gap-3 ">
-                  <svg
-                    width="26"
-                    height="26"
-                    viewBox="0 0 22 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g clipPath="url(#clip0_55_1137)">
-                      <path
-                        d="M1.65 0C0.739062 0 0 0.739062 0 1.65V15.95C0 16.8609 0.739062 17.6 1.65 17.6H4.95V14.85C4.95 13.9391 5.68906 13.2 6.6 13.2C7.51094 13.2 8.25 13.9391 8.25 14.85V17.6H11.55C12.4609 17.6 13.2 16.8609 13.2 15.95V1.65C13.2 0.739062 12.4609 0 11.55 0H1.65ZM2.2 8.25C2.2 7.9475 2.4475 7.7 2.75 7.7H3.85C4.1525 7.7 4.4 7.9475 4.4 8.25V9.35C4.4 9.6525 4.1525 9.9 3.85 9.9H2.75C2.4475 9.9 2.2 9.6525 2.2 9.35V8.25ZM6.05 7.7H7.15C7.4525 7.7 7.7 7.9475 7.7 8.25V9.35C7.7 9.6525 7.4525 9.9 7.15 9.9H6.05C5.7475 9.9 5.5 9.6525 5.5 9.35V8.25C5.5 7.9475 5.7475 7.7 6.05 7.7ZM8.8 8.25C8.8 7.9475 9.0475 7.7 9.35 7.7H10.45C10.7525 7.7 11 7.9475 11 8.25V9.35C11 9.6525 10.7525 9.9 10.45 9.9H9.35C9.0475 9.9 8.8 9.6525 8.8 9.35V8.25ZM2.75 3.3H3.85C4.1525 3.3 4.4 3.5475 4.4 3.85V4.95C4.4 5.2525 4.1525 5.5 3.85 5.5H2.75C2.4475 5.5 2.2 5.2525 2.2 4.95V3.85C2.2 3.5475 2.4475 3.3 2.75 3.3ZM5.5 3.85C5.5 3.5475 5.7475 3.3 6.05 3.3H7.15C7.4525 3.3 7.7 3.5475 7.7 3.85V4.95C7.7 5.2525 7.4525 5.5 7.15 5.5H6.05C5.7475 5.5 5.5 5.2525 5.5 4.95V3.85ZM9.35 3.3H10.45C10.7525 3.3 11 3.5475 11 3.85V4.95C11 5.2525 10.7525 5.5 10.45 5.5H9.35C9.0475 5.5 8.8 5.2525 8.8 4.95V3.85C8.8 3.5475 9.0475 3.3 9.35 3.3ZM15.4 0C14.7916 0 14.3 0.491562 14.3 1.1V17.6H16.5V6.6H21.45C21.7525 6.6 22 6.3525 22 6.05V1.65C22 1.3475 21.7525 1.1 21.45 1.1H16.5C16.5 0.491562 16.0084 0 15.4 0Z"
-                        fill="#2E5077"
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_55_1137">
-                        <rect width="22" height="17.6" fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                  <p className="text-content">
-                    Headquarters in:
-                    {/* {company?.hq}{" "} */}
-                  </p>
-                </div>
-                <div className="flex gap-2 items-center ">
-                  <svg
-                    className="fill-darkBlue"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="32"
-                    height="32"
-                    viewBox="0 0 256 256"
-                  >
-                    <path d="M240,208H224V96a16,16,0,0,0-16-16H144V32a16,16,0,0,0-24.88-13.32L39.12,72A16,16,0,0,0,32,85.34V208H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM208,96V208H144V96ZM48,85.34,128,32V208H48ZM112,112v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm-32,0v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm0,56v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Zm32,0v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Z"></path>
-                  </svg>{" "}
-                  <p className="text-content">
-                    Other offices:{" "}
-                    {/* {company &&
-                      company.countries.map((country, index) => {
-                        return index === company.countries.length - 1
-                          ? country.name
-                          : country.name + ",";
-                      })} */}
-                  </p>
-                </div>
-
-                <div className="flex gap-2 items-center">
-                  <svg
-                    className="fill-darkBlue"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="32"
-                    height="32"
-                    viewBox="0 0 256 256"
-                  >
-                    <path d="M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z"></path>
-                  </svg>
-                  <p className="text-content">Categories: </p>
-                  {/* {company.categories.map((category) => (
-                    <p className="text-content">{category}</p>
-                  ))} */}
-                </div>
-              </article>
+              <article className="flex flex-col gap-2 sm:items-center md:items-baseline "></article>
               <article
                 className={`flex flex-col gap-2 overflow-y-scroll custom-overflow`}
               >
