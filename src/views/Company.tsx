@@ -64,7 +64,7 @@ const Company = () => {
           </div>
         </main>
       ) : (
-        <main className="h-my-screen bg-bkg pt-28">
+        <main className="h-my-screen bg-bkg pt-28 pb-8 ">
           {isWriteReviewOpen && (
             <ReviewPopup
               setIsWriteReviewOpen={setIsWriteReviewOpen}
@@ -260,7 +260,7 @@ const Company = () => {
                       <path d="M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z"></path>
                     </svg>
                     <p className="text-content">Categories: </p>
-                    {company.categories.map((category) => (
+                    {company?.categories?.map((category) => (
                       <p className="text-content">{category}</p>
                     ))}
                   </div>
