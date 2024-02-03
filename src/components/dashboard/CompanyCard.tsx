@@ -6,6 +6,8 @@ interface Props {
 }
 
 const CompanyCard: React.FC<Props> = ({ navigate, company }) => {
+  console.log(company);
+
   const [imgColors, setImgColors] = useState();
   return (
     <article className="grid custom-cols-dash gap-4 w-5/6 mx-auto text-content ">
@@ -22,9 +24,14 @@ const CompanyCard: React.FC<Props> = ({ navigate, company }) => {
             <span className="font-black">HQ:</span> {company.hq}
           </p>
           <div className="flex gap-2 mb-2">
-            <button className="py-1 px-2 text-bkg  bg-content text-sm">
-              {company.group ? company.group : "HIRING"}
-            </button>
+            {company && (
+              <button
+                aria-label={`This company is ${company?.group} `}
+                className="py-1 px-2 text-bkg  bg-content text-sm"
+              >
+                {company.group ? company.group : "HIRING"}
+              </button>
+            )}
           </div>
         </div>
         <div className="flex flex-col gap-2 text-content  w-full py-2  ">

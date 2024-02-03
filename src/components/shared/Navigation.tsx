@@ -44,7 +44,7 @@ const Navigation = () => {
   return (
     <header className="pt-4 z-30 mx-auto relative w-4/5  ">
       <nav
-        className={`sm:gap-2 md:gap-0 w-4/5  justify-between ${
+        className={`sm:gap-2 md:gap-0 w-4/5  justify-between gradient-border ${
           !show ? "-top-96" : "top-3"
         }  fixed  rounded-xl bg-bkgContrast py-2 flex items-center z-30 `}
       >
