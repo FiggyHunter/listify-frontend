@@ -4,6 +4,8 @@ import Employees from "@/components/company/Employees";
 import ReviewPopup from "@/components/company/ReviewPopup";
 import Reviews from "@/components/company/Reviews";
 import Navigation from "@/components/shared/Navigation";
+import NotFoundCard from "@/components/shared/NotFoundCard";
+import userNavigationGuard from "@/hooks/userNavigationGuard";
 import { useJwtStore } from "@/stores/useUserStore";
 import { useEffect, useState } from "react";
 import { useJwt } from "react-jwt";
@@ -14,7 +16,7 @@ const Company = () => {
   const { companyId } = params;
   const [displayDescription, setDisplayDescription] = useState(false);
   const { jwt, setJwt } = useJwtStore();
-  const token = useJwt(jwt) || null;
+  const { token } = userNavigationGuard();
   const navigate = useNavigate();
   const [company, setCompany] = useState(null);
   const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
@@ -28,13 +30,6 @@ const Company = () => {
       setReviews(reviews);
     });
   }, []);
-
-  useEffect(() => {
-    if (!jwt || jwt === "" || jwt === "noToken") {
-      navigate("/login");
-      return;
-    }
-  }, [token.decodedToken, navigate]);
 
   useEffect(() => {
     getCompanyById(jwt, setCompany, companyId);
@@ -273,15 +268,19 @@ const Company = () => {
                   <h3 className="text-content sm:text-center lg:text-left text-2xl mb-4  text-left  inline-block px-1 font-semibold after:absolute after:-bottom-2  sm:after:left-1/2 lg:after:left-1 after:h-1 after:w-12 after:-translate-y-1 after:bg-gray-300 after:content-[''] sticky top-0 bg-bkgContrast bg-bkg z-20">
                     Reviews
                   </h3>
-                  {reviews.map((review) => (
-                    <Reviews
-                      key={review.userId}
-                      rating={review.rating}
-                      text={review.text}
-                      userId={review.userId}
-                      jwt={jwt}
-                    />
-                  ))}
+                  {reviews.length !== 0 ? (
+                    reviews.map((review) => (
+                      <Reviews
+                        key={review.userId}
+                        rating={review.rating}
+                        text={review.text}
+                        userId={review.userId}
+                        jwt={jwt}
+                      />
+                    ))
+                  ) : (
+                    <NotFoundCard text="This company has no reviews." />
+                  )}
                 </article>
               </section>
             </section>

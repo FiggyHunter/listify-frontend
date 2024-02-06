@@ -12,20 +12,17 @@ import { getAllCountries } from "@/api/country.ts";
 import Fuse from "fuse.js";
 import { fuseOptions } from "@/config/fuse";
 import MobileCompanyFilters from "@/components/dashboard/MobileCompanyFilters";
+import useJWT from "@/hooks/userNavigationGuard";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-
-  const [isAddCompanyOpen, setIsAddCompanyOpen] = useState(false);
   const { jwt, setJwt } = useJwtStore();
-  const token = useJwt(jwt) || null;
-
-  console.log(token.decodedToken);
+  const [isAddCompanyOpen, setIsAddCompanyOpen] = useState(false);
   const [companies, setCompanies] = useState([]);
   const [displayedCompanies, setDisplayedCompanies] = useState(companies);
   const [locations, setLocations] = useState([]);
   const [filters, setFilters] = useState({ category: null, location: null });
-
+  const { token } = useJWT();
   const { searchTerm } = useSearchStore();
 
   function getCurrentDay() {
@@ -89,11 +86,6 @@ const Dashboard = () => {
     }
   }, [filters, searchTerm]);
 
-  if (!jwt || jwt === "" || jwt === "noToken" || token.isExpired) {
-    navigate("/login");
-    return;
-  }
-
   return (
     <>
       {isAddCompanyOpen && (
@@ -111,29 +103,31 @@ const Dashboard = () => {
         >
           +
         </div>
-        <div className="mx-auto w-4/5">
-          <section className="flex flex-col gap-2 mb-6 text-content bg-bkgContrast p-6 rounded-2xl">
-            <h1 className="sm:text-center sm:text-3xl md:text-5xl md:text-right font-bold text-content ">
-              Good afternoon {token.decodedToken ? token.decodedToken.name : ""}
-              .
-            </h1>
-            <h2 className="sm:text-center md:text-right text-content">
-              It's{" "}
-              {`${new Date().getHours()}:${
-                new Date().getMinutes() > 0 && new Date().getMinutes() < 10
-                  ? `0${new Date().getMinutes()}`
-                  : new Date().getMinutes()
-              }`}{" "}
-              on a {currentDay}
-            </h2>
-            <div className="flex flex-col gap-2 sm:flex md:hidden lg:hidden">
-              {" "}
-              <MobileCompanyFilters
-                locations={locations}
-                setFilters={setFilters}
-              />
+        <div className="mx-auto sm:w-5/6  lg:w-4/5">
+          <section className="flex flex-col gap-2 mb-6 text-content bg-bkgContrast  rounded-2xl city">
+            <div className="custom-grad h-full self-stretch p-6">
+              <h1 className="sm:text-center sm:text-3xl md:text-5xl md:text-right font-bold text-white ">
+                Good afternoon{" "}
+                {token.decodedToken ? token.decodedToken.name : ""}.
+              </h1>
+              <h2 className="sm:text-center md:text-right text-content text-white">
+                It's{" "}
+                {`${new Date().getHours()}:${
+                  new Date().getMinutes() > 0 && new Date().getMinutes() < 10
+                    ? `0${new Date().getMinutes()}`
+                    : new Date().getMinutes()
+                }`}{" "}
+                on a {currentDay}
+              </h2>
             </div>
-          </section>
+          </section>{" "}
+          <div className="flex flex-col gap-2 sm:flex md:hidden lg:hidden">
+            {" "}
+            <MobileCompanyFilters
+              locations={locations}
+              setFilters={setFilters}
+            />
+          </div>
           <section className="grid sm:block md:grid lg:grid custom-cols-dash gap-8">
             <div className="sticky top-24 h-fit">
               <button

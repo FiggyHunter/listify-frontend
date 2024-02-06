@@ -1,9 +1,10 @@
 import LoaderButton from "@/components/shared/LoaderButton";
+import authorisedNavigationGuard from "@/hooks/authorisedNavigationGuard";
 import { useButtonLoadingStore } from "@/stores/useButtonLoadingStore";
 import ForgotTheme from "@/themes/ForgotTheme";
 import resetPasswordValidation from "@/utilities/validators/ResetPasswordValidation";
 import { TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
@@ -14,9 +15,7 @@ const ResetPassword = () => {
   const buttonId = "resetPassword";
   const isLoading = buttonLoading[buttonId] || false;
   const navigate = useNavigate();
-
-  console.log(emailError);
-
+  const { token } = authorisedNavigationGuard();
   return (
     <>
       <ToastContainer

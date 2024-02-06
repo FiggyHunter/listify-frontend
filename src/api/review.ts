@@ -44,3 +44,20 @@ export const getAllReviewsByCompany = async (companyId, jwt) => {
     throw error;
   }
 };
+
+export const getReviewsByUserId = async (jwt, userId) => {
+  console.log(userId);
+
+  const uri =
+    import.meta.env.VITE_API_ENDPOINT + `/api/review/getByUserId/${userId}`;
+  try {
+    const response = await Axios.get(uri, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

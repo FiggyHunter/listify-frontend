@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { handleScroll } from "@/utilities/HandleScroll";
 import { useJwtStore, useSearchStore } from "@/stores/useUserStore";
 import { useJwt } from "react-jwt";
+import getInitials from "@/utilities/getInitialsFromName";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -151,7 +152,11 @@ const Navigation = () => {
             <p className="text-white font-light mt-4 text-center ">
               {token?.decodedToken?.email}
             </p>
-            <div className="w-16 h-16 rounded-full bg-slate-50 mt-1 justify-self-center "></div>
+            <div className="w-16 h-16 text-black font-black grid place-content-center rounded-full bg-slate-50 mt-1 justify-self-center ">
+              {getInitials(
+                `${token?.decodedToken?.name} ${token?.decodedToken?.surname}`
+              )}
+            </div>
             <p className="text-white font-medium text-center">
               Hi, {token?.decodedToken?.name}
             </p>{" "}
