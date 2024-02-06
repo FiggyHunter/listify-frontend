@@ -8,7 +8,8 @@
   :root {
     --color-bkg: rgb(230, 230, 230);
     --color-content: black;
-    --color-accent1: #00a3ff;
+    --color-accent1: #2e5077;
+    --color-accent2: #e56b6f;
     --input-fill: #f2f2f2;
     --bkg-contrast: black;
     --popup-bkg: #414244;
@@ -19,7 +20,8 @@
       --color-bkg: black;
       --color-content: white;
       --bkg-contrast: white;
-      --color-accent1: #00a3ff;
+      --color-accent1: #2e5077;
+      --color-accent2: #e56b6f;
       --input-fill: transparent;
       --popup-bkg: #414244;
       --popup-btn: #343434;
@@ -30,7 +32,8 @@
     --color-bkg: black;
     --color-content: white;
     --bkg-contrast: #1b1f23;
-    --color-accent1: #00a3ff;
+    --color-accent1: #2e5077;
+    --color-accent2: #e56b6f;
     --input-fill: transparent;
     --label-fill: white;
     --label-bkg: white;
@@ -41,7 +44,8 @@
   :root[data-theme="light"] {
     --color-bkg: rgb(230, 230, 230);
     --color-content: black;
-    --color-accent1: #00a3ff;
+    --color-accent1: #2e5077;
+    --color-accent2: #e56b6f;
     --input-fill: #f2f2f2;
     --bkg-contrast: white;
     --label-fill: white;
@@ -142,4 +146,41 @@ nav {
   .access-grid {
     grid-template-columns: min-content 1fr;
   }
+}
+
+@media screen and (min-width: 900px) {
+  .custom-grad {
+    background-color: none;
+    background: linear-gradient(
+      270deg,
+      #353535 42.44%,
+      rgba(255, 255, 255, 0) 120.18%
+    );
+  }
+}
+
+.gradient-border {
+  border-bottom: double 2px transparent;
+  border-radius: 80px;
+  background-image: linear-gradient(var(--bkg-contrast), var(--bkg-contrast)),
+    radial-gradient(
+      circle at top left,
+      var(--color-accent2),
+      var(--color-accent1)
+    );
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.city {
+  background-image: url("/city.webp");
+  background-position: 50% 50%;
+  background-size: cover;
+}
+
+.custom-grad {
+  background: none;
+  background-color: #353535ce;
+  box-shadow: 0px 1px 3.1px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
 }
