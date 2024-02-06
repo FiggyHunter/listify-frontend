@@ -1,17 +1,29 @@
+import { getReviewsByUserId } from "@/api/review";
+import Reviews from "@/components/company/Reviews";
 import Navigation from "@/components/shared/Navigation";
+import NotFoundCard from "@/components/shared/NotFoundCard";
+import userNavigationGuard from "@/hooks/userNavigationGuard";
 import { useJwtStore } from "@/stores/useUserStore";
-import React from "react";
+import getInitials from "@/utilities/getInitialsFromName";
+import { useEffect, useState } from "react";
 import { useJwt } from "react-jwt";
 import { useNavigate } from "react-router-dom";
 
 const Account = () => {
   const navigate = useNavigate();
   const { jwt, setJwt } = useJwtStore();
-  const token = useJwt(jwt) || null;
-  if (!jwt || jwt === "" || jwt === "noToken") {
-    navigate("/login");
-    return;
-  }
+  const { token } = userNavigationGuard();
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    const fetchUserReviews = async () =>
+      await getReviewsByUserId(jwt, token?.decodedToken?.user_id);
+
+    fetchUserReviews().then((reviews) => {
+      setReviews(reviews);
+    });
+  }, [token?.decodedToken]);
+
   return (
     <>
       <Navigation />(
@@ -28,12 +40,11 @@ const Account = () => {
           <section className="grid sm:grid-cols-1 md:custom-cols-company gap-4 h-min">
             <aside className="sm:block md:sticky top-24 bg-bkgContrast rounded-tl-2xl bg-transparent  h-full pt-0   ">
               <div className="flex flex-col bg-bkgContrast shadow-md rounded-xl pt-5">
-                <img
-                  src={
-                    "https://www.google.com/s2/favicons?domain=www.ministryofprogramming.com"
-                  }
-                  className="sm:w-4/4 lg:w-3/4 rounded-xl h-16 lg:h-56 self-center bg-gray-300"
-                ></img>{" "}
+                <div className="sm:w-4/4 lg:w-3/4 rounded-xl h-16 lg:h-56 self-center bg-content font-black text-6xl grid place-content-center text-bkg">
+                  {getInitials(
+                    `${token?.decodedToken?.name} ${token?.decodedToken?.surname}`
+                  )}
+                </div>{" "}
                 <div className="grid grid-cols-2 gap-1 mt-4 w-5/6 mx-auto"></div>
                 <button
                   // onClick={() =>
@@ -103,15 +114,22 @@ const Account = () => {
                 <h3 className="text-content sm:text-center lg:text-left text-2xl mb-4  text-left  inline-block px-1 font-semibold after:absolute after:-bottom-2  sm:after:left-1/2 lg:after:left-1 after:h-1 after:w-12 after:-translate-y-1 after:bg-gray-300 after:content-[''] sticky top-0 bg-bkgContrast bg-bkg z-20">
                   User Reviews
                 </h3>
-                {/* {reviews.map((review) => (
-                  <Reviews
-                    key={review.userId}
-                    rating={review.rating}
-                    text={review.text}
-                    userId={review.userId}
-                    jwt={jwt}
-                  />
-                ))} */}
+
+                {reviews.length !== 0 ? (
+                  reviews.map((review) => (
+                    <Reviews
+                      key={review.userId}
+                      rating={review.rating}
+                      text={review.text}
+                      userId={review.userId}
+                      jwt={jwt}
+                      navigate={navigate}
+                      companyId={review.companyId}
+                    />
+                  ))
+                ) : (
+                  <NotFoundCard text="This user has no reviews." />
+                )}
               </article>
             </section>
           </section>

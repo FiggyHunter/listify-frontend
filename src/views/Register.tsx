@@ -5,20 +5,13 @@ import { useJwtStore } from "@/stores/useUserStore.ts";
 import { useJwt } from "react-jwt";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import authorisedNavigationGuard from "@/hooks/authorisedNavigationGuard.ts";
 
 const Register = () => {
   const { jwt, setJwt } = useJwtStore();
-  const token = useJwt(jwt) || null;
+  const { token } = authorisedNavigationGuard();
   const navigate = useNavigate();
 
-  console.log(token);
-
-  useEffect(() => {
-    if (token.decodedToken && !token.isExpired) {
-      navigate("/dashboard");
-      return;
-    }
-  }, [token.decodedToken, navigate]);
   return (
     <>
       <ToastContainer

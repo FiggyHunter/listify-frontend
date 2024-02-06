@@ -3,17 +3,12 @@ import LoginForm from "../components/login/LoginForm.tsx";
 import { useEffect } from "react";
 import { useJwt } from "react-jwt";
 import { useJwtStore } from "@/stores/useUserStore.ts";
+import authorisedNavigationGuard from "@/hooks/authorisedNavigationGuard.ts";
 
 const Login = () => {
   const { jwt, setJwt } = useJwtStore();
-  const token = useJwt(jwt) || null;
+  const { token } = authorisedNavigationGuard();
   const navigate = useNavigate();
-  useEffect(() => {
-    if (token.decodedToken && !token.isExpired) {
-      navigate("/dashboard");
-      return;
-    }
-  }, [token.decodedToken, navigate]);
 
   return (
     <main className="h-screen w-screen grid items-center bg-bkg">

@@ -3,15 +3,19 @@ import { getAllUsers } from "@/api/user";
 import AccessRequest from "@/components/admin/AccessRequest";
 import AdminCompany from "@/components/admin/AdminCompany";
 import Navigation from "@/components/shared/Navigation";
+import adminNavigationGuard from "@/hooks/adminNavigationGuard";
 import { useJwtStore } from "@/stores/useUserStore";
 import { useEffect, useState } from "react";
+import { useJwt } from "react-jwt";
+import { useNavigate } from "react-router-dom";
 
 const Admin = () => {
   const { jwt, setJwt } = useJwtStore();
   const [users, setUsers] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [focusedTab, setFocusedTab] = useState("users");
-
+  const { token } = adminNavigationGuard() || null;
+  console.log(token);
   const fetchUsers = async () => {
     try {
       const userData = await getAllUsers(jwt);
@@ -22,15 +26,12 @@ const Admin = () => {
   };
 
   const fetchCompanies = async () => {
-    console.log("call");
     try {
       await getAllCompanies(jwt, setCompanies);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
-
-  console.log(companies);
 
   useEffect(() => {
     fetchUsers();
@@ -40,6 +41,7 @@ const Admin = () => {
   return (
     <>
       <Navigation />
+
       <main className="sm:w-5/5 lg:w-4/5 mx-auto min-h-96 mt-28 gap-10 grid pb-4">
         <section className="bg-bkgContrast w-4/5 mx-auto min-h-96 rounded-3xl shadow-md">
           <h2 className="text-content text-2xl w-full mx-auto sm:text-md lg:text-2xl pt-4 pb-8 px-8 font-bold flex flex-col">
