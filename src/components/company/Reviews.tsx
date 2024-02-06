@@ -1,17 +1,23 @@
+import { getCompanyById } from "@/api/company";
 import { getUserById } from "@/api/user";
 import { Rating } from "@mui/material";
 import { useEffect, useState } from "react";
 
-const Reviews = ({ rating, text, userId, jwt }) => {
+const Reviews = ({ rating, text, userId, jwt, navigate, companyId }) => {
   const [user, setUser] = useState({});
+  const [company, setCompany] = useState({});
 
   const fetchUser = async () => {
     return await getUserById(userId, jwt);
   };
 
+  const fetchCompanyName = async () => {
+    return await getCompanyById(jwt, setCompany, companyId);
+  };
+
   useEffect(() => {
     fetchUser().then((user) => setUser(user));
-    console.log(userId);
+    fetchCompanyName();
   }, []);
 
   return (
@@ -45,6 +51,17 @@ const Reviews = ({ rating, text, userId, jwt }) => {
       <p className="w-5/6 sm:mx-auto lg:mx-0 mt-2 pl-1 sm:text-center lg:text-left">
         {text}
       </p>
+      {navigate && (
+        <div className="mt-4">
+          <p className="pl-1.5  inline">Reviewed company:</p>
+          <a
+            onClick={() => navigate("/company/65b11c7a6f61a60f46860fd7")}
+            className="inline-block ml-1 cursor-pointer text-content hover:text-accent-2"
+          >
+            {company.name}
+          </a>
+        </div>
+      )}
       <span className="w-full block mt-8 border-b-1 border-gray-500"></span>
     </div>
   );
