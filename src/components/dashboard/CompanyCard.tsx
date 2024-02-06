@@ -10,7 +10,7 @@ const CompanyCard: React.FC<Props> = ({ navigate, company }) => {
 
   const [imgColors, setImgColors] = useState();
   return (
-    <article className="grid custom-cols-dash gap-4 w-5/6 mx-auto text-content ">
+    <article className="grid custom-cols-dash gap-4 w-5/6 mx-auto text-content">
       <img
         onClick={() => navigate(`/company/${company._id}`)}
         src={
