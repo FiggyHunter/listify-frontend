@@ -11,7 +11,13 @@ export const userNavigationGuard = () => {
   console.log(token);
 
   useEffect(() => {
-    if (!jwt || jwt === "" || jwt === "noToken" || token.isExpired) {
+    if (
+      !jwt ||
+      jwt === "" ||
+      jwt === "noToken" ||
+      token.isExpired === true ||
+      token?.decodedToken?.isAdmitted === false
+    ) {
       navigate("/login");
       return;
     }
