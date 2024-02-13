@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/login/LoginForm.tsx";
-import { useEffect } from "react";
-import { useJwt } from "react-jwt";
 import { useJwtStore } from "@/stores/useUserStore.ts";
 import authorisedNavigationGuard from "@/hooks/authorisedNavigationGuard.ts";
 
@@ -10,14 +8,50 @@ const Login = () => {
   const { token } = authorisedNavigationGuard();
   const navigate = useNavigate();
 
+  console.log(token);
+
   return (
-    <main className="h-screen w-screen grid items-center bg-bkg">
+    <main className="min-h-screen w-screen grid gap-4 items-center bg-bkg">
       <img
         className="place-self-center sm:w-36 md:w-44 lg:w-64"
         src="/logo.svg"
         alt="logo for the app"
       />
-      <LoginForm navigate={navigate} />
+      {!token?.decodedToken ||
+        (token?.isExpired && <LoginForm navigate={navigate} />)}
+      {token?.decodedToken?.isAdmitted === false &&
+        token?.decodedToken &&
+        !token?.isExpired && (
+          <>
+            <section className="bg-bkgContrast text-bkg mx-auto text-center flex flex-col gap-4 sm:w-4/5 md:w-1/2 lg:w-2/6">
+              <h1 className="text-2xl font-bold mt-3">WAIT</h1>
+              <div className="">
+                <p className="text-xl w-4/5 mx-auto">
+                  Our team needs to confirm your registration for you to be able
+                  to access our platform.
+                </p>
+                <p className="text-xl w-4/5 mx-auto">
+                  Please stay patient, we’re on it!
+                </p>
+              </div>
+              <button className="w-4/5 mx-auto bg-crimson text-white font-bold mb-7 py-2 rounded-xl">
+                REFRESH
+              </button>
+            </section>{" "}
+            <section className="bg-bkgContrast text-bkg mx-auto text-center flex flex-col gap-4 sm:w-4/5 md:w-1/2 lg:w-2/6">
+              <h1 className="text-2xl font-bold mt-3">Problems?</h1>
+              <div className="">
+                <p className="text-xl w-4/5 mx-auto">
+                  If you think there has been an error, you can contact us via
+                  mail:
+                </p>
+              </div>
+              <button className="w-2/5 mx-auto bg-darkBlue text-white font-bold mb-7 py-2 rounded-xl">
+                CONTACT
+              </button>
+            </section>
+          </>
+        )}
       <section className="flex flex-row items-center gap-2 justify-center ">
         <p className="text-content w-max ">Powered by </p>{" "}
         <a target="_blank" href="https://skim.ba/">
