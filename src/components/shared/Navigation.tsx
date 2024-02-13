@@ -5,19 +5,18 @@ import { handleScroll } from "@/utilities/HandleScroll";
 import { useJwtStore, useSearchStore } from "@/stores/useUserStore";
 import { useJwt } from "react-jwt";
 import getInitials from "@/utilities/getInitialsFromName";
+import CompanySearch from "./CompanySearch";
 
 const Navigation = () => {
   const navigate = useNavigate();
 
   const { jwt, setJwt } = useJwtStore();
   const token = useJwt(jwt);
-
+  const { searchTerm, setSearchTerm } = useSearchStore();
   const [show, setShow] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isPopUpShowed, setIsPopUpShowed] = useState(false);
   const location = useLocation();
-
-  const { searchTerm, setSearchTerm } = useSearchStore();
 
   const handleScrollListener = () =>
     handleScroll(setShow, lastScrollY, setLastScrollY);
@@ -37,10 +36,6 @@ const Navigation = () => {
       window.removeEventListener("keydown", hidePopup);
     };
   }, []);
-
-  const handleSearch = (userSearch) => {
-    setSearchTerm(userSearch);
-  };
 
   return (
     <header className="pt-4 z-30 mx-auto relative w-4/5  ">
@@ -62,48 +57,21 @@ const Navigation = () => {
           className="sm:block md:hidden lg:hidden ml-4 w-8 cursor-pointer"
           src="/logo-small.svg"
           alt=""
-          onClick={() => navigate("/dashboard")}
-        />{" "}
+          onClick={() => {
+            navigate("/dashboard");
+            setSearchTerm("");
+          }}
+        />
         {location.pathname === "/dashboard" && (
-          <div className="h-full md:ml-auto lg:ml-auto sm:w-full  md:w-1/3  items-center md:mr-4 lg:mr-4 flex flex-row border-content border-1 rounded-2xl bg-transparent overflow-hidden gap-1 focus-within:border-crimsonHover  transition-all duration-250">
-            {searchTerm === "" ? (
-              <svg
-                className="fill-content ml-3"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 256 256"
-              >
-                <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
-              </svg>
-            ) : (
-              <svg
-                onClick={() => setSearchTerm("")}
-                className="fill-content ml-3 cursor-pointer"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 256 256"
-              >
-                <path d="M165.66,101.66,139.31,128l26.35,26.34a8,8,0,0,1-11.32,11.32L128,139.31l-26.34,26.35a8,8,0,0,1-11.32-11.32L116.69,128,90.34,101.66a8,8,0,0,1,11.32-11.32L128,116.69l26.34-26.35a8,8,0,0,1,11.32,11.32ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"></path>
-              </svg>
-            )}
-
-            <input
-              className="inline-block text-content w-full text-md placeholder:font-medium sm:placeholder:text-xsm placeholder:text-sm py-1.5 focus:outline-none bg-bkgContrast "
-              placeholder="Search a company here..."
-              type="text"
-              value={searchTerm}
-              onChange={(e) => {
-                handleSearch(e.target.value);
-              }}
-            />
+          <div className="sm:hidden md:hidden lg:block w-full">
+            <CompanySearch />
           </div>
         )}
         <div className="flex sm:hidden md:flex lg:flex gap-2 mr-4">
           <button
             onClick={() => setIsPopUpShowed((prevValue) => !prevValue)}
-            className=" gap-1 bg-darkBlue hover:bg-darkBlueHover transition-colors duration-200 border-none rounded-full p-2  "
+            aria-label="User profile icon"
+            className="bg-darkBlue hover:bg-darkBlueHover transition-colors duration-200 border-none rounded-full p-2"
           >
             <svg
               className="fill-white"
@@ -114,13 +82,13 @@ const Navigation = () => {
             >
               <path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"></path>
             </svg>
-          </button>{" "}
+          </button>
           <DarkModeToggle />
         </div>
-        <div className="grid-cols-2 w-1/3 sm:grid md:hidden lg:hidden place-items-center  ">
+        <div className="w-1/3 sm:flex gap-2 md:hidden lg:hidden place-content-center justify-end mr-4  ">
           <button
             onClick={() => setIsPopUpShowed((prevValue) => !prevValue)}
-            className=" gap-1  bg-darkBlue hover:bg-darkBlueHover transition-colors duration-200 border-none rounded-full p-2  "
+            className="  bg-darkBlue hover:bg-darkBlueHover transition-colors duration-200 border-none rounded-full grid  p-2 place-items-center"
           >
             <svg
               className="fill-white"
