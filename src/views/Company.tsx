@@ -8,7 +8,6 @@ import NotFoundCard from "@/components/shared/NotFoundCard";
 import userNavigationGuard from "@/hooks/userNavigationGuard";
 import { useJwtStore } from "@/stores/useUserStore";
 import { useEffect, useState } from "react";
-import { useJwt } from "react-jwt";
 import { useNavigate, useParams } from "react-router-dom";
 
 const Company = () => {
@@ -76,20 +75,15 @@ const Company = () => {
                     src={
                       "https://www.google.com/s2/favicons?domain=www.ministryofprogramming.com"
                     }
-                    className="sm:w-4/4 lg:w-3/4 rounded-xl h-16 lg:h-56 self-center bg-gray-300"
+                    className="w-32 rounded-xl h-32 lg:h-56 lg:w-3/4 self-center bg-gray-300"
+                    alt={`Logo for ${company?.name}`}
                   ></img>{" "}
-                  <div className="grid grid-cols-2 gap-1 mt-4 w-5/6 mx-auto">
-                    <button className="text-sm mx-auto w-full bg-darkBlue bg-darkBlue hover:bg-darkBlueHover transition-all duration-200">
-                      HIRING
-                    </button>
-                    <button className="mx-auto text-sm w-full bg-darkBlue bg-darkBlue hover:bg-darkBlueHover transition-all duration-200">
-                      INTERVIEW
-                    </button>
-                    <button className="mx-auto text-sm w-full bg-darkBlue bg-darkBlue hover:bg-darkBlueHover transition-all duration-200">
-                      MIM
-                    </button>
-                    <button className="mx-auto text-sm w-full bg-darkBlue hover:bg-darkBlueHover transition-all duration-200">
-                      PARTNER
+                  <div className="grid grid-cols-1 gap-1 mt-4 w-5/6 mx-auto">
+                    <button
+                      aria-label={`This company is ${company?.group}`}
+                      className="text-sm mx-auto w-full bg-darkBlue bg-darkBlue hover:bg-darkBlueHover transition-all duration-200"
+                    >
+                      {company?.group}
                     </button>
                   </div>
                   <button
@@ -144,7 +138,7 @@ const Company = () => {
                     </svg>
                   </button>
                 </div>{" "}
-                <div className="flex flex-col bg-bkgContrast shadow-md rounded-xl mt-8">
+                <div className="flex flex-col  bg-bkgContrast shadow-md rounded-xl mt-8">
                   <h3 className="text-content text-center  outline-offset-4 pt-4 font-medium">
                     CURRENTLY EMPLOYED
                   </h3>
@@ -154,7 +148,7 @@ const Company = () => {
                   <Employees />
                 </div>
               </aside>
-              <section className="md:pl-16 min-h-96 h-full bg-bkgContrast text-center rounded-tr-2xl flex flex-col py-6 mb-6 gap-12 sm:w-full md:w-auto lg:w-auto">
+              <section className="md:pl-16 min-h-96 h-full bg-bkgContrast text-center rounded-tr-2xl flex flex-col py-6 mb-6 gap-6 sm:w-full md:w-auto lg:w-auto">
                 <div>
                   <h1 className="text-content font-inter text-2xl sm:text-center md:text-left lg:text-6xl mb-4 font-extrabold">
                     {company?.name}
@@ -164,7 +158,7 @@ const Company = () => {
                   </h2>
                 </div>
                 <p
-                  className={`text-content font-normal text-justify px-2 sm:w-full md:w-5/6 ${
+                  className={`text-content font-normal text-left sm:mx-auto md:mx-0 sm:w-5/6 md:w-5/6 ${
                     displayDescription ? "" : "line-clamp-2"
                   }`}
                 >
@@ -184,8 +178,8 @@ const Company = () => {
                   </p>
                   <span className="relative top-1 w-full h-1 border-gray-400 border-t-1"></span>
                 </div>
-                <article className="flex flex-col gap-2 sm:items-center md:items-baseline ">
-                  <div className="flex items-center gap-2  ">
+                <article className="flex flex-col gap-2 sm:items-left md:items-baseline px-2 ">
+                  <div className="flex items-center gap-2   ">
                     <svg
                       className="fill-darkBlue"
                       xmlns="http://www.w3.org/2000/svg"
@@ -195,7 +189,11 @@ const Company = () => {
                     >
                       <path d="M216,24H40A16,16,0,0,0,24,40V216a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V40A16,16,0,0,0,216,24Zm0,192H40V40H216V216ZM96,112v64a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Zm88,28v36a8,8,0,0,1-16,0V140a20,20,0,0,0-40,0v36a8,8,0,0,1-16,0V112a8,8,0,0,1,15.79-1.78A36,36,0,0,1,184,140ZM100,84A12,12,0,1,1,88,72,12,12,0,0,1,100,84Z"></path>
                     </svg>
-                    <a className="text-content underline underline-offset-2 cursor-pointer">
+                    <a
+                      className="text-content underline underline-offset-2 cursor-pointer block text-wrap break-all	"
+                      href={`${company?.linkedinURL}`}
+                      target="_blank"
+                    >
                       {company?.linkedinURL}
                     </a>
                   </div>
@@ -276,6 +274,7 @@ const Company = () => {
                         text={review.text}
                         userId={review.userId}
                         jwt={jwt}
+                        companyId={review.companyId}
                       />
                     ))
                   ) : (
