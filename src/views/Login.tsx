@@ -17,8 +17,7 @@ const Login = () => {
         src="/logo.svg"
         alt="logo for the app"
       />
-      {!token?.decodedToken ||
-        (token?.isExpired && <LoginForm navigate={navigate} />)}
+      {token?.isExpired && <LoginForm navigate={navigate} />}
       {token?.decodedToken?.isAdmitted === false &&
         token?.decodedToken &&
         !token?.isExpired && (
