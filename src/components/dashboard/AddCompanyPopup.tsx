@@ -1,6 +1,7 @@
 import useCompanyState from "@/hooks/useCompanyState";
 import InputTheme from "@/themes/InputTheme";
 import { Autocomplete, TextField } from "@mui/material";
+import FileUpload from "../shared/FileUpload";
 const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
   const {
     companyData,
@@ -23,7 +24,15 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
         className="sm:w-5/6 lg:w-1/3 h-fit bg-bkgContrast grid grid-cols-2 custom-rows px-8 gap-5 rounded-2xl"
       >
         <div className="w-full mx-auto flex justify-between mt-4 border-b-1 pb-2 border-content col-span-2 font-bold text-content">
-          <p className="text-xl">ADD A NEW COMPANY</p>
+          <p
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsAddCompanyOpen(true);
+            }}
+            className="text-xl"
+          >
+            ADD A NEW COMPANY
+          </p>
           <svg
             className="fill-content cursor-pointer"
             xmlns="http://www.w3.org/2000/svg"
@@ -85,6 +94,7 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
             />
           )}
         />
+        {/* dobar dio */}
         <Autocomplete
           className="col-span-2"
           multiple
@@ -170,6 +180,7 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           error={errors?.websiteUrl ? true : false}
           helperText={errors?.websiteUrl}
         />
+        <FileUpload />
         <Autocomplete
           className="col-span-2"
           freeSolo
@@ -197,7 +208,7 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
         />
         <button
           onClick={() => handleCompanyCreation()}
-          className="mx-auto w-full col-span-2 mb-8  my-auto bg-crimson hover:bg-crimsonHover transition-all duration-200"
+          className="mx-auto w-full col-span-2 mb-8  my-auto bg-crimson hover:bg-crimsonHover text-black transition-all duration-200"
         >
           ADD A COMPANY
         </button>{" "}
