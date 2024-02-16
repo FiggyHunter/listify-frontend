@@ -25,7 +25,7 @@ const userLoginSchema = object({
     .min(5, "Email is too short - minimum of 5 charachters."),
   password: string()
     .required("No password provided.")
-    .min(5, "Password is too short - minimum of 8 charachters."),
+    .min(8, "Password is too short - minimum of 8 charachters."),
 });
 
 const onBoardingName = string()
@@ -36,10 +36,18 @@ const onBoardingName = string()
 const passwordUpdateSchema = object({
   oldPassword: string()
     .required("Old password is required")
-    .min(8, "Old password must be at least 8 characters"),
+    .min(8, "Old password must be at least 8 characters")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).+$/,
+      "Password must contain at least one lowercase letter, one uppercase letter, and one special character."
+    ),
   newPassword: string()
     .required("New password is required")
     .min(8, "New password must be at least 8 characters")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).+$/,
+      "Password must contain at least one lowercase letter, one uppercase letter, and one special character."
+    )
     .oneOf([ref("repeatPassword")], "New password must match repeat password"),
   repeatPassword: string()
     .required("Repeat password is required")
