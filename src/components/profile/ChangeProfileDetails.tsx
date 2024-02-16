@@ -6,6 +6,7 @@ import FormTheme from "@/themes/FormTheme";
 import InputTheme from "@/themes/InputTheme";
 import { Autocomplete, Input, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
+import LoaderButton from "../shared/LoaderButton";
 
 const ChangeProfileDetails = ({ setIsChangeModalOpen, jwt, setJwt }) => {
   const [currentTab, setCurrentTab] = useState("profile");
@@ -16,6 +17,8 @@ const ChangeProfileDetails = ({ setIsChangeModalOpen, jwt, setJwt }) => {
     userPasswordData,
     handleChange,
     handleUserDataUpdate,
+    handleUserPasswordUpdate,
+    userDataErrors,
   } = useUserChangeState();
   const { buttonLoading, setButtonLoading } = useButtonLoadingStore();
   const isLoading = buttonLoading["saveProfileDetails"] || false;
@@ -148,6 +151,10 @@ const ChangeProfileDetails = ({ setIsChangeModalOpen, jwt, setJwt }) => {
                 fullWidth
                 label={"Current Password"}
                 onChange={(e) => handleChange("oldPassword", e.target.value)}
+                helperText={
+                  userDataErrors?.oldPassword ? userDataErrors?.oldPassword : ``
+                }
+                error={userDataErrors?.oldPassword}
               />
               <TextField
                 sx={InputTheme}
@@ -155,6 +162,10 @@ const ChangeProfileDetails = ({ setIsChangeModalOpen, jwt, setJwt }) => {
                 fullWidth
                 label={"New Password"}
                 onChange={(e) => handleChange("newPassword", e.target.value)}
+                helperText={
+                  userDataErrors?.newPassword ? userDataErrors?.newPassword : ``
+                }
+                error={userDataErrors?.newPassword}
               />
               <TextField
                 sx={InputTheme}
@@ -162,6 +173,12 @@ const ChangeProfileDetails = ({ setIsChangeModalOpen, jwt, setJwt }) => {
                 fullWidth
                 label={"Repeat Password"}
                 onChange={(e) => handleChange("repeatPassword", e.target.value)}
+                helperText={
+                  userDataErrors?.repeatPassword
+                    ? userDataErrors?.repeatPassword
+                    : ``
+                }
+                error={userDataErrors?.repeatPassword}
               />
             </div>
           )}
@@ -180,14 +197,14 @@ const ChangeProfileDetails = ({ setIsChangeModalOpen, jwt, setJwt }) => {
                 }
                 className="w-full bg-darkBlue hover:bg-darkBlueHover transition-all duration-150"
               >
-                {isLoading ? "Loading" : "SAVE"}
+                {isLoading ? <LoaderButton /> : "SAVE"}
               </button>
             )}
 
             {currentTab === "password" && (
               <button
                 onClick={() =>
-                  updateUserPassword(
+                  handleUserPasswordUpdate(
                     "saveProfileDetails",
                     setButtonLoading,
                     jwt,
@@ -197,7 +214,7 @@ const ChangeProfileDetails = ({ setIsChangeModalOpen, jwt, setJwt }) => {
                 }
                 className="w-full bg-darkBlue hover:bg-darkBlueHover transition-all duration-150"
               >
-                {isLoading ? "Loading" : "SAVE"}
+                {isLoading ? <LoaderButton /> : "SAVE"}
               </button>
             )}
 
