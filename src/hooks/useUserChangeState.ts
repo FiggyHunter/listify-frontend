@@ -1,5 +1,6 @@
-import { updateUserData } from "@/api/user";
+import { updateUserData, updateUserPassword } from "@/api/user";
 import { useButtonLoadingStore } from "@/stores/useButtonLoadingStore";
+import { changePasswordValidation } from "@/utilities/validators/ChangePasswordValidation";
 import { useState } from "react";
 
 const useUserChangeState = () => {
@@ -16,6 +17,10 @@ const useUserChangeState = () => {
     newPassword: "",
     repeatPassword: "",
   });
+
+  const [userDataErrors, setUserDataErrors] = useState({});
+
+  console.log(userDataErrors);
 
   const handleChange = (fieldName, value) => {
     if (
@@ -42,6 +47,7 @@ const useUserChangeState = () => {
   ) => {
     try {
       setButtonLoading(buttonId, true);
+
       await updateUserData(
         buttonId,
         setButtonLoading,
@@ -49,6 +55,7 @@ const useUserChangeState = () => {
         userUpdatedData,
         setJwt
       );
+
       // await loginValidation(loginFormData, setLoginErrors);
       // const token = await logInUser(loginFormData);
       // await setJwt(token);
@@ -68,18 +75,25 @@ const useUserChangeState = () => {
   };
   const handleUserPasswordUpdate = async (
     buttonId: string,
-    e: React.MouseEvent<HTMLButtonElement>,
+    setButtonLoading,
     jwt,
     setJwt
   ) => {
     try {
-      e.preventDefault();
       setButtonLoading(buttonId, true);
-      await updateUser(
+
+      await changePasswordValidation(
+        userPasswordData,
+        setUserDataErrors,
+        buttonId,
+        setButtonLoading
+      );
+
+      await updateUserPassword(
         "saveProfileDetails",
         setButtonLoading,
         jwt,
-        userUpdatedData,
+        userPasswordData,
         setJwt
       );
       // await loginValidation(loginFormData, setLoginErrors);
@@ -88,6 +102,7 @@ const useUserChangeState = () => {
       // navigate("/dashboard");
       setButtonLoading(buttonId, false);
     } catch (e) {
+      console.log(e);
       // MOZDA BUDE TREBALO KADA BUDEM CHECKIRAO DA LI JE DOBAR PASSWORD USERU
       //if (e.message === "Validation failed") {
       //   setButtonLoading(buttonId, false);
@@ -107,6 +122,8 @@ const useUserChangeState = () => {
     handleUserDataUpdate,
     setUserPasswordData,
     handleChange,
+    handleUserPasswordUpdate,
+    userDataErrors,
   };
 };
 
