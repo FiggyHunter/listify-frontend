@@ -9,7 +9,7 @@ const AdminCompany = ({ company }) => {
         <h4 className="text-base font-light">Date: {company?.createdAt}</h4>
       </div>
       <div className="flex items-center gap-4">
-        <button className="bg-darkBlue">Disband</button>
+        <button className="bg-darkBlue w-fit">Disband</button>
       </div>{" "}
       <div className="flex items-center gap-4">
         <button className="bg-crimson">Admit</button>
