@@ -37,7 +37,7 @@ export const getAllUsers = async (jwt) => {
   }
 };
 
-export const updateUser = async (
+export const updateUserData = async (
   buttonId,
   setButtonLoading,
   jwt,
@@ -51,7 +51,7 @@ export const updateUser = async (
   //   throw new Error("Please Input Details");
   // }
   setButtonLoading(buttonId, true);
-  const formattedUserData = updateUserData;
+  const formattedUserData = { ...updateUserData };
 
   if (formattedUserData.name === "") delete formattedUserData.name;
   if (formattedUserData.surname === "") delete formattedUserData.surname;
@@ -59,30 +59,58 @@ export const updateUser = async (
     delete formattedUserData.skills;
     delete formattedUserData.skillsIds;
   }
-
-  console.log(formattedUserData);
+  // if (oldPassword)
+  //   if (newPassword) if (repeatPassword)
+  // console.log(formattedUserData);
 
   const uri = import.meta.env.VITE_API_ENDPOINT + `/api/users/update`;
   try {
-    const response = await Axios.patch(
-      uri,
-
-      formattedUserData,
-      {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      }
-    );
-    console.log(response);
-
+    const response = await Axios.patch(uri, formattedUserData, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
     setJwt(response.data);
     setButtonLoading(buttonId, false);
     notify();
     return response.data;
   } catch (error) {
-    setButtonLoading(buttonId, false);
     console.log(error);
+    setButtonLoading(buttonId, false);
+    throw error;
+  }
+};
+
+export const updateUserPassword = async (
+  buttonId,
+  setButtonLoading,
+  jwt,
+  userPasswordData,
+  setJwt
+) => {
+  console.log(jwt);
+  console.log(userPasswordData);
+
+  setButtonLoading(buttonId, true);
+  const formattedUserData = { ...userPasswordData };
+
+  const uri = import.meta.env.VITE_API_ENDPOINT + `/api/users/changePassword`;
+  console.log(uri);
+  try {
+    const response = await Axios.patch(uri, formattedUserData, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    console.log(response);
+
+    setButtonLoading(buttonId, false);
+    console.log(jwt);
+    notify();
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    setButtonLoading(buttonId, false);
     throw error;
   }
 };
