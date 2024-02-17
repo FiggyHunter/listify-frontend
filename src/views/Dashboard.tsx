@@ -4,7 +4,6 @@ import CompanyCard from "@/components/dashboard/CompanyCard.tsx";
 import SkeletonCompanyCard from "@/components/dashboard/SkeletonCompanyCard.tsx";
 import { useEffect, useState } from "react";
 import { useJwtStore, useSearchStore } from "@/stores/useUserStore.ts";
-import { useJwt } from "react-jwt";
 import { getAllCompanies } from "@/api/company";
 import AddCompanyPopup from "@/components/dashboard/AddCompanyPopup.tsx";
 import CompanyFilters from "@/components/dashboard/CompanyFilters.tsx";
@@ -132,14 +131,14 @@ const Dashboard = () => {
             <div className="sticky top-24 h-fit">
               <button
                 onClick={() => setIsAddCompanyOpen(!isAddCompanyOpen)}
-                className="mx-auto w-full mb-4 w-5/6 my-auto bg-crimson hover:bg-crimsonHover transition-all duration-200 sm:hidden md:block lg:block"
+                className="mx-auto w-full mb-4 my-auto bg-crimson text-black font-bold hover:bg-crimsonHover transition-all duration-200 sm:hidden md:block lg:block"
               >
                 ADD A COMPANY
               </button>{" "}
               <CompanyFilters setFilters={setFilters} locations={locations} />
             </div>
 
-            <section className="min-h-96 bg-bkgContrast rounded-2xl flex flex-col py-6 mb-6 gap-12 sm:w-full md:w-auto lg:w-auto">
+            <section className="min-h-96  rounded-2xl flex flex-col py-6 mb-6 gap-8  sm:w-full md:w-auto lg:w-auto">
               {Object.entries(companies).length === 0 ? (
                 <>
                   <SkeletonCompanyCard />
@@ -157,12 +156,13 @@ const Dashboard = () => {
                   />
                 ))
               ) : (
-                <article className="flex flex-col gap-2 items-center">
+                <article className="flex flex-col gap-2 items-center bg-bkgContrast py-4 rounded-xl mt-9">
                   <img
                     className="w-1/3"
                     width={64}
                     height={64}
                     src={"/cat_search.webp"}
+                    alt="cat holding a magnifying glass"
                   />
                   <p className="text-content font-bold">
                     No results found for:
@@ -171,7 +171,13 @@ const Dashboard = () => {
                       "
                     </span>
                   </p>
-                  <button className="bg-crimson px-8 font-bold">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsAddCompanyOpen(true);
+                    }}
+                    className="bg-crimson px-8 font-bold"
+                  >
                     ADD A NEW COMPANY
                   </button>
                 </article>

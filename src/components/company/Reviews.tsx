@@ -2,10 +2,13 @@ import { getCompanyById } from "@/api/company";
 import { getUserById } from "@/api/user";
 import { Rating } from "@mui/material";
 import { useEffect, useState } from "react";
+import ReviewSkeleton from "../profile/ReviewSkeleton";
+import getInitials from "@/utilities/getInitialsFromName";
 
 const Reviews = ({ rating, text, userId, jwt, navigate, companyId }) => {
   const [user, setUser] = useState({});
   const [company, setCompany] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchUser = async () => {
     return await getUserById(userId, jwt);
@@ -17,14 +20,20 @@ const Reviews = ({ rating, text, userId, jwt, navigate, companyId }) => {
 
   useEffect(() => {
     fetchUser().then((user) => setUser(user));
-    fetchCompanyName();
-  }, []);
+    fetchCompanyName().then(() => {
+      setIsLoading(false);
+    });
+  }, [jwt]);
 
-  return (
+  return isLoading ? (
+    <ReviewSkeleton navigate={navigate} />
+  ) : (
     <div className="text-content text-left p-4 ">
       <div className="flex gap-2 sm:justify-center lg:justify-stretch ">
-        <div className="bg-gray-300 self-center w-12 h-12 rounded-full"></div>
-        <div className="rac">
+        <div className="bg-gray-300 self-center w-12 h-12 rounded-full place-content-center grid font-bold text-black">
+          {getInitials(`${user.name} ${user.surname}`)}
+        </div>
+        <section className="rac">
           <h4>{`${user.name} ${user.surname}`}</h4>
           <Rating
             className="self-center"
@@ -46,7 +55,7 @@ const Reviews = ({ rating, text, userId, jwt, navigate, companyId }) => {
               },
             }}
           />
-        </div>
+        </section>
       </div>{" "}
       <p className="w-5/6 sm:mx-auto lg:mx-0 mt-2 pl-1 sm:text-center lg:text-left">
         {text}
@@ -54,12 +63,12 @@ const Reviews = ({ rating, text, userId, jwt, navigate, companyId }) => {
       {navigate && (
         <div className="mt-4">
           <p className="pl-1.5  inline">Reviewed company:</p>
-          <a
+          <button
             onClick={() => navigate("/company/65b11c7a6f61a60f46860fd7")}
-            className="inline-block ml-1 cursor-pointer text-content hover:text-accent-2"
+            className="inline-block bg-transparent p-0 ml-1 cursor-pointer text-content hover:text-accent-2"
           >
             {company.name}
-          </a>
+          </button>
         </div>
       )}
       <span className="w-full block mt-8 border-b-1 border-gray-500"></span>

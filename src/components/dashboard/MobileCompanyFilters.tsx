@@ -1,6 +1,7 @@
 import InputTheme from "@/themes/InputTheme";
 import { Autocomplete, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
+import CompanySearch from "../shared/CompanySearch";
 
 const MobileCompanyFilters = ({ locations, setFilters }) => {
   const [selectedFilters, setSelectedFilters] = useState({
@@ -26,7 +27,9 @@ const MobileCompanyFilters = ({ locations, setFilters }) => {
 
   return (
     <>
+      <CompanySearch />
       <Autocomplete
+        className="my-2"
         id="tags-outlined"
         options={["HIRING", "INTERVIEW", "MITM", "PARTNER"]}
         getOptionLabel={(option) => option}
@@ -82,10 +85,10 @@ const MobileCompanyFilters = ({ locations, setFilters }) => {
           setFilters({ category: null, location: null });
           setSelectedFilters({ category: [], locations: [] });
         }}
-        className="mx-auto w-full my-auto bg-crimson font-bold hover:bg-crimsonHover transition-all duration-200"
+        className="mx-auto w-full my-auto bg-crimson font-bold hover:bg-crimsonHover transition-all duration-200 mb-4"
       >
         CLEAR FILTERS
-      </button>{" "}
+      </button>
     </>
   );
 };

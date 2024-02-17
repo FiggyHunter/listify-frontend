@@ -1,5 +1,9 @@
 import Axios from "axios";
 import { getCountryNameById } from "./country";
+import { toast } from "react-toastify";
+
+const notifyDeletedCompany = (companyName) =>
+  toast(`You have successfully REMOVED ${companyName}.`);
 
 async function modifyAllHq(jwt, data) {
   const modifiedData = await Promise.all(
@@ -12,6 +16,7 @@ async function modifyAllHq(jwt, data) {
 }
 
 function FormatAddCompanyRequest(companyData) {
+  console.log(companyData);
   //   {
   //     "name": "Tech Innovators Ltd",
   //     "description": "Tech Innovators is a cutting-edge technology company focused on creating groundbreaking solutions to meet the evolving needs of businesses globally.",
@@ -32,7 +37,7 @@ function FormatAddCompanyRequest(companyData) {
     hq: companyData.hqId,
     categories: ["neki ID"],
     countries: companyData.locationId,
-    group: companyData.category,
+    group: `${companyData.category}`,
   };
 }
 
@@ -55,6 +60,7 @@ export const getAllCompanies = async (jwt, setCompanies) => {
 };
 
 export const getCompanyById = async (jwt, setCompany, id) => {
+  console.log(id);
   const uri = import.meta.env.VITE_API_ENDPOINT + `/api/company/getById/${id}`;
   try {
     const response = await Axios.get(uri, {
@@ -62,6 +68,7 @@ export const getCompanyById = async (jwt, setCompany, id) => {
         Authorization: `Bearer ${jwt}`,
       },
     });
+
     response.data.hq = await getCountryNameById(jwt, response.data.hq._id);
     console.log(response.data);
     setCompany(await response.data);
@@ -97,6 +104,32 @@ export const CreateCompany = async (companyData, jwt) => {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteCompany = async (
+  companyId,
+  companyName,
+  jwt,
+  setCompanies
+) => {
+  const uri =
+    import.meta.env.VITE_API_ENDPOINT + `/api/company/remove/${companyId}`;
+  console.log(uri);
+  try {
+    await Axios.delete(uri, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    notifyDeletedCompany(companyName);
+    setCompanies((prevCompanies) => {
+      return prevCompanies.filter(
+        (prevCompany) => prevCompany._id !== companyId
+      );
     });
   } catch (error) {
     throw error;
