@@ -1,7 +1,9 @@
 import { getAllCompanies } from "@/api/company";
+import { getAllCountries } from "@/api/country";
 import { getAllUsers } from "@/api/user";
 import AccessRequest from "@/components/admin/AccessRequest";
 import AdminCompany from "@/components/admin/AdminCompany";
+import AddCompanyPopup from "@/components/dashboard/AddCompanyPopup";
 import Navigation from "@/components/shared/Navigation";
 import adminNavigationGuard from "@/hooks/adminNavigationGuard";
 import { useJwtStore } from "@/stores/useUserStore";
@@ -16,6 +18,10 @@ const Admin = () => {
   const [companies, setCompanies] = useState([]);
   const [focusedTab, setFocusedTab] = useState("users");
   const { token } = adminNavigationGuard() || null;
+  const [locations, setLocations] = useState([]);
+  const [isAddCompanyOpen, setIsAddCompanyOpen] = useState(false);
+  const [currentCompany, setCurrentCompany] = useState({});
+
   const fetchUsers = async () => {
     try {
       const userData = await getAllUsers(jwt);
@@ -48,6 +54,9 @@ const Admin = () => {
     fetchUsers();
     fetchCompanies();
   }, []);
+  useEffect(() => {
+    getAllCountries(jwt, setLocations);
+  }, [jwt]);
 
   return (
     <>
@@ -62,7 +71,15 @@ const Admin = () => {
         draggable
         pauseOnHover
         theme="dark"
-      />
+      />{" "}
+      {isAddCompanyOpen && (
+        <AddCompanyPopup
+          jwt={jwt}
+          locations={locations}
+          setIsAddCompanyOpen={setIsAddCompanyOpen}
+          currentCompany={currentCompany}
+        />
+      )}
       <Navigation />
       <main className="sm:w-5/5 lg:w-4/5 mx-auto min-h-96 mt-28 gap-10 grid pb-4">
         <section className="bg-bkgContrast w-4/5 mx-auto min-h-96 rounded-3xl shadow-md">
@@ -84,30 +101,30 @@ const Admin = () => {
             })}
           </article>{" "}
         </section>
-        <section className="bg-bkgContrast w-4/5 mx-auto min-h-96 rounded-tr-xl bg-gray-300 mb-20 ">
+        <section className="bg-bkgContrast w-4/5 mx-auto min-h-96 rounded-tr-xl bg-bkgContrast mb-20 ">
           <div
             className={`flex ${
-              focusedTab !== "companies" ? "bg-gray-300" : "bg-white"
+              focusedTab !== "companies" ? "bg-bkgContrast" : "bg-white"
             } `}
           >
-            <div className="flex justify-between w-full">
+            <div className="flex justify-between w-full pb-8">
               {" "}
               <button
                 onClick={() => setFocusedTab("users")}
-                className={`text-content sm:text-md lg:text-2xl p-4 font-bold whitespace-nowrap ${
+                className={` sm:text-md lg:text-2xl p-4 font-bold whitespace-nowrap ${
                   focusedTab !== "companies"
-                    ? "bg-white w-full  rounded-br-none rounded-tr-3xl "
-                    : "bg-gray-300 w-max  rounded-tr-3xl  "
-                }  bg-bkgContrast text-left rounded-tl-none rounded-bl-none `}
+                    ? "bg-content text-bkgContrast w-full  rounded-br-none rounded-tr-3xl "
+                    : "bg-bkgContrast w-max  rounded-tr-3xl text-content  "
+                }   text-left rounded-tl-none rounded-bl-none `}
               >
                 List of Users
               </button>{" "}
               <button
                 onClick={() => setFocusedTab("companies")}
-                className={`text-content sm:text-md lg:text-2xl min-w-max text-right ${
+                className={` sm:text-md lg:text-2xl min-w-max text-right ${
                   focusedTab === "companies"
-                    ? "bg-white w-full rounded-tr-none rounded-br-none rounded-tl-none rounded-bl-3xl"
-                    : "bg-gray-300 w-fill"
+                    ? "bg-content text-bkgContrast w-full rounded-tr-none rounded-br-none rounded-tl-none rounded-bl-3xl"
+                    : "bg-bkgContrast w-fill text-content"
                 }  rounded-tr-3xl p-4 font-bold relative overflow-hidden`}
               >
                 List of Companies
@@ -134,7 +151,15 @@ const Admin = () => {
                 })}
               {focusedTab === "companies" &&
                 companies.map((company) => {
-                  return <AdminCompany company={company} />;
+                  return (
+                    <AdminCompany
+                      jwt={jwt}
+                      company={company}
+                      setCompanies={setCompanies}
+                      setIsCompanyOpen={setIsAddCompanyOpen}
+                      setCurrentCompany={setCurrentCompany}
+                    />
+                  );
                 })}
             </article>{" "}
           </article>
