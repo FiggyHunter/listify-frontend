@@ -1,8 +1,11 @@
-import { changeAdmitted } from "@/api/user";
+import { changeAdmitted, disbandUser } from "@/api/user";
 import AdminButton from "../shared/AdminButtons";
 import getInitials from "@/utilities/getInitialsFromName";
+import DisbandButton from "./DisbandButton";
+import BanButton from "./BanButton";
+import PromoteToAdmin from "./PromoteToAdmin";
 
-const AccessRequest = ({ jwt, user, handleAdmitUser }) => {
+const AdminCard = ({ jwt, user, handleAdmitUser, fetchUsers, type }) => {
   console.log(jwt);
   return (
     <section className="grid w-full px-8 mx-auto access-grid gap-4 ">
@@ -16,20 +19,28 @@ const AccessRequest = ({ jwt, user, handleAdmitUser }) => {
         <h4 className="text-base font-light">Date: {user.createdAt}</h4>
       </div>
       <div className="flex items-center gap-4">
-        <button className="bg-darkBlue w-fit">Disband</button>
+        {type === "list" ? (
+          <DisbandButton jwt={jwt} userId={user._id} fetchUsers={fetchUsers} />
+        ) : (
+          <BanButton jwt={jwt} user={user} fetchUsers={fetchUsers} />
+        )}
       </div>{" "}
       <div className="flex items-center gap-4">
-        <AdminButton
-          buttonId={`btn${user._id}`}
-          jwt={jwt}
-          text={"ADMIT"}
-          userId={user._id}
-          handleAdmitUser={handleAdmitUser}
-          fullName={`${user.name} ${user.surname}`}
-        />
-      </div>{" "}
+        {type === "list" ? (
+          <AdminButton
+            buttonId={`btn${user._id}`}
+            jwt={jwt}
+            text={"ADMIT"}
+            userId={user._id}
+            handleAdmitUser={handleAdmitUser}
+            fullName={`${user.name} ${user.surname}`}
+          />
+        ) : (
+          <PromoteToAdmin />
+        )}
+      </div>
     </section>
   );
 };
 
-export default AccessRequest;
+export default AdminCard;
