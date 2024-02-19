@@ -105,6 +105,7 @@ export const CreateCompany = async (companyData, jwt) => {
         Authorization: `Bearer ${jwt}`,
       },
     });
+    return response;
   } catch (error) {
     throw error;
   }
@@ -132,6 +133,46 @@ export const deleteCompany = async (
       );
     });
   } catch (error) {
+    throw error;
+  }
+};
+
+export const addCompanyImage = async (jwt, companyId, companyImage) => {
+  const uri =
+    import.meta.env.VITE_API_ENDPOINT +
+    `/api/company/addImageToCompany/${companyId}`;
+  console.log(companyImage);
+  try {
+    const formData = new FormData();
+    formData.append("image", companyImage, companyImage.name);
+    console.log(formData);
+    console.log(
+      await Axios.post(uri, formData, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+    );
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const getEmployeesByCompany = async (jwt, companyId, setEmployees) => {
+  const uri =
+    import.meta.env.VITE_API_ENDPOINT +
+    `/api/company/getAllUsersInCompany/${companyId}`;
+  try {
+    const response = await Axios.get(uri, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    setEmployees(response.data);
+  } catch (error) {
+    console.log(error);
     throw error;
   }
 };
