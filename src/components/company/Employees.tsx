@@ -1,9 +1,21 @@
-const Employees = () => {
+import getInitials from "@/utilities/getInitialsFromName";
+import { useNavigate } from "react-router-dom";
+
+const Employees = ({ employee }) => {
+  const navigate = useNavigate();
   return (
-    <div className="text-content flex w-5/6 mx-auto gap-2 sm:justify-center md:justify-start my-4">
-      <div className="bg-gray-300 self-center w-16 h-16 rounded-full "></div>
+    <div
+      onClick={() => {
+        navigate(`/profile/${employee._id}`);
+      }}
+      className="cursor-pointer text-content flex w-5/6 mx-auto gap-2 sm:justify-center md:justify-start my-4"
+    >
+      <div className="bg-gray-300 grid place-content-center font-bold self-center w-16 h-16 rounded-full ">
+        {getInitials(`${employee.name} ${employee.surname}`)}{" "}
+      </div>
       <div className="">
-        <p className="font-extrabold">Name Nameson</p> <p>3 Months</p>
+        <p className="font-extrabold">{`${employee.name} ${employee.surname}`}</p>{" "}
+        <p>3 Months</p>
       </div>
     </div>
   );
