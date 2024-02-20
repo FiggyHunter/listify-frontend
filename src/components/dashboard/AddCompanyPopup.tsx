@@ -14,7 +14,10 @@ const AddCompanyPopup = ({
     handleCompanyCreation,
     setCompanyData,
     errors,
+    companyImage,
+    setCompanyImage,
   } = useCompanyState();
+  console.log(currentCompany);
   console.log(companyData);
   return (
     <div
@@ -208,7 +211,7 @@ const AddCompanyPopup = ({
           error={errors?.websiteUrl ? true : false}
           helperText={errors?.websiteUrl}
         />
-        <FileUpload />
+        <FileUpload setCompanyImage={setCompanyImage} />
         <Autocomplete
           className="col-span-2"
           freeSolo
