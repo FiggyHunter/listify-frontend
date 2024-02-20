@@ -39,6 +39,7 @@ export const getAllReviewsByCompany = async (companyId, jwt) => {
         Authorization: `Bearer ${jwt}`,
       },
     });
+    console.log(response.data);
     return response.data.reverse();
   } catch (error) {
     throw error;
@@ -56,6 +57,7 @@ export const getReviewsByUserId = async (jwt, userId) => {
         Authorization: `Bearer ${jwt}`,
       },
     });
+    console.log(response);
     return response.data;
   } catch (error) {
     throw error;

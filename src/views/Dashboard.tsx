@@ -105,11 +105,11 @@ const Dashboard = () => {
         <div className="mx-auto sm:w-5/6  lg:w-4/5">
           <section className="flex flex-col gap-2 mb-6 text-content bg-bkgContrast  rounded-2xl city">
             <div className="custom-grad h-full self-stretch p-6">
-              <h1 className="sm:text-center sm:text-3xl md:text-5xl md:text-right font-bold text-white ">
+              <h1 className="cursor-default sm:text-center sm:text-3xl md:text-5xl md:text-right font-bold text-white ">
                 Good afternoon{" "}
                 {token.decodedToken ? token.decodedToken.name : ""}.
               </h1>
-              <h2 className="sm:text-center md:text-right text-content text-white">
+              <h2 className="cursor-default sm:text-center md:text-right text-content text-white">
                 It's{" "}
                 {`${new Date().getHours()}:${
                   new Date().getMinutes() > 0 && new Date().getMinutes() < 10

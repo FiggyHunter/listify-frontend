@@ -22,7 +22,7 @@ const Login = () => {
         token?.decodedToken &&
         !token?.isExpired && (
           <>
-            <section className="bg-bkgContrast text-bkg mx-auto text-center flex flex-col gap-4 sm:w-4/5 md:w-1/2 lg:w-2/6">
+            <section className="bg-bkgContrast text-content mx-auto text-center flex flex-col gap-4 sm:w-4/5 md:w-1/2 lg:w-2/6">
               <h1 className="text-2xl font-bold mt-3">WAIT</h1>
               <div className="">
                 <p className="text-xl w-4/5 mx-auto">
@@ -37,7 +37,7 @@ const Login = () => {
                 REFRESH
               </button>
             </section>{" "}
-            <section className="bg-bkgContrast text-bkg mx-auto text-center flex flex-col gap-4 sm:w-4/5 md:w-1/2 lg:w-2/6">
+            <section className="bg-bkgContrast text-content text-bkg mx-auto text-center flex flex-col gap-4 sm:w-4/5 md:w-1/2 lg:w-2/6">
               <h1 className="text-2xl font-bold mt-3">Problems?</h1>
               <div className="">
                 <p className="text-xl w-4/5 mx-auto">
@@ -51,7 +51,7 @@ const Login = () => {
             </section>
           </>
         )}
-      <section className="flex flex-row items-center gap-2 justify-center ">
+      <section className="flex flex-row  items-center gap-2 justify-center ">
         <p className="text-content w-max ">Powered by </p>{" "}
         <a target="_blank" href="https://skim.ba/">
           <svg

@@ -1,4 +1,4 @@
-import { deleteCompany } from "@/api/company";
+import { deleteCompany, getCompanyById } from "@/api/company";
 import AddCompanyPopup from "../dashboard/AddCompanyPopup";
 
 const AdminCompany = ({
@@ -8,7 +8,7 @@ const AdminCompany = ({
   setIsCompanyOpen,
   setCurrentCompany,
 }) => {
-  console.log(company);
+  console.log(getCompanyById(jwt, setCompanies, company._id));
   return (
     <section className="grid w-full px-8 mx-auto access-grid gap-4 ">
       <div className="h-16  sm:col-span-2 lg:col-span-1  sm:self-center w-16 bg-sky-400 ">
