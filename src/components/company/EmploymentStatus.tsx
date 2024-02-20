@@ -9,7 +9,7 @@ const EmploymentStatus = ({
   fetchEmployees,
 }) => {
   const [isChecked, setIsChecked] = useState(false);
-
+  console.log(employees);
   useEffect(() => {
     function isUserIdInEmployeesList(userId: string) {
       for (let employee of employees) {
@@ -20,8 +20,8 @@ const EmploymentStatus = ({
       }
       setIsChecked(false);
     }
-    isUserIdInEmployeesList(userId);
-  }, []);
+    if (employees && employees?.length !== 0) isUserIdInEmployeesList(userId);
+  }, [employees]);
 
   return (
     <>
