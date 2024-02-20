@@ -1,12 +1,14 @@
-import { getCompanyById } from "@/api/company";
+import { getCompanyById, getEmployeesByCompany } from "@/api/company";
 import { getAllReviewsByCompany } from "@/api/review";
 import Employees from "@/components/company/Employees";
+import EmploymentStatus from "@/components/company/EmploymentStatus";
 import ReviewPopup from "@/components/company/ReviewPopup";
 import Reviews from "@/components/company/Reviews";
 import Navigation from "@/components/shared/Navigation";
 import NotFoundCard from "@/components/shared/NotFoundCard";
 import userNavigationGuard from "@/hooks/userNavigationGuard";
 import { useJwtStore } from "@/stores/useUserStore";
+import { Switch } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -19,7 +21,8 @@ const Company = () => {
   const navigate = useNavigate();
   const [company, setCompany] = useState(null);
   const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
-  const [reviews, setReviews] = useState({});
+  const [reviews, setReviews] = useState([]);
+  const [employees, setEmployees] = useState();
 
   useEffect(() => {
     const fetchCompanyReviews = async () =>
@@ -32,6 +35,7 @@ const Company = () => {
 
   useEffect(() => {
     getCompanyById(jwt, setCompany, companyId);
+    getEmployeesByCompany(jwt, companyId, setEmployees);
   }, [jwt]);
 
   return (
@@ -92,7 +96,7 @@ const Company = () => {
                     }
                     className="w-5/6 group  mx-auto my-4 bg-transparent text-content border-darkBlue flex items-center gap-2 hover:bg-crimson transition-all duration-200 hover:text-white justify-center"
                   >
-                    Write a review{" "}
+                    Write a review
                     <svg
                       className="fill-crimson group-hover:fill-white"
                       width="16"
@@ -115,7 +119,7 @@ const Company = () => {
                     </svg>
                   </button>
                   <button className="w-5/6 group  mx-auto mb-4 bg-transparent  border-darkBlue flex items-center gap-2 hover:bg-crimson transition-all duration-200 hover:text-white justify-center text-content">
-                    Request Changes{" "}
+                    Request Changes
                     <svg
                       className="fill-crimson group-hover:fill-white"
                       width="16"
@@ -136,25 +140,62 @@ const Company = () => {
                         </clipPath>
                       </defs>
                     </svg>
-                  </button>
-                </div>{" "}
+                  </button>{" "}
+                  <div className="w-5/6 mx-auto text-center">
+                    <EmploymentStatus
+                      jwt={jwt}
+                      companyId={companyId}
+                      userId={token?.decodedToken?.user_id}
+                      employees={employees}
+                      fetchEmployees={() =>
+                        getEmployeesByCompany(jwt, companyId, setEmployees)
+                      }
+                    />
+                  </div>
+                </div>
+
                 <div className="flex flex-col  bg-bkgContrast shadow-md rounded-xl mt-8">
                   <h3 className="text-content text-center  outline-offset-4 pt-4 font-medium">
                     CURRENTLY EMPLOYED
                   </h3>
                   <span className="w-full border-b-2 border-content mt-4"></span>
-                  <Employees />
-                  <Employees />
-                  <Employees />
+                  {employees && employees?.length >= 0 ? (
+                    employees?.map((employee) => (
+                      <Employees employee={employee} />
+                    ))
+                  ) : (
+                    <div
+                      role="status"
+                      className="sm:flex sm:flex-col sm:items-center md:grid md:custom-cols-dash gap-4 w-full mx-auto text-bkg animate-pulse  "
+                    >
+                      <div className="w-48 rounded-xl h-16 lg:h-32 self-center bg-gray-300"></div>
+                      <div className="flex flex-col items-center justify-between">
+                        <div className="w-full flex sm:flex-col md:flex-col justify-between text-black">
+                          <p className="font-inter text-lg mb-2">
+                            <span className="font-black text-content">HQ:</span>
+                          </p>
+                          <div className="flex gap-2 mb-2">
+                            <div className="py-1 px-2 text-bkgContrast text-sm lg:w-20 sm:w-16 h-8 sm:h-6 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                            <div className="py-1 px-2 text-bkgContrast text-sm lg:w-20 sm:w-16 h-8 sm:h-6 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                          </div>
+                        </div>
+                        <div className="flex flex-col  gap-2 text-black w-full py-2 ">
+                          <div className="text-2xl items-start h-6 bg-gray-200 rounded-full dark:bg-gray-700 w-48"></div>
+                          <div className="text-md sm:hidden md:block lg:block h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-full"></div>{" "}
+                          <div className="text-md sm:hidden md:block lg:block h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-full"></div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </aside>
               <section className="md:pl-16 min-h-96 h-full bg-bkgContrast text-center rounded-tr-2xl flex flex-col py-6 mb-6 gap-6 sm:w-full md:w-auto lg:w-auto">
                 <div>
-                  <h1 className="text-content font-inter text-2xl sm:text-center md:text-left lg:text-6xl mb-4 font-extrabold">
+                  <h1 className="text-content font-inter text-2xl sm:text-center md:text-left lg:text-6xl mb-4 font-extrabold whitespace-pre-wrap">
                     {company?.name}
                   </h1>
                   <h2 className="text-content text-xl font-normal md:text-left sm:text-center">
-                    <span className="font-bold">HQ:</span> {company?.hq}
+                    <span className="font-bold">HQ:</span> {company?.hq?.name}
                   </h2>
                 </div>
                 <p
@@ -218,7 +259,7 @@ const Company = () => {
                       </defs>
                     </svg>
                     <p className="text-content">
-                      Headquarters in: {company?.hq}{" "}
+                      Headquarters in: {company?.hq?.name}{" "}
                     </p>
                   </div>
                   <div className="flex gap-2 items-center ">
@@ -266,8 +307,8 @@ const Company = () => {
                   <h3 className="text-content sm:text-center lg:text-left text-2xl mb-4  text-left  inline-block px-1 font-semibold after:absolute after:-bottom-2  sm:after:left-1/2 lg:after:left-1 after:h-1 after:w-12 after:-translate-y-1 after:bg-gray-300 after:content-[''] sticky top-0 bg-bkgContrast bg-bkg z-20">
                     Reviews
                   </h3>
-                  {reviews.length !== 0 ? (
-                    reviews.map((review) => (
+                  {reviews && reviews?.length !== 0 ? (
+                    reviews?.map((review) => (
                       <Reviews
                         key={review.userId}
                         rating={review.rating}
