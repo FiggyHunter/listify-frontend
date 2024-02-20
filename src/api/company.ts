@@ -68,8 +68,6 @@ export const getCompanyById = async (jwt, setCompany, id) => {
         Authorization: `Bearer ${jwt}`,
       },
     });
-
-    response.data.hq = await getCountryNameById(jwt, response.data.hq._id);
     console.log(response.data);
     setCompany(await response.data);
   } catch (error) {
