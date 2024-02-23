@@ -15,6 +15,39 @@ async function modifyAllHq(jwt, data) {
   return modifiedData;
 }
 
+export function formatExistingCompany(company) {
+  console.log(company);
+  // Extracting necessary fields from the company object
+  const {
+    name: companyName,
+    description: companyDescription,
+    hq,
+    websiteURL: websiteUrl,
+    linkedinURL: linkedinUrl,
+    countries,
+    group,
+  } = company;
+
+  const locationId = countries.map((country) => country._id);
+
+  const formattedCompany = {
+    companyName: companyName,
+    companyDescription: companyDescription,
+    companyHQ: hq._id,
+    countries: [...countries],
+    areasOfExperise: ["Software Development"],
+    category: group,
+    linkedinUrl: linkedinUrl,
+    websiteUrl: websiteUrl,
+    locationId: locationId,
+    hqId: hq._id,
+  };
+
+  console.log(formattedCompany);
+
+  return formattedCompany;
+}
+
 function FormatAddCompanyRequest(companyData) {
   console.log(companyData);
   //   {
@@ -51,8 +84,7 @@ export const getAllCompanies = async (jwt, setCompanies) => {
     });
 
     console.log(response.data);
-    const modifiedResponse = await modifyAllHq(jwt, response.data);
-    setCompanies(modifiedResponse?.reverse());
+    setCompanies(response.data?.reverse());
   } catch (error) {
     console.log(error);
     throw new Error(error.response.data);
@@ -168,6 +200,7 @@ export const getEmployeesByCompany = async (jwt, companyId, setEmployees) => {
         Authorization: `Bearer ${jwt}`,
       },
     });
+    console.log(response.data);
     setEmployees(response.data);
   } catch (error) {
     console.log(error);
