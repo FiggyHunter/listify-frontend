@@ -42,6 +42,8 @@ const Dashboard = () => {
 
   const currentDay = getCurrentDay();
 
+  console.log(companies);
+
   useEffect(() => {
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") setIsAddCompanyOpen(false);
@@ -62,7 +64,9 @@ const Dashboard = () => {
       setDisplayedCompanies(companies);
     if (!filters.category && filters.location)
       setDisplayedCompanies(() =>
-        companies?.filter((company) => filters.location.includes(company.hq))
+        companies?.filter((company) =>
+          filters.location.includes(company.hq.name)
+        )
       );
     if (filters.category && !filters.location) {
       setDisplayedCompanies(() =>
@@ -73,7 +77,7 @@ const Dashboard = () => {
       setDisplayedCompanies(() =>
         companies
           ?.filter((company) => company.group === filters.category)
-          ?.filter((company) => filters.location.includes(company.hq))
+          ?.filter((company) => filters.location.includes(company.hq.name))
       );
     }
     if (searchTerm !== "") {
