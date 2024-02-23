@@ -1,5 +1,4 @@
 import { deleteCompany, getCompanyById } from "@/api/company";
-import AddCompanyPopup from "../dashboard/AddCompanyPopup";
 
 const AdminCompany = ({
   jwt,
@@ -8,11 +7,14 @@ const AdminCompany = ({
   setIsCompanyOpen,
   setCurrentCompany,
 }) => {
-  console.log(getCompanyById(jwt, setCompanies, company._id));
   return (
     <section className="grid w-full px-8 mx-auto access-grid gap-4 ">
-      <div className="h-16  sm:col-span-2 lg:col-span-1  sm:self-center w-16 bg-sky-400 ">
-        <img src={company.logo} alt={`${company?.name} logo`} />
+      <div className="h-16  sm:col-span-2 lg:col-span-1  sm:self-center w-16  bg-sky-400 ">
+        <img
+          className="h-full"
+          src={company.logo}
+          alt={`${company?.name} logo`}
+        />
       </div>
       <div className="flex sm:col-span-2 lg:col-span-1 flex-col gap-3 w-full text-content">
         <h2 className="text-xl font-bold">{`${company.name}`}</h2>{" "}
