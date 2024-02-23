@@ -13,15 +13,13 @@ const CompanyCard: React.FC<Props> = ({ navigate, company }) => {
       <img
         alt={`logo for ${company.name}`}
         onClick={() => navigate(`/company/${company._id}`)}
-        src={
-          "https://www.google.com/s2/favicons?domain=www.ministryofprogramming.com"
-        }
+        src={company.logo}
         className="sm:w-4/4 lg:w-3/4 rounded-xl h-24 lg:h-32 self-center bg-gray-300 cursor-pointer"
       ></img>
       <div className="flex flex-col items-center justify-between">
         <div className="w-full flex sm:flex-col md:flex-row justify-between  text-content">
           <p className="lg:mx-0 text-lg mb-2">
-            <span className="font-black">HQ:</span> {company.hq}
+            <span className="font-black">HQ:</span> {company.hq.name}
           </p>
           <div className="flex gap-2 mb-2">
             {company && (
