@@ -1,4 +1,4 @@
-import { getAllCompanies } from "@/api/company";
+import { formatExistingCompany, getAllCompanies } from "@/api/company";
 import { getAllCountries } from "@/api/country";
 import { getAllUsers } from "@/api/user";
 import AdminCard from "@/components/admin/AdminCard";
@@ -19,6 +19,11 @@ const Admin = () => {
   const [locations, setLocations] = useState([]);
   const [isAddCompanyOpen, setIsAddCompanyOpen] = useState(false);
   const [currentCompany, setCurrentCompany] = useState({});
+
+  useEffect(() => {
+    if (Object.entries(currentCompany).length !== 0)
+      formatExistingCompany(currentCompany);
+  }, [currentCompany]);
 
   const fetchUsers = async () => {
     try {
@@ -51,7 +56,8 @@ const Admin = () => {
   useEffect(() => {
     fetchUsers();
     fetchCompanies();
-  }, []);
+  }, [jwt]);
+
   useEffect(() => {
     getAllCountries(jwt, setLocations);
   }, [jwt]);
@@ -101,7 +107,7 @@ const Admin = () => {
             })}
           </article>{" "}
         </section>
-        <section className="bg-bkgContrast w-4/5 mx-auto  rounded-tr-xl bg-bkgContrast mb-20 ">
+        <section className=" w-4/5 mx-auto  rounded-2xl overflow-hidden bg-bkgContrast mb-20 ">
           <div
             className={`flex ${
               focusedTab !== "companies" ? "bg-bkgContrast" : "bg-white"
@@ -151,7 +157,7 @@ const Admin = () => {
                     );
                 })}
               {focusedTab === "companies" &&
-                companies.map((company) => {
+                companies?.map((company) => {
                   return (
                     <AdminCompany
                       jwt={jwt}
