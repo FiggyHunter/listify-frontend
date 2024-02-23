@@ -4,9 +4,9 @@ import getInitials from "@/utilities/getInitialsFromName";
 import DisbandButton from "./DisbandButton";
 import BanButton from "./BanButton";
 import PromoteToAdmin from "./PromoteToAdmin";
+import DemoteFromAdmin from "./DemoteFromAdmin";
 
 const AdminCard = ({ jwt, user, handleAdmitUser, fetchUsers, type }) => {
-  console.log(jwt);
   return (
     <section className="grid w-full px-8 mx-auto access-grid gap-4 ">
       <div className="h-16  sm:col-span-2 lg:col-span-1  sm:self-center w-16 bg-sky-400 grid place-content-center text-black font-black text-xl ">
@@ -35,8 +35,14 @@ const AdminCard = ({ jwt, user, handleAdmitUser, fetchUsers, type }) => {
             handleAdmitUser={handleAdmitUser}
             fullName={`${user.name} ${user.surname}`}
           />
+        ) : !user.isAdmin ? (
+          <PromoteToAdmin jwt={jwt} userId={user._id} fetchUsers={fetchUsers} />
         ) : (
-          <PromoteToAdmin />
+          <DemoteFromAdmin
+            jwt={jwt}
+            userId={user._id}
+            fetchUsers={fetchUsers}
+          />
         )}
       </div>
     </section>
