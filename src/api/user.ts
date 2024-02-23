@@ -277,3 +277,21 @@ export const promoteUser = async (jwt, userId, fetchUsers) => {
     throw error;
   }
 };
+
+export const demoteUser = async (jwt, userId, fetchUsers) => {
+  const uri = import.meta.env.VITE_AUTH_ENDPOINT + `/demoteFromAdmin/${userId}`;
+  try {
+    await Axios.patch(
+      uri,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+    fetchUsers();
+  } catch (error) {
+    throw error;
+  }
+};
