@@ -76,9 +76,7 @@ const Company = () => {
               <aside className="sm:block md:sticky top-24 bg-bkgContrast rounded-tl-2xl bg-transparent  h-full pt-0   ">
                 <div className="flex flex-col bg-bkgContrast shadow-md rounded-xl pt-5">
                   <img
-                    src={
-                      "https://www.google.com/s2/favicons?domain=www.ministryofprogramming.com"
-                    }
+                    src={company.logo}
                     className="w-32 rounded-xl h-32 lg:h-56 lg:w-3/4 self-center bg-gray-300"
                     alt={`Logo for ${company?.name}`}
                   ></img>{" "}
