@@ -16,7 +16,7 @@ const DisbandButton = ({ jwt, userId, fetchUsers }) => {
           fetchUsers
         );
       }}
-      className="bg-darkBlue w-fit"
+      className="bg-darkBlue w-fit hover:bg-darkBlueHover transition-all duration-150 font-bold"
     >
       {isLoading ? <LoaderButton /> : "DISBAND"}
     </button>
