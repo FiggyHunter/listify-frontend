@@ -1,5 +1,6 @@
 import { getCompanyById, getEmployeesByCompany } from "@/api/company";
 import { getAllReviewsByCompany } from "@/api/review";
+import CompanyRequest from "@/components/company/CompanyRequest";
 import Employees from "@/components/company/Employees";
 import EmploymentStatus from "@/components/company/EmploymentStatus";
 import ReviewPopup from "@/components/company/ReviewPopup";
@@ -23,6 +24,7 @@ const Company = () => {
   const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [employees, setEmployees] = useState();
+  const [isAddRequestOpen, setIsAddRequestOpen] = useState(false);
 
   useEffect(() => {
     const fetchCompanyReviews = async () =>
@@ -71,6 +73,14 @@ const Company = () => {
               jwt={jwt}
             />
           )}
+          {isAddRequestOpen && (
+            <CompanyRequest
+              jwt={jwt}
+              userId={token.decodedToken.user_id}
+              companyId={companyId}
+              setIsAddRequestOpen={setIsAddRequestOpen}
+            />
+          )}
           <div className="mx-auto w-4/5">
             <section className="grid sm:grid-cols-1 md:custom-cols-company gap-4 h-min">
               <aside className="sm:block md:sticky top-24 bg-bkgContrast rounded-tl-2xl bg-transparent  h-full pt-0   ">
@@ -116,7 +126,12 @@ const Company = () => {
                       </defs>
                     </svg>
                   </button>
-                  <button className="w-5/6 group  mx-auto mb-4 bg-transparent  border-darkBlue flex items-center gap-2 hover:bg-crimson transition-all duration-200 hover:text-white justify-center text-content">
+                  <button
+                    onClick={() => {
+                      setIsAddRequestOpen(true);
+                    }}
+                    className="w-5/6 group  mx-auto mb-4 bg-transparent  border-darkBlue flex items-center gap-2 hover:bg-crimson transition-all duration-200 hover:text-white justify-center text-content"
+                  >
                     Request Changes
                     <svg
                       className="fill-crimson group-hover:fill-white"
