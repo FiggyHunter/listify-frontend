@@ -6,7 +6,7 @@ const PromoteToAdmin = ({ jwt, userId, fetchUsers }) => {
       onClick={() => {
         promoteUser(jwt, userId, fetchUsers);
       }}
-      className="focus:outline-none  rounded-lg hover:bg-crimsonHover hover:outline-0 border-none transition-all duration-250 bg-crimson font-semibold text-white"
+      className="focus:outline-none  rounded-lg hover:outline-0 border-none duration-250 bg-crimson  text-white hover:bg-crimsonHover transition-all duration-150 font-bold"
     >
       Promote to Admin
     </button>
