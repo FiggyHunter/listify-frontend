@@ -34,7 +34,7 @@ const AdminCompany = ({
             setCurrentCompany(company);
             setIsCompanyOpen(true);
           }}
-          className="bg-darkBlue w-fit"
+          className="bg-darkBlue w-fit hover:bg-darkBlueHover transition-all duration-150 font-bold"
         >
           Edit
         </button>
@@ -44,7 +44,7 @@ const AdminCompany = ({
           onClick={() =>
             deleteCompany(company._id, company.name, jwt, setCompanies)
           }
-          className="bg-crimson"
+          className="bg-crimson hover:bg-crimsonHover transition-all duration-150 font-bold"
         >
           Delete
         </button>
