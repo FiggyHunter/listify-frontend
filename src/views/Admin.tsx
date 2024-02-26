@@ -1,8 +1,10 @@
 import { formatExistingCompany, getAllCompanies } from "@/api/company";
 import { getAllCountries } from "@/api/country";
+import { getAllRequests } from "@/api/request";
 import { getAllUsers } from "@/api/user";
 import AdminCard from "@/components/admin/AdminCard";
 import AdminCompany from "@/components/admin/AdminCompany";
+import AdminRequestCard from "@/components/admin/AdminRequestCard";
 import AddCompanyPopup from "@/components/dashboard/AddCompanyPopup";
 import Navigation from "@/components/shared/Navigation";
 import adminNavigationGuard from "@/hooks/adminNavigationGuard";
@@ -19,6 +21,7 @@ const Admin = () => {
   const [locations, setLocations] = useState([]);
   const [isAddCompanyOpen, setIsAddCompanyOpen] = useState(false);
   const [currentCompany, setCurrentCompany] = useState({});
+  const [requests, setRequests] = useState([]);
 
   useEffect(() => {
     if (Object.entries(currentCompany).length !== 0)
@@ -42,6 +45,14 @@ const Admin = () => {
     }
   };
 
+  const fetchRequests = async () => {
+    try {
+      await getAllRequests(jwt, setRequests);
+    } catch (error) {
+      return error;
+    }
+  };
+
   const handleAdmitUser = (userId) => {
     setUsers((prevUsers) => {
       return prevUsers.map((user) => {
@@ -53,9 +64,12 @@ const Admin = () => {
     });
   };
 
+  console.log(requests);
+
   useEffect(() => {
     fetchUsers();
     fetchCompanies();
+    fetchRequests();
   }, [jwt]);
 
   useEffect(() => {
@@ -106,7 +120,27 @@ const Admin = () => {
                 );
             })}
           </article>{" "}
-        </section>
+        </section>{" "}
+        {requests.length !== 0 && (
+          <section className="bg-bkgContrast w-4/5 mx-auto rounded-3xl shadow-md">
+            <h2 className="text-content text-2xl w-full mx-auto sm:text-md lg:text-2xl pt-4 pb-8 px-8 font-bold flex flex-col">
+              Company Modification Requests (
+              {document.getElementById("changes")?.childElementCount})
+            </h2>{" "}
+            <article id={"changes"} className="flex flex-col gap-4 pb-8 px-8">
+              {requests.map((request) => {
+                return (
+                  <AdminRequestCard
+                    key={request._id}
+                    request={request}
+                    jwt={jwt}
+                    setRequests={setRequests}
+                  />
+                );
+              })}
+            </article>{" "}
+          </section>
+        )}
         <section className=" w-4/5 mx-auto  rounded-2xl overflow-hidden bg-bkgContrast mb-20 ">
           <div
             className={`flex ${
@@ -149,6 +183,7 @@ const Admin = () => {
                   if (user.isAdmitted || user.isBanned)
                     return (
                       <AdminCard
+                        key={user._id}
                         jwt={jwt}
                         user={user}
                         handleAdmitUser={handleAdmitUser}
@@ -160,6 +195,7 @@ const Admin = () => {
                 companies?.map((company) => {
                   return (
                     <AdminCompany
+                      key={company._id}
                       jwt={jwt}
                       company={company}
                       setCompanies={setCompanies}
