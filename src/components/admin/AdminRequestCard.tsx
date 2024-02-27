@@ -1,10 +1,14 @@
 import { getCompanyById } from "@/api/company";
 import { deleteRequest } from "@/api/request";
 import { getUserById } from "@/api/user";
+import { useButtonLoadingStore } from "@/stores/useButtonLoadingStore";
 import getInitials from "@/utilities/getInitialsFromName";
 import { useEffect, useState } from "react";
+import LoaderButton from "../shared/LoaderButton";
 
 const AdminRequestCard = ({ request, jwt, setRequests }) => {
+  const { buttonLoading, setButtonLoading } = useButtonLoadingStore();
+  const isLoading = buttonLoading[`btn-demote${request._id}`] || false;
   const [user, setUser] = useState();
   const [company, setCompany] = useState();
 
@@ -12,8 +16,6 @@ const AdminRequestCard = ({ request, jwt, setRequests }) => {
     getUserById(request.userId, jwt).then((user) => setUser(user));
     getCompanyById(jwt, setCompany, request.companyId);
   }, []);
-
-  console.log(company);
 
   return (
     <article className=" gap-2 w-full mx-auto text-content ">
@@ -23,18 +25,26 @@ const AdminRequestCard = ({ request, jwt, setRequests }) => {
         </div>
         <div className="">
           <h2 className="text-xl font-bold">
-            {`${user?.name} ${user?.surname} @ ${company?.name}`}{" "}
+            {`${user?.name ? user.name : "Loading"} ${
+              user?.surname ? user.surname : "user..."
+            } @ ${company?.name}`}{" "}
           </h2>
         </div>
       </div>
       <p className="text-content mt-4">{request?.text}</p>
       <button
         onClick={() => {
-          deleteRequest(jwt, request._id, setRequests);
+          deleteRequest(
+            jwt,
+            request._id,
+            setRequests,
+            `btn-demote${request._id}`,
+            setButtonLoading
+          );
         }}
         className="mt-4 bg-crimson transition-all duration-150 hover:bg-crimsonHover  font-bold"
       >
-        MARK AS COMPLETED
+        {isLoading ? <LoaderButton /> : `MARK AS COMPLETED`}
       </button>
     </article>
   );
