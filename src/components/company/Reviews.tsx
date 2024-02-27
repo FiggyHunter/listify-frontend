@@ -20,21 +20,30 @@ const Reviews = ({ rating, text, userId, jwt, navigate, companyId }) => {
 
   useEffect(() => {
     fetchUser().then((user) => setUser(user));
-    fetchCompanyName().then(() => {
-      setIsLoading(false);
-    });
+    if (companyId)
+      fetchCompanyName().then(() => {
+        setIsLoading(false);
+      });
+    setIsLoading(false);
   }, [jwt]);
 
   return isLoading ? (
     <ReviewSkeleton navigate={navigate} />
   ) : (
-    <div className="text-content text-left p-4 ">
+    <div className="text-content text-left p-4 cursor-default">
       <div className="flex gap-2 sm:justify-center lg:justify-stretch ">
-        <div className="bg-gray-300 self-center w-12 h-12 rounded-full place-content-center grid font-bold text-black">
-          {getInitials(`${user.name} ${user.surname}`)}
+        <div
+          onClick={() => {
+            navigate(`/profile/${userId}`);
+          }}
+          className="bg-gray-300 self-center w-12 h-12 rounded-full place-content-center grid font-bold text-black cursor-pointer"
+        >
+          {getInitials(`${user?.name} ${user?.surname}`)}
         </div>
         <section className="rac">
-          <h4>{`${user.name} ${user.surname}`}</h4>
+          <h4>{`${user.name ? user.name : "Loading"} ${
+            user.surname ? user.surname : "user..."
+          }`}</h4>
           <Rating
             className="self-center"
             name="half-rating"
@@ -60,7 +69,7 @@ const Reviews = ({ rating, text, userId, jwt, navigate, companyId }) => {
       <p className="w-5/6 sm:mx-auto lg:mx-0 mt-2 pl-1 sm:text-center lg:text-left">
         {text}
       </p>
-      {navigate && (
+      {navigate && companyId && (
         <div className="mt-4">
           <p className="pl-1.5  inline">Reviewed company:</p>
           <button
