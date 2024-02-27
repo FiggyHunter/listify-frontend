@@ -10,7 +10,7 @@ const useCompanyState = () => {
   const [companyData, setCompanyData] = useState({
     companyName: "",
     companyDescription: "",
-    companyHQ: "",
+    companyHQ: {},
     location: [""],
     areasOfExperise: ["Software Development"],
     category: "HIRING",
