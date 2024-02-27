@@ -7,8 +7,7 @@ const Login = () => {
   const { jwt, setJwt } = useJwtStore();
   const { token } = authorisedNavigationGuard();
   const navigate = useNavigate();
-
-  console.log(token);
+  document.title = "Listify | Login";
 
   return (
     <main className="min-h-screen w-screen grid gap-4 items-center bg-bkg">

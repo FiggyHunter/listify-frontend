@@ -24,6 +24,7 @@ const Account = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    document.title = "Listify | Profile";
     const fetchUserReviews = async () => {
       console.log(reviews);
       if (userId) {

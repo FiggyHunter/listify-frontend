@@ -11,7 +11,7 @@ const Register = () => {
   const { jwt, setJwt } = useJwtStore();
   const { token } = authorisedNavigationGuard();
   const navigate = useNavigate();
-
+  document.title = "Listify | Register";
   return (
     <>
       <ToastContainer
