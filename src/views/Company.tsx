@@ -9,9 +9,9 @@ import Navigation from "@/components/shared/Navigation";
 import NotFoundCard from "@/components/shared/NotFoundCard";
 import userNavigationGuard from "@/hooks/userNavigationGuard";
 import { useJwtStore } from "@/stores/useUserStore";
-import { Switch } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 const Company = () => {
   const params = useParams();
@@ -40,27 +40,60 @@ const Company = () => {
     getEmployeesByCompany(jwt, companyId, setEmployees);
   }, [jwt]);
 
+  useEffect(() => {
+    document.title = `Listify | ${company?.name ? company.name : "Company"}`;
+  }, [company]);
+
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />{" "}
       <Navigation />
       {company === null ? (
-        <main className="pt-28">
-          <div
-            role="status"
-            className="p-4 border border-gray-200 rounded shadow animate-pulse md:p-6 dark:border-gray-700 h-my-screen  w-4/5 mx-auto"
-          >
-            <div className="flex  h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
-            <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-            <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
-            <div className="flex items-center mt-4">
-              <div>
-                <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32 mb-2"></div>
-                <div className="w-48 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+        <main className="pt-28 bg-bkg h-my-screen">
+          <div className="mx-auto w-4/5 grid sm:grid-cols-1 md:custom-cols-company gap-4 h-min">
+            <div
+              role="status"
+              className="p-4 border border-gray-200 rounded shadow animate-pulse md:p-6 dark:border-gray-700"
+            >
+              <div className="flex h-32 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
+              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+              <div className="flex items-center mt-4">
+                <div>
+                  <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32 mb-2"></div>
+                  <div className="w-48 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                </div>
               </div>
-            </div>{" "}
-            <div className="flex mt-4 h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>{" "}
-            <div className="flex mt-4 h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
-            <span className="sr-only">Loading...</span>
+              <div className="flex mt-4 h-32 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
+              <div className="flex mt-4 h-32 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
+              <span className="sr-only"></span>
+            </div>
+            <div className="h-full w-full p-4 border border-gray-200 rounded shadow animate-pulse md:p-6 dark:border-gray-700">
+              {" "}
+              <div className="flex h-32 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
+              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+              <div className="flex items-center mt-4">
+                <div>
+                  <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32 mb-2"></div>
+                  <div className="w-48 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                </div>
+              </div>{" "}
+              <div className="flex mt-4 h-32 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>{" "}
+              <div className="flex mt-4 h-32 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>{" "}
+              <div className="flex mt-4 h-32 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
+            </div>
           </div>
         </main>
       ) : (
@@ -71,6 +104,7 @@ const Company = () => {
               companyId={companyId}
               userId={token.decodedToken.user_id}
               jwt={jwt}
+              setReviews={setReviews}
             />
           )}
           {isAddRequestOpen && (
@@ -86,7 +120,7 @@ const Company = () => {
               <aside className="sm:block md:sticky top-24 bg-bkgContrast rounded-tl-2xl bg-transparent  h-full pt-0   ">
                 <div className="flex flex-col bg-bkgContrast shadow-md rounded-xl pt-5">
                   <img
-                    src={company.logo}
+                    src={company.logo || "/logo.svg"}
                     className="w-32 rounded-xl h-32 lg:h-56 lg:w-3/4 self-center bg-gray-300"
                     alt={`Logo for ${company?.name}`}
                   ></img>{" "}
@@ -328,7 +362,7 @@ const Company = () => {
                         text={review.text}
                         userId={review.userId}
                         jwt={jwt}
-                        companyId={review.companyId}
+                        navigate={navigate}
                       />
                     ))
                   ) : (
