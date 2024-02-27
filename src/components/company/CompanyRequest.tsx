@@ -2,7 +2,7 @@ import { AddRequest, addRequest } from "@/api/request";
 import { useButtonLoadingStore } from "@/stores/useButtonLoadingStore";
 import InputTheme from "@/themes/InputTheme";
 import { TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoaderButton from "../shared/LoaderButton";
 
 const CompanyRequest = ({ jwt, userId, companyId, setIsAddRequestOpen }) => {
@@ -10,6 +10,17 @@ const CompanyRequest = ({ jwt, userId, companyId, setIsAddRequestOpen }) => {
   const [requestError, setRequestErrors] = useState("");
   const { buttonLoading, setButtonLoading } = useButtonLoadingStore();
   const isLoading = buttonLoading[`requestLoader`] || false;
+  useEffect(() => {
+    const escListener = (e) => {
+      if (e.key === "Escape") setIsAddRequestOpen(false);
+    };
+
+    window.addEventListener("keydown", escListener);
+
+    return () => {
+      window.removeEventListener("keydown", escListener);
+    };
+  }, []);
   return (
     <section
       onClick={(e) => {
