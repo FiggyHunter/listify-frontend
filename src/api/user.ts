@@ -9,6 +9,21 @@ const notifyApprovedUser = (userFullName) =>
 const notifyDisbandedRequest = () =>
   toast(`You have successfully DISBANDED the request to join.`);
 
+const notifyBannedUser = async (fullName) => {
+  toast(`You have BANNED the user ${fullName}`);
+};
+const notifyUnbannedUser = async (fullName) => {
+  toast(`You have UNBANNED the user ${fullName}`);
+};
+
+const notifyPromotedUser = async (fullName) => {
+  toast(`You have PROMOTED the USER ${fullName} to ADMIN `);
+};
+
+const notifyDemotedUser = async (fullName) => {
+  toast(`You have DEMOTED the ADMIN ${fullName} to USER `);
+};
+
 export const getUserById = async (userId, jwt) => {
   const uri =
     import.meta.env.VITE_API_ENDPOINT + `/api/users/getById/${userId}`;
@@ -212,7 +227,7 @@ export const disbandUser = async (
     );
     setButtonLoading(buttonId, false);
     notifyDisbandedRequest();
-    fetchUsers();
+    await fetchUsers();
   } catch (error) {
     setButtonLoading(buttonId, false);
     console.log(error);
@@ -220,8 +235,15 @@ export const disbandUser = async (
   }
 };
 
-export const banUser = async (jwt, userId, fetchUsers) => {
+export const banUser = async (
+  jwt,
+  userId,
+  fetchUsers,
+  buttonId,
+  setButtonLoading
+) => {
   const uri = import.meta.env.VITE_AUTH_ENDPOINT + `/banUser/${userId}`;
+  setButtonLoading(buttonId, true);
   try {
     await Axios.patch(
       uri,
@@ -232,15 +254,25 @@ export const banUser = async (jwt, userId, fetchUsers) => {
         },
       }
     );
-    fetchUsers();
+    await fetchUsers();
+    const { name, surname } = await getUserById(userId, jwt);
+    await notifyBannedUser(`${name} ${surname}`);
+    setButtonLoading(buttonId, false);
   } catch (error) {
+    setButtonLoading(buttonId, false);
     console.log(error);
     throw error;
   }
 };
 
-export const unbanUser = async (jwt, userId, fetchUsers) => {
-  console.log(userId);
+export const unbanUser = async (
+  jwt,
+  userId,
+  fetchUsers,
+  buttonId,
+  setButtonLoading
+) => {
+  setButtonLoading(buttonId, true);
   const uri = import.meta.env.VITE_AUTH_ENDPOINT + `/unBanUser/${userId}`;
   try {
     await Axios.patch(
@@ -252,14 +284,25 @@ export const unbanUser = async (jwt, userId, fetchUsers) => {
         },
       }
     );
-    fetchUsers();
+    await fetchUsers();
+    const { name, surname } = await getUserById(userId, jwt);
+    await notifyUnbannedUser(`${name} ${surname}`);
+    setButtonLoading(buttonId, false);
   } catch (error) {
+    setButtonLoading(buttonId, false);
     console.log(error);
     throw error;
   }
 };
 
-export const promoteUser = async (jwt, userId, fetchUsers) => {
+export const promoteUser = async (
+  jwt,
+  userId,
+  fetchUsers,
+  buttonId,
+  setButtonLoading
+) => {
+  setButtonLoading(buttonId, true);
   const uri = import.meta.env.VITE_AUTH_ENDPOINT + `/promoteToAdmin/${userId}`;
   try {
     await Axios.patch(
@@ -271,15 +314,26 @@ export const promoteUser = async (jwt, userId, fetchUsers) => {
         },
       }
     );
-    fetchUsers();
+    await fetchUsers();
+    const { name, surname } = await getUserById(userId, jwt);
+    notifyPromotedUser(`${name} ${surname}`);
+    setButtonLoading(buttonId, false);
   } catch (error) {
+    setButtonLoading(buttonId, false);
     console.log(error);
     throw error;
   }
 };
 
-export const demoteUser = async (jwt, userId, fetchUsers) => {
+export const demoteUser = async (
+  jwt,
+  userId,
+  fetchUsers,
+  buttonId,
+  setButtonLoading
+) => {
   const uri = import.meta.env.VITE_AUTH_ENDPOINT + `/demoteFromAdmin/${userId}`;
+  setButtonLoading(buttonId, true);
   try {
     await Axios.patch(
       uri,
@@ -290,8 +344,12 @@ export const demoteUser = async (jwt, userId, fetchUsers) => {
         },
       }
     );
-    fetchUsers();
+    await fetchUsers();
+    const { name, surname } = await getUserById(userId, jwt);
+    notifyDemotedUser(`${name} ${surname}`);
+    setButtonLoading(buttonId, false);
   } catch (error) {
+    setButtonLoading(buttonId, false);
     throw error;
   }
 };

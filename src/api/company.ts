@@ -145,11 +145,14 @@ export const deleteCompany = async (
   companyId,
   companyName,
   jwt,
-  setCompanies
+  setCompanies,
+  buttonId,
+  setButtonLoading
 ) => {
+  setButtonLoading(buttonId, true);
   const uri =
     import.meta.env.VITE_API_ENDPOINT + `/api/company/remove/${companyId}`;
-  console.log(uri);
+
   try {
     await Axios.delete(uri, {
       headers: {
@@ -162,7 +165,9 @@ export const deleteCompany = async (
         (prevCompany) => prevCompany._id !== companyId
       );
     });
+    setButtonLoading(buttonId, false);
   } catch (error) {
+    setButtonLoading(buttonId, false);
     throw error;
   }
 };
