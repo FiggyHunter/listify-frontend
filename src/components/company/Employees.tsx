@@ -1,8 +1,24 @@
 import getInitials from "@/utilities/getInitialsFromName";
+import moment from "moment";
 import { useNavigate } from "react-router-dom";
 
 const Employees = ({ employee }) => {
   const navigate = useNavigate();
+  const date = new Date().toISOString();
+
+  function getMonthDifference(joinedAt) {
+    console.log(joinedAt);
+
+    if (joinedAt === null) {
+      return "Unknown";
+    }
+
+    const date = new Date(joinedAt);
+    return moment(date, "YYYYMMDD").fromNow();
+  }
+
+  const monthDifference = getMonthDifference(employee.joinedAt);
+
   return (
     <div
       onClick={() => {
@@ -15,7 +31,7 @@ const Employees = ({ employee }) => {
       </div>
       <div className="">
         <p className="font-extrabold">{`${employee.name} ${employee.surname}`}</p>{" "}
-        <p>3 Months</p>
+        <p>{`${monthDifference}`}</p>
       </div>
     </div>
   );
