@@ -2,14 +2,7 @@ import useCompanyState from "@/hooks/useCompanyState";
 import InputTheme from "@/themes/InputTheme";
 import { Autocomplete, TextField } from "@mui/material";
 import FileUpload from "../shared/FileUpload";
-import { formatExistingCompany } from "@/api/company";
-import { useEffect } from "react";
-const AddCompanyPopup = ({
-  jwt,
-  locations,
-  setIsAddCompanyOpen,
-  currentCompany,
-}) => {
+const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
   const {
     companyData,
     handleChange,
@@ -19,20 +12,6 @@ const AddCompanyPopup = ({
     companyImage,
     setCompanyImage,
   } = useCompanyState();
-
-  console.log(currentCompany);
-  console.log(companyData);
-  console.log(companyData.companyHQ.name);
-  useEffect(() => {
-    if (currentCompany) {
-      setCompanyData((prevData) => {
-        return {
-          ...prevData,
-          ...formatExistingCompany(currentCompany),
-        };
-      });
-    }
-  }, [currentCompany]);
 
   return (
     <div
@@ -244,7 +223,7 @@ const AddCompanyPopup = ({
           className="mx-auto w-full col-span-2 mb-8  my-auto bg-crimson hover:bg-crimsonHover text-black transition-all duration-200"
         >
           ADD A COMPANY
-        </button>{" "}
+        </button>
       </div>
     </div>
   );
