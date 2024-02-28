@@ -4,8 +4,8 @@ import { getAllRequests } from "@/api/request";
 import { getAllUsers } from "@/api/user";
 import AdminCard from "@/components/admin/AdminCard";
 import AdminCompany from "@/components/admin/AdminCompany";
+import AdminEditCompany from "@/components/admin/AdminEditCompany";
 import AdminRequestCard from "@/components/admin/AdminRequestCard";
-import AddCompanyPopup from "@/components/dashboard/AddCompanyPopup";
 import Navigation from "@/components/shared/Navigation";
 import adminNavigationGuard from "@/hooks/adminNavigationGuard";
 import { useJwtStore } from "@/stores/useUserStore";
@@ -19,9 +19,11 @@ const Admin = () => {
   const [focusedTab, setFocusedTab] = useState("users");
   const { token } = adminNavigationGuard() || null;
   const [locations, setLocations] = useState([]);
-  const [isAddCompanyOpen, setIsAddCompanyOpen] = useState(false);
+  const [isEditCompany, setIsEditCompany] = useState(false);
   const [currentCompany, setCurrentCompany] = useState({});
   const [requests, setRequests] = useState([]);
+
+  document.title = "Listify | Admin";
 
   useEffect(() => {
     if (Object.entries(currentCompany).length !== 0)
@@ -90,12 +92,12 @@ const Admin = () => {
         pauseOnHover
         theme="dark"
       />{" "}
-      {isAddCompanyOpen && (
-        <AddCompanyPopup
+      {isEditCompany && (
+        <AdminEditCompany
           jwt={jwt}
-          locations={locations}
-          setIsAddCompanyOpen={setIsAddCompanyOpen}
           currentCompany={currentCompany}
+          setIsEditCompany={setIsEditCompany}
+          setCompanies={setCompanies}
         />
       )}
       <Navigation />
@@ -199,7 +201,7 @@ const Admin = () => {
                       jwt={jwt}
                       company={company}
                       setCompanies={setCompanies}
-                      setIsCompanyOpen={setIsAddCompanyOpen}
+                      setIsEditCompany={setIsEditCompany}
                       setCurrentCompany={setCurrentCompany}
                     />
                   );
