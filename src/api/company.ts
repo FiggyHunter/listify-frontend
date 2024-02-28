@@ -212,3 +212,24 @@ export const getEmployeesByCompany = async (jwt, companyId, setEmployees) => {
     throw error;
   }
 };
+
+export const updateCompany = async (jwt, companyData, setCompanies) => {
+  if (Object.entries(companyData).length <= 1) return;
+
+  const uri = import.meta.env.VITE_API_ENDPOINT + `/api/company/update`;
+  try {
+    await Axios.patch(
+      uri,
+      { ...companyData },
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+    await getAllCompanies(jwt, setCompanies);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
