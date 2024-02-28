@@ -2,14 +2,18 @@ import { useLocation, useNavigate } from "react-router-dom";
 import DarkModeToggle from "./DarkModeToggle";
 import { useEffect, useState } from "react";
 import { handleScroll } from "@/utilities/HandleScroll";
-import { useJwtStore, useSearchStore } from "@/stores/useUserStore";
+import {
+  useDarkModeStore,
+  useJwtStore,
+  useSearchStore,
+} from "@/stores/useUserStore";
 import { useJwt } from "react-jwt";
 import getInitials from "@/utilities/getInitialsFromName";
 import CompanySearch from "./CompanySearch";
 
 const Navigation = () => {
   const navigate = useNavigate();
-
+  const { darkMode, setDarkMode } = useDarkModeStore();
   const { jwt, setJwt } = useJwtStore();
   const token = useJwt(jwt);
   const { searchTerm, setSearchTerm } = useSearchStore();
@@ -45,9 +49,9 @@ const Navigation = () => {
         }  fixed  rounded-xl bg-bkgContrast py-2 flex items-center z-30 `}
       >
         <img
-          className="sm:hidden md:block lg:block ml-4 w-36 cursor-pointer"
-          src="/logo.svg"
-          alt=""
+          className="sm:hidden md:block lg:block ml-4 max-w-32 cursor-pointer"
+          src={`${darkMode ? `/logo.svg` : `/logo-bw.svg`}`}
+          alt="Listify Logo"
           onClick={() => {
             setSearchTerm("");
             navigate("/dashboard");
@@ -70,7 +74,7 @@ const Navigation = () => {
         <div className="flex sm:hidden md:flex lg:flex gap-2 mr-4">
           <button
             onClick={() => setIsPopUpShowed((prevValue) => !prevValue)}
-            aria-label="User profile icon"
+            aria-label={"See user options"}
             className="bg-darkBlue hover:bg-darkBlueHover transition-colors duration-200 border-none rounded-full p-2"
           >
             <svg
@@ -87,6 +91,7 @@ const Navigation = () => {
         </div>
         <div className="w-1/3 sm:flex gap-2 md:hidden lg:hidden place-content-center justify-end mr-4  ">
           <button
+            aria-label={"See user options"}
             onClick={() => setIsPopUpShowed((prevValue) => !prevValue)}
             className="  bg-darkBlue hover:bg-darkBlueHover transition-colors duration-200 border-none rounded-full grid  p-2 place-items-center"
           >
