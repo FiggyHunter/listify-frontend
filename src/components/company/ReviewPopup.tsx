@@ -18,8 +18,14 @@ const ReviewPopup = ({
     rating: 3.5,
     text: "",
   });
+
+  const [reviewErrors, setReviewErrors] = useState(null);
+
   const { buttonLoading, setButtonLoading } = useButtonLoadingStore();
   const isLoading = buttonLoading[`addReviewBtn`] || false;
+
+  console.log(isLoading);
+
   useEffect(() => {
     const escListener = (e) => {
       if (e.key === "Escape") setIsWriteReviewOpen(false);
@@ -89,6 +95,8 @@ const ReviewPopup = ({
           required
           multiline
           value={popupData.text}
+          error={reviewErrors}
+          helperText={reviewErrors}
           inputProps={{ style: { color: "var(--color-content)" } }} // Set the input text color directly
           onChange={(e) =>
             setPopupData((prevData) => {
@@ -102,15 +110,20 @@ const ReviewPopup = ({
 
         <button
           className="bg-content text-bkg"
-          onClick={() => {
-            AddReview(
-              popupData,
-              jwt,
-              setReviews,
-              "addReviewBtn",
-              setButtonLoading
-            );
-          }}
+          onClick={
+            isLoading
+              ? () => {}
+              : () => {
+                  AddReview(
+                    popupData,
+                    jwt,
+                    setReviews,
+                    "addReviewBtn",
+                    setButtonLoading,
+                    setReviewErrors
+                  );
+                }
+          }
         >
           {isLoading ? <LoaderButton /> : "PUBLISH"}
         </button>
