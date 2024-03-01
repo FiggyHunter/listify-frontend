@@ -12,7 +12,7 @@ export default function FileUpload({ setCompanyImage }) {
   };
 
   return (
-    <>
+    <div className="w-full">
       <label
         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         for="file_input"
@@ -32,6 +32,6 @@ export default function FileUpload({ setCompanyImage }) {
           Please upload image in the correct format
         </label>
       )}
-    </>
+    </div>
   );
 }
