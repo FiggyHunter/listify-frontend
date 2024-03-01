@@ -5,6 +5,9 @@ import { toast } from "react-toastify";
 const notifyDeletedCompany = (companyName) =>
   toast(`You have successfully REMOVED ${companyName}.`);
 
+export const notifyUpdatedCompany = () =>
+  toast(`You have successfully updated the company.`);
+
 async function modifyAllHq(jwt, data) {
   const modifiedData = await Promise.all(
     data.map(async (obj) => {
@@ -172,7 +175,17 @@ export const deleteCompany = async (
   }
 };
 
-export const addCompanyImage = async (jwt, companyId, companyImage) => {
+export const addCompanyImage = async (
+  jwt,
+  companyId,
+  companyImage,
+  setCompanies,
+  setButtonLoading,
+  buttonId,
+  setUploadErrors
+) => {
+  setUploadErrors(null);
+  setButtonLoading(buttonId, true);
   const uri =
     import.meta.env.VITE_API_ENDPOINT +
     `/api/company/addImageToCompany/${companyId}`;
@@ -180,7 +193,6 @@ export const addCompanyImage = async (jwt, companyId, companyImage) => {
   try {
     const formData = new FormData();
     formData.append("image", companyImage, companyImage.name);
-    console.log(formData);
     console.log(
       await Axios.post(uri, formData, {
         headers: {
@@ -189,8 +201,16 @@ export const addCompanyImage = async (jwt, companyId, companyImage) => {
         },
       })
     );
+    await getAllCompanies(jwt, setCompanies);
+    setButtonLoading(buttonId, false);
   } catch (error) {
+    setButtonLoading(buttonId, false);
     console.log(error);
+    if (error.code === "ERR_BAD_RESPONSE") {
+      setUploadErrors(
+        "Error trying to upload the image, please try uploading another format, image or name."
+      );
+    }
     throw error;
   }
 };
@@ -213,8 +233,18 @@ export const getEmployeesByCompany = async (jwt, companyId, setEmployees) => {
   }
 };
 
-export const updateCompany = async (jwt, companyData, setCompanies) => {
-  if (Object.entries(companyData).length <= 1) return;
+export const updateCompany = async (
+  jwt,
+  companyData,
+  setCompanies,
+  setButtonLoading,
+  buttonId
+) => {
+  setButtonLoading(buttonId, true);
+  if (Object.entries(companyData).length <= 1) {
+    setButtonLoading(buttonId, false);
+    return;
+  }
 
   const uri = import.meta.env.VITE_API_ENDPOINT + `/api/company/update`;
   try {
@@ -228,7 +258,9 @@ export const updateCompany = async (jwt, companyData, setCompanies) => {
       }
     );
     await getAllCompanies(jwt, setCompanies);
+    setButtonLoading(buttonId, false);
   } catch (error) {
+    setButtonLoading(buttonId, false);
     console.log(error);
     throw error;
   }
