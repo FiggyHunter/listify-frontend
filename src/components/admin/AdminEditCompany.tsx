@@ -3,7 +3,13 @@ import InputTheme from "@/themes/InputTheme";
 import { Autocomplete, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import FileUpload from "../shared/FileUpload";
-import { updateCompany } from "@/api/company";
+import {
+  addCompanyImage,
+  notifyUpdatedCompany,
+  updateCompany,
+} from "@/api/company";
+import LoaderButton from "../shared/LoaderButton";
+import { useButtonLoadingStore } from "@/stores/useButtonLoadingStore";
 
 const AdminEditCompany = ({
   jwt,
@@ -14,7 +20,11 @@ const AdminEditCompany = ({
   console.log(currentCompany);
 
   const [locations, setLocations] = useState([]);
-  const [companyImage, setCompanyImage] = useState([]);
+  const [companyImage, setCompanyImage] = useState(null);
+
+  const { buttonLoading, setButtonLoading } = useButtonLoadingStore();
+  const isLoading = buttonLoading[`editCompanyButton`] || false;
+  const [uploadErrors, setUploadErrors] = useState(null);
 
   const [company, setCompany] = useState({
     name: "",
@@ -30,6 +40,9 @@ const AdminEditCompany = ({
 
   const handleCompanyEdit = async (company) => {
     const receivedCompany = { ...company };
+    console.log(companyImage);
+
+    console.log(receivedCompany);
 
     if (receivedCompany.name === currentCompany.name)
       delete receivedCompany.name;
@@ -67,7 +80,25 @@ const AdminEditCompany = ({
     }
 
     console.log(receivedCompany);
-    await updateCompany(jwt, receivedCompany, setCompanies);
+    await updateCompany(
+      jwt,
+      receivedCompany,
+      setCompanies,
+      setButtonLoading,
+      "editCompanyButton"
+    );
+    if (companyImage) {
+      await addCompanyImage(
+        jwt,
+        receivedCompany.id,
+        companyImage,
+        setCompanies,
+        setButtonLoading,
+        "editCompanyButton",
+        setUploadErrors
+      );
+    }
+    notifyUpdatedCompany();
   };
 
   console.log(company);
@@ -267,8 +298,19 @@ const AdminEditCompany = ({
           onChange={handleChange}
           // error={errors?.websiteUrl ? true : false}
           // helperText={errors?.websiteUrl}
-        />
-        <FileUpload setCompanyImage={setCompanyImage} />
+        />{" "}
+        <div className="flex col-span-2 items-center  justify-between">
+          <h4
+            className={`${
+              uploadErrors ? "text-red-600 font-bold" : "text-content"
+            } text-content w-full text-sm`}
+          >
+            {uploadErrors
+              ? uploadErrors
+              : "Upload new image to change the current one"}
+          </h4>
+          <FileUpload setCompanyImage={setCompanyImage} />
+        </div>
         <Autocomplete
           className="col-span-2"
           freeSolo
@@ -298,7 +340,7 @@ const AdminEditCompany = ({
           onClick={() => handleCompanyEdit(company)}
           className="mx-auto w-full col-span-2 mb-8  my-auto bg-crimson hover:bg-crimsonHover text-black transition-all duration-200"
         >
-          EDIT THE COMPANY
+          {isLoading ? <LoaderButton /> : "EDIT THE COMPANY"}
         </button>
       </div>
     </div>
