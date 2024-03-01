@@ -1,3 +1,4 @@
+import reviewValidation from "@/utilities/validators/ReviewValidation";
 import Axios from "axios";
 import { toast } from "react-toastify";
 const notifyAddedReview = () =>
@@ -7,11 +8,13 @@ export const AddReview = async (
   jwt,
   setReviews,
   buttonId,
-  setButtonLoading
+  setButtonLoading,
+  setReviewError
 ) => {
   const uri = import.meta.env.VITE_API_ENDPOINT + `/api/review/add`;
   try {
     setButtonLoading(buttonId, true);
+    await reviewValidation(reviewData.text, setReviewError);
     await Axios.post(uri, reviewData, {
       headers: {
         Authorization: `Bearer ${jwt}`,
