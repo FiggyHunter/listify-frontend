@@ -76,8 +76,8 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           freeSolo
           id="free-solo-demo"
           sx={InputTheme}
-          value={currentCompany ? currentCompany.hq.name : ""}
-          defaultValue={currentCompany ? currentCompany.hq.name : ""}
+          value={""}
+          defaultValue={""}
           getOptionLabel={(option) =>
             option.country ? option.country : option
           }
@@ -103,12 +103,8 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           multiple
           id="tags-outlined"
           sx={InputTheme}
-          value={
-            currentCompany ? currentCompany?.countries : companyData.countries
-          }
-          defaultValue={
-            currentCompany ? currentCompany?.countries : companyData.countries
-          }
+          value={companyData.countries}
+          defaultValue={companyData.countries}
           options={locations.map((option) => option)}
           onChange={(_, selectedOption) => {
             const countries = selectedOption.map((country) => country.country);
@@ -120,9 +116,7 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
               locationId: ids,
             }));
           }}
-          getOptionLabel={(option) =>
-            currentCompany ? option.name : option.country
-          }
+          getOptionLabel={(option) => option.country}
           filterSelectedOptions
           renderInput={(params) => (
             <TextField
