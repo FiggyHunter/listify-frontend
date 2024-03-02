@@ -13,6 +13,7 @@ import { fuseOptions } from "@/config/fuse";
 import MobileCompanyFilters from "@/components/dashboard/MobileCompanyFilters";
 import useJWT from "@/hooks/userNavigationGuard";
 import DashboardTimeDate from "@/components/dashboard/DashboardTimeDate";
+import { getAllCategories } from "@/api/category";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -24,8 +25,7 @@ const Dashboard = () => {
   const [filters, setFilters] = useState({ category: null, location: null });
   const { token } = useJWT();
   const { searchTerm } = useSearchStore();
-
-  console.log(companies);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     document.title = "Listify | Dashboard";
@@ -37,6 +37,7 @@ const Dashboard = () => {
   useEffect(() => {
     getAllCompanies(jwt, setCompanies);
     getAllCountries(jwt, setLocations);
+    getAllCategories(jwt, setCategories);
   }, [jwt]);
 
   useEffect(() => {
@@ -77,6 +78,7 @@ const Dashboard = () => {
     <>
       {isAddCompanyOpen && (
         <AddCompanyPopup
+          categories={categories}
           locations={locations}
           setIsAddCompanyOpen={setIsAddCompanyOpen}
           jwt={jwt}
