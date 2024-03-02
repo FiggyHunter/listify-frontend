@@ -53,6 +53,12 @@ export function formatExistingCompany(company) {
 
 function FormatAddCompanyRequest(companyData) {
   console.log(companyData);
+
+  const categoryIds = companyData.areasOfExperise.map((category) => {
+    return category._id;
+  });
+
+  console.log(categoryIds);
   //   {
   //     "name": "Tech Innovators Ltd",
   //     "description": "Tech Innovators is a cutting-edge technology company focused on creating groundbreaking solutions to meet the evolving needs of businesses globally.",
@@ -71,7 +77,7 @@ function FormatAddCompanyRequest(companyData) {
     websiteURL: companyData.websiteUrl,
     linkedinURL: companyData.linkedinUrl,
     hq: companyData.hqId,
-    categories: ["neki ID"],
+    categories: categoryIds,
     countries: companyData.locationId,
     group: `${companyData.category}`,
   };
