@@ -2,7 +2,12 @@ import useCompanyState from "@/hooks/useCompanyState";
 import InputTheme from "@/themes/InputTheme";
 import { Autocomplete, TextField } from "@mui/material";
 import FileUpload from "../shared/FileUpload";
-const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
+const AddCompanyPopup = ({
+  categories,
+  jwt,
+  locations,
+  setIsAddCompanyOpen,
+}) => {
   const {
     companyData,
     handleChange,
@@ -134,20 +139,15 @@ const AddCompanyPopup = ({ jwt, locations, setIsAddCompanyOpen }) => {
           multiple
           id="tags-outlined"
           sx={InputTheme}
-          options={[
-            "Software Development",
-            "Product Development",
-            "Web Development",
-            "E-commerce",
-          ]}
+          options={categories.map((option) => option)}
           onChange={(_, selectedOptions) => {
             setCompanyData((prevValue) => ({
               ...prevValue,
               areasOfExperise: selectedOptions,
             }));
           }}
-          getOptionLabel={(option) => option}
-          defaultValue={companyData.areasOfExperise}
+          getOptionLabel={(option) => option.name}
+          defaultValue={[]}
           value={companyData.areasOfExperise}
           filterSelectedOptions
           renderInput={(params) => (
