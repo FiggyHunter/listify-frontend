@@ -1,5 +1,4 @@
 import { formatExistingCompany, getAllCompanies } from "@/api/company";
-import { getAllCountries } from "@/api/country";
 import { getAllRequests } from "@/api/request";
 import { getAllUsers } from "@/api/user";
 import AdminCard from "@/components/admin/AdminCard";
@@ -10,7 +9,7 @@ import Navigation from "@/components/shared/Navigation";
 import adminNavigationGuard from "@/hooks/adminNavigationGuard";
 import { useJwtStore } from "@/stores/useUserStore";
 import { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Admin = () => {
   const { jwt, setJwt } = useJwtStore();
@@ -18,10 +17,10 @@ const Admin = () => {
   const [companies, setCompanies] = useState([]);
   const [focusedTab, setFocusedTab] = useState("users");
   const { token } = adminNavigationGuard() || null;
-  const [locations, setLocations] = useState([]);
   const [isEditCompany, setIsEditCompany] = useState(false);
   const [currentCompany, setCurrentCompany] = useState({});
   const [requests, setRequests] = useState([]);
+  const navigate = useNavigate();
 
   document.title = "Listify | Admin";
 
@@ -74,24 +73,8 @@ const Admin = () => {
     fetchRequests();
   }, [jwt]);
 
-  useEffect(() => {
-    getAllCountries(jwt, setLocations);
-  }, [jwt]);
-
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />{" "}
       {isEditCompany && (
         <AdminEditCompany
           jwt={jwt}
@@ -190,6 +173,7 @@ const Admin = () => {
                         user={user}
                         handleAdmitUser={handleAdmitUser}
                         fetchUsers={fetchUsers}
+                        navigate={navigate}
                       />
                     );
                 })}
@@ -203,6 +187,7 @@ const Admin = () => {
                       setCompanies={setCompanies}
                       setIsEditCompany={setIsEditCompany}
                       setCurrentCompany={setCurrentCompany}
+                      navigate={navigate}
                     />
                   );
                 })}
