@@ -28,7 +28,6 @@ const registerValidation = async (
   } catch (errors) {
     if (errors instanceof ValidationError) {
       errors.inner.forEach((error) => {
-        console.log(error);
         if (
           (error.path && error.path === "firstName") ||
           error.path === "lastName"

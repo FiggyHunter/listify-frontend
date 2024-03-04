@@ -10,6 +10,7 @@ export default {
     color: "var(--color-content)",
     fontFamily: "Inter, sans-serif !important",
     fontWeight: "300",
+    backgroundColor: "var(--bkg-contrast)",
   },
   "#outlined-basic-helper-text": {
     fontFamily: "Inter, sans-serif !important",

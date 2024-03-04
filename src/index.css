@@ -142,7 +142,7 @@ nav {
   grid-template-columns: max-content 1fr auto auto;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1050px) {
   .access-grid {
     grid-template-columns: min-content 1fr;
   }
@@ -162,6 +162,19 @@ nav {
 .gradient-border {
   border-bottom: double 2px transparent;
   border-radius: 80px;
+  background-image: linear-gradient(var(--bkg-contrast), var(--bkg-contrast)),
+    radial-gradient(
+      circle at top left,
+      var(--color-accent2),
+      var(--color-accent1)
+    );
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.gradient-border-cards {
+  border-bottom: double 2px transparent;
+  border-radius: 1rem;
   background-image: linear-gradient(var(--bkg-contrast), var(--bkg-contrast)),
     radial-gradient(
       circle at top left,

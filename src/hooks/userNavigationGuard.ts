@@ -8,8 +8,6 @@ export const userNavigationGuard = () => {
   const { jwt } = useJwtStore();
   const token = useJwt(jwt) || null;
 
-  console.log(token);
-
   useEffect(() => {
     if (
       !jwt ||

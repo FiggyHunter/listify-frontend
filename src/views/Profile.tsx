@@ -1,16 +1,15 @@
 import { getReviewsByUserId } from "@/api/review";
+import { getUserById } from "@/api/user";
 import Reviews from "@/components/company/Reviews";
 import ProfileSkeleton from "@/components/profile/ProfileSkeleton";
-import ChangeProfileDetails from "@/components/profile/changeProfileDetails";
+import ChangeProfileDetails from "@/components/profile/ChangeProfileDetails";
 import Navigation from "@/components/shared/Navigation";
 import NotFoundCard from "@/components/shared/NotFoundCard";
 import userNavigationGuard from "@/hooks/userNavigationGuard";
 import { useJwtStore } from "@/stores/useUserStore";
 import getInitials from "@/utilities/getInitialsFromName";
 import { useEffect, useState } from "react";
-import { useJwt } from "react-jwt";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Account = () => {
   const navigate = useNavigate();
@@ -19,32 +18,29 @@ const Account = () => {
   const [reviews, setReviews] = useState([]);
   const [isChangeModalOpen, setIsChangeModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const params = useParams();
+  const { userId } = params;
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const fetchUserReviews = async () =>
-      await getReviewsByUserId(jwt, token?.decodedToken?.user_id);
+    document.title = "Listify | Profile";
+    const fetchUserReviews = async () => {
+      if (userId) {
+        const user = await getUserById(userId, jwt);
+        setUser(user);
+        return await getReviewsByUserId(jwt, userId);
+      }
+      return await getReviewsByUserId(jwt, token?.decodedToken?.user_id);
+    };
 
-    if (token.decodedToken)
-      fetchUserReviews().then((reviews) => {
-        setReviews(reviews);
-        setIsLoading(false);
-      });
+    fetchUserReviews().then((reviews) => {
+      setReviews(reviews);
+      setIsLoading(false);
+    });
   }, [jwt, token.decodedToken]);
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
       <Navigation />
       <main className="h-my-screen bg-bkg pt-28">
         {/* {isWriteReviewOpen && (
@@ -64,7 +60,9 @@ const Account = () => {
                 <div className="flex flex-col bg-bkgContrast shadow-md rounded-xl pt-5">
                   <div className="sm:w-2/4 lg:w-3/4 rounded-xl h-32 lg:h-56 self-center bg-content font-black text-6xl grid place-content-center text-bkg">
                     {getInitials(
-                      `${token?.decodedToken?.name} ${token?.decodedToken?.surname}`
+                      user
+                        ? `${user.name} ${user.surname}`
+                        : `${token?.decodedToken?.name} ${token?.decodedToken?.surname}`
                     )}
                   </div>{" "}
                   <div className="grid grid-cols-2 gap-1 mt-4 w-5/6 mx-auto"></div>
@@ -101,7 +99,9 @@ const Account = () => {
               <section className="md:pl-16 min-h-96 h-full bg-bkgContrast text-center rounded-tr-2xl flex flex-col py-6 mb-6 gap-3 sm:w-full md:w-auto lg:w-auto">
                 <div>
                   <h1 className="text-content font-inter text-2xl sm:text-center md:text-left lg:text-6xl mb-4 font-extrabold">
-                    {`${token?.decodedToken?.name}  ${token?.decodedToken?.surname}`}
+                    {user
+                      ? `${user.name} ${user.surname}`
+                      : `${token?.decodedToken?.name}  ${token?.decodedToken?.surname}`}
                   </h1>
                   <h2 className="text-content text-xl font-normal md:text-left sm:text-center">
                     <div className="flex gap-2 lg:justify-normal items-center sm:justify-center">
@@ -114,7 +114,7 @@ const Account = () => {
                       >
                         <path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48Zm-96,85.15L52.57,64H203.43ZM98.71,128,40,181.81V74.19Zm11.84,10.85,12,11.05a8,8,0,0,0,10.82,0l12-11.05,58,53.15H52.57ZM157.29,128,216,74.18V181.82Z"></path>
                       </svg>
-                      {token?.decodedToken?.email}
+                      {user ? `${user.email}` : token?.decodedToken?.email}
                     </div>
                   </h2>
                 </div>
@@ -136,8 +136,8 @@ const Account = () => {
                     User Reviews
                   </h3>
 
-                  {reviews.length !== 0 ? (
-                    reviews.map((review) => (
+                  {reviews?.length !== 0 ? (
+                    reviews?.map((review) => (
                       <Reviews
                         key={review.userId}
                         rating={review.rating}

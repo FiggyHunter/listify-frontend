@@ -1,5 +1,4 @@
 export default function getInitials(fullName) {
-  console.log(fullName);
   const words = fullName.split(" ");
 
   let initials = "";

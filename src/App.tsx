@@ -1,6 +1,8 @@
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes.tsx";
 import { Helmet } from "react-helmet";
+import { ToastContainer } from "react-toastify";
+
 const App = () => {
   return (
     <>
@@ -24,10 +26,23 @@ const App = () => {
         <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
       <div className="h-my-screen bg-bkg w-full ">
+        {" "}
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
         <BrowserRouter>
           <AppRoutes />
         </BrowserRouter>
-      </div>
+      </div>{" "}
     </>
   );
 };

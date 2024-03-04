@@ -1,6 +1,8 @@
-import { getCompanyById } from "@/api/company";
+import { getCompanyById, getEmployeesByCompany } from "@/api/company";
 import { getAllReviewsByCompany } from "@/api/review";
+import CompanyRequest from "@/components/company/CompanyRequest";
 import Employees from "@/components/company/Employees";
+import EmploymentStatus from "@/components/company/EmploymentStatus";
 import ReviewPopup from "@/components/company/ReviewPopup";
 import Reviews from "@/components/company/Reviews";
 import Navigation from "@/components/shared/Navigation";
@@ -19,7 +21,9 @@ const Company = () => {
   const navigate = useNavigate();
   const [company, setCompany] = useState(null);
   const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
-  const [reviews, setReviews] = useState({});
+  const [reviews, setReviews] = useState([]);
+  const [employees, setEmployees] = useState();
+  const [isAddRequestOpen, setIsAddRequestOpen] = useState(false);
 
   useEffect(() => {
     const fetchCompanyReviews = async () =>
@@ -32,29 +36,51 @@ const Company = () => {
 
   useEffect(() => {
     getCompanyById(jwt, setCompany, companyId);
+    getEmployeesByCompany(jwt, companyId, setEmployees);
   }, [jwt]);
+
+  useEffect(() => {
+    document.title = `Listify | ${company?.name ? company.name : "Company"}`;
+  }, [company]);
 
   return (
     <>
       <Navigation />
       {company === null ? (
-        <main className="pt-28">
-          <div
-            role="status"
-            className="p-4 border border-gray-200 rounded shadow animate-pulse md:p-6 dark:border-gray-700 h-my-screen  w-4/5 mx-auto"
-          >
-            <div className="flex  h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
-            <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-            <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
-            <div className="flex items-center mt-4">
-              <div>
-                <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32 mb-2"></div>
-                <div className="w-48 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+        <main className="pt-28 bg-bkg h-my-screen">
+          <div className="mx-auto w-4/5 grid sm:grid-cols-1 md:custom-cols-company gap-4 h-min">
+            <div
+              role="status"
+              className="p-4 border border-gray-200 rounded shadow animate-pulse md:p-6 dark:border-gray-700"
+            >
+              <div className="flex h-32 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
+              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+              <div className="flex items-center mt-4">
+                <div>
+                  <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32 mb-2"></div>
+                  <div className="w-48 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                </div>
               </div>
-            </div>{" "}
-            <div className="flex mt-4 h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>{" "}
-            <div className="flex mt-4 h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
-            <span className="sr-only">Loading...</span>
+              <div className="flex mt-4 h-32 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
+              <div className="flex mt-4 h-32 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
+              <span className="sr-only"></span>
+            </div>
+            <div className="h-full w-full p-4 border border-gray-200 rounded shadow animate-pulse md:p-6 dark:border-gray-700">
+              {" "}
+              <div className="flex h-32 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
+              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+              <div className="flex items-center mt-4">
+                <div>
+                  <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32 mb-2"></div>
+                  <div className="w-48 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                </div>
+              </div>{" "}
+              <div className="flex mt-4 h-32 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>{" "}
+              <div className="flex mt-4 h-32 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>{" "}
+              <div className="flex mt-4 h-32 mb-4 bg-gray-300 rounded dark:bg-gray-700"></div>
+            </div>
           </div>
         </main>
       ) : (
@@ -65,6 +91,15 @@ const Company = () => {
               companyId={companyId}
               userId={token.decodedToken.user_id}
               jwt={jwt}
+              setReviews={setReviews}
+            />
+          )}
+          {isAddRequestOpen && (
+            <CompanyRequest
+              jwt={jwt}
+              userId={token.decodedToken.user_id}
+              companyId={companyId}
+              setIsAddRequestOpen={setIsAddRequestOpen}
             />
           )}
           <div className="mx-auto w-4/5">
@@ -72,9 +107,7 @@ const Company = () => {
               <aside className="sm:block md:sticky top-24 bg-bkgContrast rounded-tl-2xl bg-transparent  h-full pt-0   ">
                 <div className="flex flex-col bg-bkgContrast shadow-md rounded-xl pt-5">
                   <img
-                    src={
-                      "https://www.google.com/s2/favicons?domain=www.ministryofprogramming.com"
-                    }
+                    src={company.logo || "/logo.svg"}
                     className="w-32 rounded-xl h-32 lg:h-56 lg:w-3/4 self-center bg-gray-300"
                     alt={`Logo for ${company?.name}`}
                   ></img>{" "}
@@ -92,7 +125,7 @@ const Company = () => {
                     }
                     className="w-5/6 group  mx-auto my-4 bg-transparent text-content border-darkBlue flex items-center gap-2 hover:bg-crimson transition-all duration-200 hover:text-white justify-center"
                   >
-                    Write a review{" "}
+                    Write a review
                     <svg
                       className="fill-crimson group-hover:fill-white"
                       width="16"
@@ -114,8 +147,13 @@ const Company = () => {
                       </defs>
                     </svg>
                   </button>
-                  <button className="w-5/6 group  mx-auto mb-4 bg-transparent  border-darkBlue flex items-center gap-2 hover:bg-crimson transition-all duration-200 hover:text-white justify-center text-content">
-                    Request Changes{" "}
+                  <button
+                    onClick={() => {
+                      setIsAddRequestOpen(true);
+                    }}
+                    className="w-5/6 group  mx-auto mb-4 bg-transparent  border-darkBlue flex items-center gap-2 hover:bg-crimson transition-all duration-200 hover:text-white justify-center text-content"
+                  >
+                    Request Changes
                     <svg
                       className="fill-crimson group-hover:fill-white"
                       width="16"
@@ -136,25 +174,62 @@ const Company = () => {
                         </clipPath>
                       </defs>
                     </svg>
-                  </button>
-                </div>{" "}
+                  </button>{" "}
+                  <div className="w-5/6 mx-auto text-center">
+                    <EmploymentStatus
+                      jwt={jwt}
+                      companyId={companyId}
+                      userId={token?.decodedToken?.user_id}
+                      employees={employees}
+                      fetchEmployees={() =>
+                        getEmployeesByCompany(jwt, companyId, setEmployees)
+                      }
+                    />
+                  </div>
+                </div>
+
                 <div className="flex flex-col  bg-bkgContrast shadow-md rounded-xl mt-8">
                   <h3 className="text-content text-center  outline-offset-4 pt-4 font-medium">
                     CURRENTLY EMPLOYED
                   </h3>
                   <span className="w-full border-b-2 border-content mt-4"></span>
-                  <Employees />
-                  <Employees />
-                  <Employees />
+                  {employees && employees?.length >= 0 ? (
+                    employees?.map((employee) => (
+                      <Employees employee={employee} />
+                    ))
+                  ) : (
+                    <div
+                      role="status"
+                      className="sm:flex sm:flex-col sm:items-center md:grid md:custom-cols-dash gap-4 w-full mx-auto text-bkg animate-pulse  "
+                    >
+                      <div className="w-48 rounded-xl h-16 lg:h-32 self-center bg-gray-300"></div>
+                      <div className="flex flex-col items-center justify-between">
+                        <div className="w-full flex sm:flex-col md:flex-col justify-between text-black">
+                          <p className="font-inter text-lg mb-2">
+                            <span className="font-black text-content">HQ:</span>
+                          </p>
+                          <div className="flex gap-2 mb-2">
+                            <div className="py-1 px-2 text-bkgContrast text-sm lg:w-20 sm:w-16 h-8 sm:h-6 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                            <div className="py-1 px-2 text-bkgContrast text-sm lg:w-20 sm:w-16 h-8 sm:h-6 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                          </div>
+                        </div>
+                        <div className="flex flex-col  gap-2 text-black w-full py-2 ">
+                          <div className="text-2xl items-start h-6 bg-gray-200 rounded-full dark:bg-gray-700 w-48"></div>
+                          <div className="text-md sm:hidden md:block lg:block h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-full"></div>{" "}
+                          <div className="text-md sm:hidden md:block lg:block h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-full"></div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </aside>
               <section className="md:pl-16 min-h-96 h-full bg-bkgContrast text-center rounded-tr-2xl flex flex-col py-6 mb-6 gap-6 sm:w-full md:w-auto lg:w-auto">
                 <div>
-                  <h1 className="text-content font-inter text-2xl sm:text-center md:text-left lg:text-6xl mb-4 font-extrabold">
+                  <h1 className="text-content font-inter text-2xl sm:text-center md:text-left lg:text-6xl mb-4 font-extrabold whitespace-pre-wrap">
                     {company?.name}
                   </h1>
                   <h2 className="text-content text-xl font-normal md:text-left sm:text-center">
-                    <span className="font-bold">HQ:</span> {company?.hq}
+                    <span className="font-bold">HQ:</span> {company?.hq?.name}
                   </h2>
                 </div>
                 <p
@@ -218,7 +293,7 @@ const Company = () => {
                       </defs>
                     </svg>
                     <p className="text-content">
-                      Headquarters in: {company?.hq}{" "}
+                      Headquarters in: {company?.hq?.name}{" "}
                     </p>
                   </div>
                   <div className="flex gap-2 items-center ">
@@ -252,10 +327,15 @@ const Company = () => {
                     >
                       <path d="M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z"></path>
                     </svg>
-                    <p className="text-content">Categories: </p>
-                    {company?.categories?.map((category) => (
-                      <p className="text-content">{category}</p>
-                    ))}
+                    <div className="flex w-full flex-wrap">
+                      <p className="text-content">Categories: </p>
+                      {company?.categories?.map((category, index) => (
+                        <p className="text-content w-max" key={index}>
+                          {category?.name}
+                          {index !== company?.categories?.length - 1 && ","}
+                        </p>
+                      ))}
+                    </div>
                   </div>
                 </article>
                 <article
@@ -266,15 +346,15 @@ const Company = () => {
                   <h3 className="text-content sm:text-center lg:text-left text-2xl mb-4  text-left  inline-block px-1 font-semibold after:absolute after:-bottom-2  sm:after:left-1/2 lg:after:left-1 after:h-1 after:w-12 after:-translate-y-1 after:bg-gray-300 after:content-[''] sticky top-0 bg-bkgContrast bg-bkg z-20">
                     Reviews
                   </h3>
-                  {reviews.length !== 0 ? (
-                    reviews.map((review) => (
+                  {reviews && reviews?.length !== 0 ? (
+                    reviews?.map((review) => (
                       <Reviews
                         key={review.userId}
                         rating={review.rating}
                         text={review.text}
                         userId={review.userId}
                         jwt={jwt}
-                        companyId={review.companyId}
+                        navigate={navigate}
                       />
                     ))
                   ) : (

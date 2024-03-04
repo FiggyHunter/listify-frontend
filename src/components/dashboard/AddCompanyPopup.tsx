@@ -2,11 +2,16 @@ import useCompanyState from "@/hooks/useCompanyState";
 import InputTheme from "@/themes/InputTheme";
 import { Autocomplete, TextField } from "@mui/material";
 import FileUpload from "../shared/FileUpload";
+import { getAllCompanies } from "@/api/company";
+import LoaderButton from "../shared/LoaderButton";
+import { useButtonLoadingStore } from "@/stores/useButtonLoadingStore";
+import { useState } from "react";
 const AddCompanyPopup = ({
+  categories,
   jwt,
   locations,
   setIsAddCompanyOpen,
-  currentCompany,
+  setCompanies,
 }) => {
   const {
     companyData,
@@ -14,8 +19,15 @@ const AddCompanyPopup = ({
     handleCompanyCreation,
     setCompanyData,
     errors,
+    companyImage,
+    setCompanyImage,
   } = useCompanyState();
-  console.log(companyData);
+
+  const { buttonLoading, setButtonLoading } = useButtonLoadingStore();
+  const isLoading = buttonLoading[`btn-addCmpny`] || false;
+
+  const [uploadErrors, setUploadErrors] = useState(null);
+
   return (
     <div
       onClick={() => {
@@ -29,7 +41,7 @@ const AddCompanyPopup = ({
         }}
         className="sm:w-5/6 lg:w-1/3 h-fit bg-bkgContrast grid grid-cols-2 custom-rows px-8 gap-5 rounded-2xl"
       >
-        <div className="w-full mx-auto flex justify-between mt-4 border-b-1 pb-2 border-content col-span-2 font-bold text-content">
+        <div className="w-full mx-auto flex items-center justify-between mt-4 border-b-1 pb-2 border-content col-span-2 font-bold text-content">
           <p
             onClick={(e) => {
               e.stopPropagation();
@@ -39,24 +51,21 @@ const AddCompanyPopup = ({
           >
             ADD A NEW COMPANY
           </p>
-          <svg
-            className="fill-content cursor-pointer"
-            xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
-            viewBox="0 0 256 256"
+          <button
             onClick={() => setIsAddCompanyOpen(false)}
+            className="text-bkg"
+            aria-label="Close popup"
           >
-            <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
-          </svg>
-        </div>{" "}
+            X
+          </button>
+        </div>
         <TextField
           className="col-span-2"
           type="text"
           label="Company Name"
           name="companyName"
           variant="outlined"
-          value={currentCompany ? currentCompany.name : companyData.companyName}
+          value={companyData.companyName}
           onChange={handleChange}
           error={errors?.companyName ? true : false}
           helperText={errors?.companyName}
@@ -69,11 +78,7 @@ const AddCompanyPopup = ({
           name="companyDescription"
           variant="outlined"
           sx={InputTheme}
-          value={
-            currentCompany
-              ? currentCompany.description
-              : companyData.companyDescription
-          }
+          value={companyData.companyDescription}
           onChange={handleChange}
           error={errors?.companyDescription ? true : false}
           helperText={errors?.companyDescription}
@@ -83,12 +88,12 @@ const AddCompanyPopup = ({
           freeSolo
           id="free-solo-demo"
           sx={InputTheme}
+          value={""}
+          defaultValue={""}
           getOptionLabel={(option) =>
             option.country ? option.country : option
           }
-          options={locations.map((option) =>
-            currentCompany ? option.country : option
-          )}
+          options={locations.map((option) => option)}
           onChange={(_, selectedOption) => {
             setCompanyData((prevValue) => ({
               ...prevValue,
@@ -96,9 +101,6 @@ const AddCompanyPopup = ({
               hqId: selectedOption?.id,
             }));
           }}
-          inputValue={
-            currentCompany ? currentCompany.hq : companyData.companyHQ?.country
-          }
           renderInput={(params) => (
             <TextField
               {...params}
@@ -113,11 +115,8 @@ const AddCompanyPopup = ({
           multiple
           id="tags-outlined"
           sx={InputTheme}
-          defaultValue={
-            currentCompany
-              ? currentCompany.countries.map((currentCountry) => currentCountry)
-              : []
-          }
+          value={companyData.countries}
+          defaultValue={companyData.countries}
           options={locations.map((option) => option)}
           onChange={(_, selectedOption) => {
             const countries = selectedOption.map((country) => country.country);
@@ -129,11 +128,7 @@ const AddCompanyPopup = ({
               locationId: ids,
             }));
           }}
-          getOptionLabel={
-            currentCompany
-              ? (option) => option?.name || option.country
-              : (option) => option.country
-          }
+          getOptionLabel={(option) => option.country}
           filterSelectedOptions
           renderInput={(params) => (
             <TextField
@@ -151,20 +146,15 @@ const AddCompanyPopup = ({
           multiple
           id="tags-outlined"
           sx={InputTheme}
-          options={[
-            "Software Development",
-            "Product Development",
-            "Web Development",
-            "E-commerce",
-          ]}
+          options={categories.map((option) => option)}
           onChange={(_, selectedOptions) => {
             setCompanyData((prevValue) => ({
               ...prevValue,
               areasOfExperise: selectedOptions,
             }));
           }}
-          getOptionLabel={(option) => option}
-          defaultValue={companyData.areasOfExperise}
+          getOptionLabel={(option) => option.name}
+          defaultValue={[]}
           value={companyData.areasOfExperise}
           filterSelectedOptions
           renderInput={(params) => (
@@ -185,11 +175,7 @@ const AddCompanyPopup = ({
           name="linkedinUrl"
           variant="outlined"
           sx={InputTheme}
-          value={
-            currentCompany
-              ? currentCompany.linkedinURL
-              : companyData.linkedinUrl
-          }
+          value={companyData.linkedinUrl}
           onChange={handleChange}
           error={errors?.linkedinUrl ? true : false}
           helperText={errors?.linkedinUrl}
@@ -201,14 +187,23 @@ const AddCompanyPopup = ({
           name="websiteUrl"
           variant="outlined"
           sx={InputTheme}
-          value={
-            currentCompany ? currentCompany.websiteURL : companyData.websiteUrl
-          }
+          value={companyData.websiteUrl}
           onChange={handleChange}
           error={errors?.websiteUrl ? true : false}
           helperText={errors?.websiteUrl}
         />
-        <FileUpload />
+        <div className="flex col-span-2 items-center">
+          <p
+            className={`${
+              uploadErrors ? "text-red-600 font-bold" : "text-content"
+            } text-content w-full text-sm mt-6`}
+          >
+            {uploadErrors
+              ? "Company was created but the image failed to upload, please contact the admin."
+              : "Upload the company logo:"}
+          </p>
+          <FileUpload setCompanyImage={setCompanyImage} />{" "}
+        </div>
         <Autocomplete
           className="col-span-2"
           freeSolo
@@ -216,18 +211,13 @@ const AddCompanyPopup = ({
           id="tags-outlined"
           options={["HIRING", "INTERVIEW", "MAN IN THE MIDDLE", "PARTNER"]}
           onChange={(_, selectedOptions) => {
-            console.log(selectedOptions);
             setCompanyData((prevValue) => ({
               ...prevValue,
               category: selectedOptions,
             }));
           }}
-          value={
-            currentCompany?.group ? currentCompany.group : companyData.category
-          }
-          defaultValue={
-            currentCompany?.group ? currentCompany.group : companyData.category
-          }
+          value={companyData.category}
+          defaultValue={companyData.category}
           filterSelectedOptions
           renderInput={(params) => (
             <TextField
@@ -240,11 +230,18 @@ const AddCompanyPopup = ({
           )}
         />
         <button
-          onClick={() => handleCompanyCreation()}
+          onClick={async () => {
+            await handleCompanyCreation(
+              "btn-addCmpny",
+              setButtonLoading,
+              setUploadErrors
+            );
+            await getAllCompanies(jwt, setCompanies);
+          }}
           className="mx-auto w-full col-span-2 mb-8  my-auto bg-crimson hover:bg-crimsonHover text-black transition-all duration-200"
         >
-          ADD A COMPANY
-        </button>{" "}
+          {isLoading ? <LoaderButton /> : "ADD A COMPANY"}
+        </button>
       </div>
     </div>
   );
