@@ -1,0 +1,186 @@
+@import url("./assets/styles.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bkg: rgb(230, 230, 230);
+    --color-content: black;
+    --color-accent1: #2e5077;
+    --color-accent2: #e56b6f;
+    --input-fill: #f2f2f2;
+    --bkg-contrast: black;
+    --popup-bkg: #414244;
+    --popup-btn: #343434;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-bkg: black;
+      --color-content: white;
+      --bkg-contrast: white;
+      --color-accent1: #2e5077;
+      --color-accent2: #e56b6f;
+      --input-fill: transparent;
+      --popup-bkg: #414244;
+      --popup-btn: #343434;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --color-bkg: black;
+    --color-content: white;
+    --bkg-contrast: #1b1f23;
+    --color-accent1: #2e5077;
+    --color-accent2: #e56b6f;
+    --input-fill: transparent;
+    --label-fill: white;
+    --label-bkg: white;
+    --popup-bkg: #414244;
+    --popup-btn: #343434;
+    --scroller: #ffffff;
+  }
+  :root[data-theme="light"] {
+    --color-bkg: rgb(230, 230, 230);
+    --color-content: black;
+    --color-accent1: #2e5077;
+    --color-accent2: #e56b6f;
+    --input-fill: #f2f2f2;
+    --bkg-contrast: white;
+    --label-fill: white;
+    --label-bkg: white;
+    --popup-bkg: #414244;
+    --popup-btn: #343434;
+    --scroller: #1a365d;
+  }
+}
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:focus,
+button:focus-visible {
+  outline: 2px auto -webkit-focus-ring-color;
+}
+
+nav {
+  transition: top 200ms ease-in-out, bottom 200ms ease-in-out;
+}
+
+.custom-overflow {
+  overflow-y: auto; /* Enable vertical scrolling */
+  scrollbar-width: auto; /* Set the width of the scrollbar */
+
+  /* WebKit browsers (Chrome, Safari, etc.) */
+  scrollbar-color: var(--scroller) var(--color-bkg);
+}
+
+/* WebKit browsers (Chrome, Safari, etc.) */
+.custom-overflow::-webkit-scrollbar {
+  width: 14px; /* Set the width of the scrollbar for WebKit browsers */
+}
+
+.custom-overflow::-webkit-scrollbar-thumb {
+  background-color: var(--color-bkg);
+  border: 0.5px solid #b3b3b3; /* Set the color of the scrollbar thumb */
+  border-radius: 10rem;
+}
+
+.custom-overflow::-webkit-scrollbar-track {
+  background-color: var(--color-bkg);
+  border: 0.5px solid #b3b3b3;
+  border-radius: 10rem; /* Set the color of the scrollbar track */
+}
+
+.custom-animation {
+  transition: top 200ms ease-in-out;
+}
+
+.access-grid {
+  grid-template-columns: max-content 1fr auto auto;
+}
+
+@media screen and (max-width: 900px) {
+  .access-grid {
+    grid-template-columns: min-content 1fr;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .custom-grad {
+    background-color: none;
+    background: linear-gradient(
+      270deg,
+      #353535 42.44%,
+      rgba(255, 255, 255, 0) 120.18%
+    );
+  }
+}
+
+.gradient-border {
+  border-bottom: double 2px transparent;
+  border-radius: 80px;
+  background-image: linear-gradient(var(--bkg-contrast), var(--bkg-contrast)),
+    radial-gradient(
+      circle at top left,
+      var(--color-accent2),
+      var(--color-accent1)
+    );
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.city {
+  background-image: url("/city.webp");
+  background-position: 50% 50%;
+  background-size: cover;
+}
+
+.custom-grad {
+  background: none;
+  background-color: #353535ce;
+  box-shadow: 0px 1px 3.1px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+}
