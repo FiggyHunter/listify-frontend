@@ -90,7 +90,7 @@ const ChangeProfileDetails = ({ setIsChangeModalOpen, jwt, setJwt }) => {
         <div
           className={`${
             currentTab === "password" ? "rounded-tr-none " : ""
-          } flex flex-col min-h-48  rounded-tr-2xl bg-bkg`}
+          } flex flex-col min-h-48  rounded-tr-2xl bg-bkgContrast`}
         >
           {currentTab === "profile" && (
             <div className="w-5/6 mx-auto flex flex-col gap-4 py-8  ">
@@ -185,7 +185,7 @@ const ChangeProfileDetails = ({ setIsChangeModalOpen, jwt, setJwt }) => {
             </div>
           )}
         </div>
-        <div className=" pb-4 bg-bkg gap-3 ">
+        <div className=" pb-4 bg-bkgContrast gap-3 ">
           <div className="w-5/6 mx-auto flex flex-row pt-4 gap-3">
             {currentTab === "profile" && (
               <button
