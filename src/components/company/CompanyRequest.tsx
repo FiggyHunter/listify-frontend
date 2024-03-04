@@ -59,7 +59,7 @@ const CompanyRequest = ({ jwt, userId, companyId, setIsAddRequestOpen }) => {
               style: {
                 minHeight: "5rem",
                 color: "var(--color-content)",
-                resize: "both", // Make the TextField resizable
+                resize: "both",
               },
             }}
             onChange={(e) => setChangeText(e.target.value)}

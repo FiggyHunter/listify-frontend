@@ -7,8 +7,6 @@ const Employees = ({ employee }) => {
   const date = new Date().toISOString();
 
   function getMonthDifference(joinedAt) {
-    console.log(joinedAt);
-
     if (joinedAt === null) {
       return "Unknown";
     }

@@ -25,7 +25,6 @@ const Account = () => {
   useEffect(() => {
     document.title = "Listify | Profile";
     const fetchUserReviews = async () => {
-      console.log(reviews);
       if (userId) {
         const user = await getUserById(userId, jwt);
         setUser(user);
@@ -35,8 +34,6 @@ const Account = () => {
     };
 
     fetchUserReviews().then((reviews) => {
-      console.log(reviews);
-      console.log(token.decodedToken);
       setReviews(reviews);
       setIsLoading(false);
     });

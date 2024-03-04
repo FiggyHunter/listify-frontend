@@ -6,13 +6,8 @@ export default {
   theme: {
     screens: {
       sm: "200px",
-      // => @media (min-width: 640px) { ... }
-
       md: "1048px",
-      // => @media (min-width: 768px) { ... }
-
       lg: "1050px",
-      // => @media (min-width: 1024px) { ... }
     },
     extend: {
       fontSize: {

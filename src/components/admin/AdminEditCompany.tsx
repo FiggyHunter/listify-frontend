@@ -40,10 +40,6 @@ const AdminEditCompany = ({
 
   const handleCompanyEdit = async (company) => {
     const receivedCompany = { ...company };
-    console.log(companyImage);
-
-    console.log(receivedCompany);
-
     if (receivedCompany.name === currentCompany.name)
       delete receivedCompany.name;
     if (receivedCompany.description === currentCompany.description)
@@ -99,9 +95,6 @@ const AdminEditCompany = ({
     }
     notifyUpdatedCompany();
   };
-
-  console.log(company);
-  console.log(locations);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -214,7 +207,6 @@ const AdminEditCompany = ({
           options={locations.map((option) => option)}
           onChange={(_, selectedOption) => {
             const countries = selectedOption.map((country) => {
-              console.log(country);
               return {
                 _id: country._id ? country._id : country.id,
                 name: country.country ? country.country : country.name,

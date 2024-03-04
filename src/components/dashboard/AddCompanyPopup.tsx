@@ -27,7 +27,6 @@ const AddCompanyPopup = ({
   const isLoading = buttonLoading[`btn-addCmpny`] || false;
 
   const [uploadErrors, setUploadErrors] = useState(null);
-  console.log(errors);
 
   return (
     <div
@@ -212,7 +211,6 @@ const AddCompanyPopup = ({
           id="tags-outlined"
           options={["HIRING", "INTERVIEW", "MAN IN THE MIDDLE", "PARTNER"]}
           onChange={(_, selectedOptions) => {
-            console.log(selectedOptions);
             setCompanyData((prevValue) => ({
               ...prevValue,
               category: selectedOptions,

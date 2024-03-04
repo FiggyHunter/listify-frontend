@@ -62,12 +62,6 @@ export const updateUserData = async (
   updateUserData,
   setJwt
 ) => {
-  console.log(jwt);
-  console.log(updateUserData);
-  // if (Object.keys(updateUserData).length === 0) {
-  //   console.log("usao");
-  //   throw new Error("Please Input Details");
-  // }
   setButtonLoading(buttonId, true);
   const formattedUserData = { ...updateUserData };
 
@@ -77,9 +71,6 @@ export const updateUserData = async (
     delete formattedUserData.skills;
     delete formattedUserData.skillsIds;
   }
-  // if (oldPassword)
-  //   if (newPassword) if (repeatPassword)
-  // console.log(formattedUserData);
 
   const uri = import.meta.env.VITE_API_ENDPOINT + `/api/users/update`;
   try {
@@ -93,7 +84,6 @@ export const updateUserData = async (
     notify();
     return response.data;
   } catch (error) {
-    console.log(error);
     setButtonLoading(buttonId, false);
     throw error;
   }
@@ -106,28 +96,20 @@ export const updateUserPassword = async (
   userPasswordData,
   setJwt
 ) => {
-  console.log(jwt);
-  console.log(userPasswordData);
-
   setButtonLoading(buttonId, true);
   const formattedUserData = { ...userPasswordData };
 
   const uri = import.meta.env.VITE_API_ENDPOINT + `/api/users/changePassword`;
-  console.log(uri);
   try {
     const response = await Axios.patch(uri, formattedUserData, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
     });
-    console.log(response);
-
     setButtonLoading(buttonId, false);
-    console.log(jwt);
     notify();
     return response.data;
   } catch (error) {
-    console.log(error);
     setButtonLoading(buttonId, false);
     throw error;
   }
@@ -142,7 +124,6 @@ export const changeAdmitted = async (
   fullName
 ) => {
   const uri = import.meta.env.VITE_AUTH_ENDPOINT + `/approveNewUser/${userId}`;
-  console.log(uri);
   try {
     setButtonLoading(buttonId, true);
     const response = await Axios.patch(
@@ -160,14 +141,12 @@ export const changeAdmitted = async (
     return response.data;
   } catch (error) {
     setButtonLoading(buttonId, false);
-    console.log(error);
     throw error;
   }
 };
 
 export const joinCompany = async (jwt, userId, companyId, fetchEmployees) => {
   const uri = import.meta.env.VITE_AUTH_ENDPOINT + `/joinCompany/`;
-  console.log(uri);
   try {
     const response = await Axios.patch(
       uri,
@@ -180,14 +159,12 @@ export const joinCompany = async (jwt, userId, companyId, fetchEmployees) => {
     );
     fetchEmployees();
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
 
 export const leaveCompany = async (jwt, userId, fetchEmployees) => {
   const uri = import.meta.env.VITE_AUTH_ENDPOINT + `/leaveCompany/${userId}`;
-  console.log(uri);
   try {
     const response = await Axios.patch(
       uri,
@@ -200,7 +177,6 @@ export const leaveCompany = async (jwt, userId, fetchEmployees) => {
     );
     fetchEmployees();
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -214,7 +190,6 @@ export const disbandUser = async (
 ) => {
   setButtonLoading(buttonId, true);
   const uri = import.meta.env.VITE_AUTH_ENDPOINT + `/disband/${userId}`;
-  console.log(uri);
   try {
     await Axios.patch(
       uri,
@@ -230,7 +205,6 @@ export const disbandUser = async (
     await fetchUsers();
   } catch (error) {
     setButtonLoading(buttonId, false);
-    console.log(error);
     throw error;
   }
 };
@@ -260,7 +234,6 @@ export const banUser = async (
     setButtonLoading(buttonId, false);
   } catch (error) {
     setButtonLoading(buttonId, false);
-    console.log(error);
     throw error;
   }
 };
@@ -290,7 +263,6 @@ export const unbanUser = async (
     setButtonLoading(buttonId, false);
   } catch (error) {
     setButtonLoading(buttonId, false);
-    console.log(error);
     throw error;
   }
 };
@@ -320,7 +292,6 @@ export const promoteUser = async (
     setButtonLoading(buttonId, false);
   } catch (error) {
     setButtonLoading(buttonId, false);
-    console.log(error);
     throw error;
   }
 };

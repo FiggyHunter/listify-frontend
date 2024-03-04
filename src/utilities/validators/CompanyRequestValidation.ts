@@ -8,7 +8,6 @@ export const companyRequestValidation = async (userData, setRequestErrors) => {
       abortEarly: false,
     });
   } catch (errors) {
-    console.log(errors);
     if (errors instanceof ValidationError) {
       errors.inner.forEach((error) => {
         setRequestErrors(error.message);

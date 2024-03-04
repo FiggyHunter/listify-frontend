@@ -24,8 +24,6 @@ const ReviewPopup = ({
   const { buttonLoading, setButtonLoading } = useButtonLoadingStore();
   const isLoading = buttonLoading[`addReviewBtn`] || false;
 
-  console.log(isLoading);
-
   useEffect(() => {
     const escListener = (e) => {
       if (e.key === "Escape") setIsWriteReviewOpen(false);
@@ -97,7 +95,7 @@ const ReviewPopup = ({
           value={popupData.text}
           error={reviewErrors}
           helperText={reviewErrors}
-          inputProps={{ style: { color: "var(--color-content)" } }} // Set the input text color directly
+          inputProps={{ style: { color: "var(--color-content)" } }}
           onChange={(e) =>
             setPopupData((prevData) => {
               return {

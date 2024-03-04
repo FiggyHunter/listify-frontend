@@ -65,8 +65,6 @@ const Admin = () => {
     });
   };
 
-  console.log(requests);
-
   useEffect(() => {
     fetchUsers();
     fetchCompanies();

@@ -7,7 +7,6 @@ interface Props {
 
 const CompanyCard: React.FC<Props> = ({ navigate, company }) => {
   const [imgColors, setImgColors] = useState();
-  console.log(company);
   return (
     <article className="sm:flex sm:flex-col sm:text-center lg:text-left lg:grid border-b-2 rounded-xl bg-bkgContrast p-4 border-content custom-cols-dash gap-4 sm:w-full lg:w-full mx-auto text-content gradient-border-cards">
       <img

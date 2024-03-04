@@ -5,9 +5,6 @@ export default function FileUpload({ setCompanyImage }) {
   const [imageError, setImageError] = useState("");
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
-    console.log(e.target);
-    console.log(setCompanyImage);
-    console.log(selectedFile);
     imageValidation(selectedFile, setCompanyImage, setImageError);
   };
 

@@ -114,16 +114,12 @@ const ChangeProfileDetails = ({ setIsChangeModalOpen, jwt, setJwt }) => {
                 options={categories}
                 getOptionLabel={(option) => option.name}
                 onChange={(_, selectedOptions) => {
-                  console.log(selectedOptions);
                   const selectedSkills = selectedOptions.map(
                     (location) => location.name
                   );
                   const selectedSkillsIds = selectedOptions.map(
                     (skill) => skill._id
                   );
-
-                  console.log(selectedSkills);
-
                   setUserUpdatedData((prevValue) => ({
                     ...prevValue,
                     skills: selectedSkills,

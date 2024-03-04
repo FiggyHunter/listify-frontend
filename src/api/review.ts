@@ -45,8 +45,6 @@ export const getAllReviewsByCompany = async (companyId, jwt) => {
 };
 
 export const getReviewsByUserId = async (jwt, userId) => {
-  console.log(userId);
-
   const uri =
     import.meta.env.VITE_API_ENDPOINT + `/api/review/getByUserId/${userId}`;
   try {
@@ -55,7 +53,6 @@ export const getReviewsByUserId = async (jwt, userId) => {
         Authorization: `Bearer ${jwt}`,
       },
     });
-    console.log(response);
     return response.data;
   } catch (error) {
     throw error;

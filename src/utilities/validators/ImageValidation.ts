@@ -14,7 +14,6 @@ const imageValidation = async (image: File, setCompanyImage, setImageError) => {
   } catch (errors) {
     if (errors instanceof ValidationError) {
       errors.inner.forEach((error) => {
-        console.log(error.message);
         setImageError(error.message);
       });
     }

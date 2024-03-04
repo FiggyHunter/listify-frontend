@@ -28,8 +28,6 @@ const useRegisterState = () => {
     repeatPassword: null,
   });
 
-  console.log(registerErrors);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setRegisterFormData((prevData: RegisterFormData) => ({
@@ -69,7 +67,6 @@ const useRegisterState = () => {
 
       await notify();
     } catch (error) {
-      console.log(error);
       if (error.message === "400")
         handleResponseError("Register", setRegisterErrors);
       setButtonLoading(buttonId, false);

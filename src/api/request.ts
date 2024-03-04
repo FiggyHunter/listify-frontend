@@ -35,7 +35,6 @@ export const addRequest = async (
     notifyRequestAdded();
     setButtonLoading(buttonId, false);
   } catch (error) {
-    console.log(error);
     setButtonLoading(buttonId, false);
     throw error;
   }

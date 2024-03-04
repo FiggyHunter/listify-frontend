@@ -25,8 +25,6 @@ const Company = () => {
   const [employees, setEmployees] = useState();
   const [isAddRequestOpen, setIsAddRequestOpen] = useState(false);
 
-  console.log(company?.categories);
-
   useEffect(() => {
     const fetchCompanyReviews = async () =>
       await getAllReviewsByCompany(companyId, jwt);

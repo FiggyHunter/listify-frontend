@@ -19,8 +19,6 @@ async function modifyAllHq(jwt, data) {
 }
 
 export function formatExistingCompany(company) {
-  console.log(company);
-  // Extracting necessary fields from the company object
   const {
     name: companyName,
     description: companyDescription,
@@ -51,30 +49,13 @@ export function formatExistingCompany(company) {
     hqId: hq._id,
   };
 
-  console.log(formattedCompany);
-
   return formattedCompany;
 }
 
 function FormatAddCompanyRequest(companyData) {
-  console.log(companyData);
-
   const categoryIds = companyData.areasOfExperise.map((category) => {
     return category._id;
   });
-
-  console.log(categoryIds);
-  //   {
-  //     "name": "Tech Innovators Ltd",
-  //     "description": "Tech Innovators is a cutting-edge technology company focused on creating groundbreaking solutions to meet the evolving needs of businesses globally.",
-  //     "logo" : "neki link za url",
-  //     "websiteURL": "http://www.techinnovators.com",
-  //     "linkedinURL": "http://www.linkedin.com/techinnovators",
-  //     "hq": "6598a2509c886391d35e406e",
-  //     "categories" : ["neki ID"],
-  //     "countries": ["6598a2509c886391d35e406e"],
-  //     "group": "HIRING"
-  // }
 
   return {
     name: companyData.companyName,
@@ -97,17 +78,13 @@ export const getAllCompanies = async (jwt, setCompanies) => {
         Authorization: `Bearer ${jwt}`,
       },
     });
-
-    console.log(response.data);
     setCompanies(response.data?.reverse());
   } catch (error) {
-    console.log(error);
     throw new Error(error.response.data);
   }
 };
 
 export const getCompanyById = async (jwt, setCompany, id) => {
-  console.log(id);
   const uri = import.meta.env.VITE_API_ENDPOINT + `/api/company/getById/${id}`;
   try {
     const response = await Axios.get(uri, {
@@ -115,7 +92,6 @@ export const getCompanyById = async (jwt, setCompany, id) => {
         Authorization: `Bearer ${jwt}`,
       },
     });
-    console.log(response.data);
     setCompany(await response.data);
   } catch (error) {
     throw new Error(error.response.data);
@@ -123,26 +99,7 @@ export const getCompanyById = async (jwt, setCompany, id) => {
 };
 
 export const CreateCompany = async (companyData, jwt) => {
-  /* 
-
-{
-    "name": "Tech Innovators Ltd",
-    "description": "Tech Innovators is a cutting-edge technology company focused on creating groundbreaking solutions to meet the evolving needs of businesses globally.",
-    "logo" : "neki link za url",
-    "websiteURL": "http://www.techinnovators.com",
-    "linkedinURL": "http://www.linkedin.com/techinnovators",
-    "hq": "6598a2509c886391d35e406e",
-    "categories" : ["neki ID"],
-    "countries": ["6598a2509c886391d35e406e"],
-    "group": "HIRING"
-}
-
-  */
-
-  console.log(jwt);
-  console.log(companyData);
   const formattedRequest = FormatAddCompanyRequest(companyData);
-  console.log(formattedRequest);
   const uri = import.meta.env.VITE_API_ENDPOINT + `/api/company/add`;
   try {
     const response = await Axios.post(uri, formattedRequest, {
@@ -201,23 +158,20 @@ export const addCompanyImage = async (
   const uri =
     import.meta.env.VITE_API_ENDPOINT +
     `/api/company/addImageToCompany/${companyId}`;
-  console.log(companyImage);
   try {
     const formData = new FormData();
     formData.append("image", companyImage, companyImage.name);
-    console.log(
-      await Axios.post(uri, formData, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-          "Content-Type": "multipart/form-data",
-        },
-      })
-    );
+
+    await Axios.post(uri, formData, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
     if (setCompanies) await getAllCompanies(jwt, setCompanies);
     if (setButtonLoading) setButtonLoading(buttonId, false);
   } catch (error) {
     if (setButtonLoading) setButtonLoading(buttonId, false);
-    console.log(error);
     if (error.code === "ERR_BAD_RESPONSE") {
       setUploadErrors(
         "Error trying to upload the image, please try uploading another format, image or name."
@@ -237,10 +191,8 @@ export const getEmployeesByCompany = async (jwt, companyId, setEmployees) => {
         Authorization: `Bearer ${jwt}`,
       },
     });
-    console.log(response.data);
     setEmployees(response.data);
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -273,7 +225,6 @@ export const updateCompany = async (
     setButtonLoading(buttonId, false);
   } catch (error) {
     setButtonLoading(buttonId, false);
-    console.log(error);
     throw error;
   }
 };

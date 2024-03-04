@@ -6,7 +6,7 @@ export const imageSchema = object().shape({
       "fileType",
       "Invalid file format. Only PNG, JPEG, and WEBP images are allowed.",
       (value) => {
-        if (!value) return true; // Allow empty values
+        if (!value) return true;
         const supportedFormats = ["image/png", "image/jpeg", "image/webp"];
         return supportedFormats.includes(value.type);
       }
