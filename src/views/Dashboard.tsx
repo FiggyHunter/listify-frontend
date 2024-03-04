@@ -82,6 +82,7 @@ const Dashboard = () => {
           locations={locations}
           setIsAddCompanyOpen={setIsAddCompanyOpen}
           jwt={jwt}
+          setCompanies={setCompanies}
         />
       )}
       <Navigation />
