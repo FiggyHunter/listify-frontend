@@ -11,7 +11,6 @@ import userNavigationGuard from "@/hooks/userNavigationGuard";
 import { useJwtStore } from "@/stores/useUserStore";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 
 const Company = () => {
   const params = useParams();
@@ -25,6 +24,8 @@ const Company = () => {
   const [reviews, setReviews] = useState([]);
   const [employees, setEmployees] = useState();
   const [isAddRequestOpen, setIsAddRequestOpen] = useState(false);
+
+  console.log(company?.categories);
 
   useEffect(() => {
     const fetchCompanyReviews = async () =>
@@ -46,18 +47,6 @@ const Company = () => {
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />{" "}
       <Navigation />
       {company === null ? (
         <main className="pt-28 bg-bkg h-my-screen">
@@ -340,10 +329,15 @@ const Company = () => {
                     >
                       <path d="M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z"></path>
                     </svg>
-                    <p className="text-content">Categories: </p>
-                    {company?.categories?.map((category) => (
-                      <p className="text-content">{category}</p>
-                    ))}
+                    <div className="flex w-full flex-wrap">
+                      <p className="text-content">Categories: </p>
+                      {company?.categories?.map((category, index) => (
+                        <p className="text-content w-max" key={index}>
+                          {category?.name}
+                          {index !== company?.categories?.length - 1 && ","}
+                        </p>
+                      ))}
+                    </div>
                   </div>
                 </article>
                 <article
