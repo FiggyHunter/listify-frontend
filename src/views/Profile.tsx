@@ -2,7 +2,7 @@ import { getReviewsByUserId } from "@/api/review";
 import { getUserById } from "@/api/user";
 import Reviews from "@/components/company/Reviews";
 import ProfileSkeleton from "@/components/profile/ProfileSkeleton";
-import ChangeProfileDetails from "@/components/profile/changeProfileDetails";
+import ChangeProfileDetails from "@/components/profile/ChangeProfileDetails";
 import Navigation from "@/components/shared/Navigation";
 import NotFoundCard from "@/components/shared/NotFoundCard";
 import userNavigationGuard from "@/hooks/userNavigationGuard";
