@@ -2,11 +2,16 @@ import useCompanyState from "@/hooks/useCompanyState";
 import InputTheme from "@/themes/InputTheme";
 import { Autocomplete, TextField } from "@mui/material";
 import FileUpload from "../shared/FileUpload";
+import { getAllCompanies } from "@/api/company";
+import LoaderButton from "../shared/LoaderButton";
+import { useButtonLoadingStore } from "@/stores/useButtonLoadingStore";
+import { useState } from "react";
 const AddCompanyPopup = ({
   categories,
   jwt,
   locations,
   setIsAddCompanyOpen,
+  setCompanies,
 }) => {
   const {
     companyData,
@@ -17,6 +22,12 @@ const AddCompanyPopup = ({
     companyImage,
     setCompanyImage,
   } = useCompanyState();
+
+  const { buttonLoading, setButtonLoading } = useButtonLoadingStore();
+  const isLoading = buttonLoading[`btn-addCmpny`] || false;
+
+  const [uploadErrors, setUploadErrors] = useState(null);
+  console.log(errors);
 
   return (
     <div
@@ -31,7 +42,7 @@ const AddCompanyPopup = ({
         }}
         className="sm:w-5/6 lg:w-1/3 h-fit bg-bkgContrast grid grid-cols-2 custom-rows px-8 gap-5 rounded-2xl"
       >
-        <div className="w-full mx-auto flex justify-between mt-4 border-b-1 pb-2 border-content col-span-2 font-bold text-content">
+        <div className="w-full mx-auto flex items-center justify-between mt-4 border-b-1 pb-2 border-content col-span-2 font-bold text-content">
           <p
             onClick={(e) => {
               e.stopPropagation();
@@ -41,17 +52,14 @@ const AddCompanyPopup = ({
           >
             ADD A NEW COMPANY
           </p>
-          <svg
-            className="fill-content cursor-pointer"
-            xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
-            viewBox="0 0 256 256"
+          <button
             onClick={() => setIsAddCompanyOpen(false)}
+            className="text-bkg"
+            aria-label="Close popup"
           >
-            <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
-          </svg>
-        </div>{" "}
+            X
+          </button>
+        </div>
         <TextField
           className="col-span-2"
           type="text"
@@ -185,7 +193,18 @@ const AddCompanyPopup = ({
           error={errors?.websiteUrl ? true : false}
           helperText={errors?.websiteUrl}
         />
-        <FileUpload setCompanyImage={setCompanyImage} />
+        <div className="flex col-span-2 items-center">
+          <p
+            className={`${
+              uploadErrors ? "text-red-600 font-bold" : "text-content"
+            } text-content w-full text-sm mt-6`}
+          >
+            {uploadErrors
+              ? "Company was created but the image failed to upload, please contact the admin."
+              : "Upload the company logo:"}
+          </p>
+          <FileUpload setCompanyImage={setCompanyImage} />{" "}
+        </div>
         <Autocomplete
           className="col-span-2"
           freeSolo
@@ -213,10 +232,17 @@ const AddCompanyPopup = ({
           )}
         />
         <button
-          onClick={() => handleCompanyCreation()}
+          onClick={async () => {
+            await handleCompanyCreation(
+              "btn-addCmpny",
+              setButtonLoading,
+              setUploadErrors
+            );
+            await getAllCompanies(jwt, setCompanies);
+          }}
           className="mx-auto w-full col-span-2 mb-8  my-auto bg-crimson hover:bg-crimsonHover text-black transition-all duration-200"
         >
-          ADD A COMPANY
+          {isLoading ? <LoaderButton /> : "ADD A COMPANY"}
         </button>
       </div>
     </div>
