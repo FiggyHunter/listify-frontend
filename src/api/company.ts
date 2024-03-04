@@ -29,9 +29,14 @@ export function formatExistingCompany(company) {
     linkedinURL: linkedinUrl,
     countries,
     group,
+    categories,
   } = company;
 
   const locationId = countries.map((country) => country._id);
+
+  const categoryIds = categories.map((category) => {
+    return category._id;
+  });
 
   const formattedCompany = {
     companyName: companyName,
@@ -39,7 +44,7 @@ export function formatExistingCompany(company) {
     companyHQ: hq._id,
     countries: [...countries],
     areasOfExperise: ["Software Development"],
-    category: group,
+    categories: categoryIds,
     linkedinUrl: linkedinUrl,
     websiteUrl: websiteUrl,
     locationId: locationId,
@@ -70,6 +75,7 @@ function FormatAddCompanyRequest(companyData) {
   //     "countries": ["6598a2509c886391d35e406e"],
   //     "group": "HIRING"
   // }
+
   return {
     name: companyData.companyName,
     description: companyData.companyDescription,
@@ -190,8 +196,8 @@ export const addCompanyImage = async (
   buttonId,
   setUploadErrors
 ) => {
-  setUploadErrors(null);
-  setButtonLoading(buttonId, true);
+  if (setUploadErrors) setUploadErrors(null);
+  if (setButtonLoading) setButtonLoading(buttonId, true);
   const uri =
     import.meta.env.VITE_API_ENDPOINT +
     `/api/company/addImageToCompany/${companyId}`;
@@ -207,10 +213,10 @@ export const addCompanyImage = async (
         },
       })
     );
-    await getAllCompanies(jwt, setCompanies);
-    setButtonLoading(buttonId, false);
+    if (setCompanies) await getAllCompanies(jwt, setCompanies);
+    if (setButtonLoading) setButtonLoading(buttonId, false);
   } catch (error) {
-    setButtonLoading(buttonId, false);
+    if (setButtonLoading) setButtonLoading(buttonId, false);
     console.log(error);
     if (error.code === "ERR_BAD_RESPONSE") {
       setUploadErrors(
