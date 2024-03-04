@@ -2,6 +2,7 @@ import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes.tsx";
 import { Helmet } from "react-helmet";
 import { ToastContainer } from "react-toastify";
+
 const App = () => {
   return (
     <>
@@ -41,7 +42,7 @@ const App = () => {
         <BrowserRouter>
           <AppRoutes />
         </BrowserRouter>
-      </div>
+      </div>{" "}
     </>
   );
 };
