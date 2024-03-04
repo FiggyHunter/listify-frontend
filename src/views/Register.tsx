@@ -3,7 +3,6 @@ import RegisterForm from "../components/register/RegisterForm.tsx";
 import { useEffect } from "react";
 import { useJwtStore } from "@/stores/useUserStore.ts";
 import { useJwt } from "react-jwt";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import authorisedNavigationGuard from "@/hooks/authorisedNavigationGuard.ts";
 
@@ -14,18 +13,6 @@ const Register = () => {
   document.title = "Listify | Register";
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
       <main className="h-screen w-screen grid items-center bg-bkg">
         <img
           className="place-self-center sm:w-36 md:w-44 lg:w-64"

@@ -10,7 +10,6 @@ import { useJwtStore } from "@/stores/useUserStore";
 import getInitials from "@/utilities/getInitialsFromName";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 
 const Account = () => {
   const navigate = useNavigate();
@@ -45,18 +44,6 @@ const Account = () => {
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
       <Navigation />
       <main className="h-my-screen bg-bkg pt-28">
         {/* {isWriteReviewOpen && (

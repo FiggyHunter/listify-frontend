@@ -6,7 +6,7 @@ import resetPasswordValidation from "@/utilities/validators/ResetPasswordValidat
 import { TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+
 
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
@@ -18,18 +18,7 @@ const ResetPassword = () => {
   const { token } = authorisedNavigationGuard();
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
+
       <main className="h-screen w-screen grid grid-rows-3 items-center bg-bkg ">
         {" "}
         <img
