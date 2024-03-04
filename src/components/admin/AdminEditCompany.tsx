@@ -10,6 +10,7 @@ import {
 } from "@/api/company";
 import LoaderButton from "../shared/LoaderButton";
 import { useButtonLoadingStore } from "@/stores/useButtonLoadingStore";
+import { getAllCategories } from "@/api/category";
 
 const AdminEditCompany = ({
   jwt,
@@ -17,14 +18,13 @@ const AdminEditCompany = ({
   setIsEditCompany,
   setCompanies,
 }) => {
-  console.log(currentCompany);
-
   const [locations, setLocations] = useState([]);
   const [companyImage, setCompanyImage] = useState(null);
 
   const { buttonLoading, setButtonLoading } = useButtonLoadingStore();
   const isLoading = buttonLoading[`editCompanyButton`] || false;
   const [uploadErrors, setUploadErrors] = useState(null);
+  const [categories, setCategories] = useState([]);
 
   const [company, setCompany] = useState({
     name: "",
@@ -79,7 +79,6 @@ const AdminEditCompany = ({
       receivedCompany.hq = id;
     }
 
-    console.log(receivedCompany);
     await updateCompany(
       jwt,
       receivedCompany,
@@ -113,6 +112,7 @@ const AdminEditCompany = ({
   };
 
   useEffect(() => {
+    getAllCategories(jwt, setCategories);
     getAllCountries(jwt, setLocations);
   }, [jwt]);
 
@@ -247,26 +247,21 @@ const AdminEditCompany = ({
           multiple
           id="tags-outlined"
           sx={InputTheme}
-          options={[
-            "Software Development",
-            "Product Development",
-            "Web Development",
-            "E-commerce",
-          ]}
-          // onChange={(_, selectedOptions) => {
-          //   setCompanyData((prevValue) => ({
-          //     ...prevValue,
-          //     areasOfExperise: selectedOptions,
-          //   }));
-          // }}
-          // getOptionLabel={(option) => option}
-          // defaultValue={companyData.areasOfExperise}
-          // value={companyData.areasOfExperise}
-          // filterSelectedOptions
+          options={categories.map((option) => option)}
+          onChange={(_, selectedOptions) => {
+            setCompany((prevValue) => ({
+              ...prevValue,
+              categories: selectedOptions,
+            }));
+          }}
+          getOptionLabel={(option) => option.name}
+          defaultValue={company.categories}
+          value={company.categories}
+          filterSelectedOptions
           renderInput={(params) => (
             <TextField
-              // {...params}
-              // sx={InputTheme}
+              {...params}
+              sx={InputTheme}
               fullWidth
               label="Areas of expertise"
               placeholder="Start typing an expertise"
