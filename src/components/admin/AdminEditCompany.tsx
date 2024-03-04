@@ -11,6 +11,7 @@ import {
 import LoaderButton from "../shared/LoaderButton";
 import { useButtonLoadingStore } from "@/stores/useButtonLoadingStore";
 import { getAllCategories } from "@/api/category";
+import editCompanySchema from "@/schemas/editCompanySchema";
 
 const AdminEditCompany = ({
   jwt,
@@ -26,6 +27,10 @@ const AdminEditCompany = ({
   const [uploadErrors, setUploadErrors] = useState(null);
   const [categories, setCategories] = useState([]);
 
+  const [errors, setErrors] = useState();
+
+  console.log(errors);
+
   const [company, setCompany] = useState({
     name: "",
     description: "",
@@ -39,61 +44,75 @@ const AdminEditCompany = ({
   });
 
   const handleCompanyEdit = async (company) => {
-    const receivedCompany = { ...company };
-    if (receivedCompany.name === currentCompany.name)
-      delete receivedCompany.name;
-    if (receivedCompany.description === currentCompany.description)
-      delete receivedCompany.description;
-    if (receivedCompany.logo === currentCompany.logo)
-      delete receivedCompany.logo;
-    if (receivedCompany.websiteURL === currentCompany.websiteURL)
-      delete receivedCompany.websiteURL;
-    if (receivedCompany.linkedinURL === currentCompany.linkedinURL)
-      delete receivedCompany.linkedinURL;
-    if (receivedCompany.hq === currentCompany.hq) delete receivedCompany.hq;
-    if (
-      JSON.stringify(receivedCompany.countries) ===
-      JSON.stringify(currentCompany.countries)
-    )
-      delete receivedCompany.countries;
-    if (
-      JSON.stringify(receivedCompany.categories) ===
-      JSON.stringify(currentCompany.categories)
-    )
-      delete receivedCompany.categories;
-    if (receivedCompany.group === currentCompany.group)
-      delete receivedCompany.group;
+    try {
+      setErrors(null);
+      const receivedCompany = { ...company, hq: { ...company.hq } };
+      if (receivedCompany.name === currentCompany.name)
+        delete receivedCompany.name;
+      if (receivedCompany.description === currentCompany.description)
+        delete receivedCompany.description;
+      if (receivedCompany.logo === currentCompany.logo)
+        delete receivedCompany.logo;
+      if (receivedCompany.websiteURL === currentCompany.websiteURL)
+        delete receivedCompany.websiteURL;
+      if (receivedCompany.linkedinURL === currentCompany.linkedinURL)
+        delete receivedCompany.linkedinURL;
+      if (receivedCompany.hq === currentCompany.hq) delete receivedCompany.hq;
+      if (
+        JSON.stringify(receivedCompany.countries) ===
+        JSON.stringify(currentCompany.countries)
+      )
+        delete receivedCompany.countries;
+      if (
+        JSON.stringify(receivedCompany.categories) ===
+        JSON.stringify(currentCompany.categories)
+      )
+        delete receivedCompany.categories;
+      if (receivedCompany.group === currentCompany.group)
+        delete receivedCompany.group;
 
-    receivedCompany.id = receivedCompany._id;
-    delete receivedCompany._id;
-    delete receivedCompany.createdAt;
-    delete receivedCompany.__v;
+      receivedCompany.id = receivedCompany._id;
+      delete receivedCompany._id;
+      delete receivedCompany.createdAt;
+      delete receivedCompany.__v;
 
-    if (receivedCompany.hq) {
-      delete receivedCompany.hq.name;
-      let id = receivedCompany.hq._id;
-      receivedCompany.hq = id;
-    }
+      if (receivedCompany.hq) {
+        delete receivedCompany.hq.name;
+        let id = receivedCompany.hq._id;
+        receivedCompany.hq = id;
+      }
 
-    await updateCompany(
-      jwt,
-      receivedCompany,
-      setCompanies,
-      setButtonLoading,
-      "editCompanyButton"
-    );
-    if (companyImage) {
-      await addCompanyImage(
+      console.log(company);
+
+      await editCompanySchema.validate(company, { abortEarly: false });
+      await updateCompany(
         jwt,
-        receivedCompany.id,
-        companyImage,
+        receivedCompany,
         setCompanies,
         setButtonLoading,
-        "editCompanyButton",
-        setUploadErrors
+        "editCompanyButton"
       );
+      if (companyImage) {
+        await addCompanyImage(
+          jwt,
+          receivedCompany.id,
+          companyImage,
+          setCompanies,
+          setButtonLoading,
+          "editCompanyButton",
+          setUploadErrors
+        );
+      }
+      notifyUpdatedCompany();
+      setErrors(null);
+    } catch (error) {
+      const validationErrors = {};
+      error?.inner?.forEach((err) => {
+        console.log(err.path);
+        validationErrors[err.path] = err.message;
+      });
+      setErrors(validationErrors);
     }
-    notifyUpdatedCompany();
   };
 
   const handleChange = (event) => {
@@ -153,8 +172,8 @@ const AdminEditCompany = ({
           variant="outlined"
           value={company?.name}
           onChange={handleChange}
-          // error={errors?.companyName ? true : false}
-          // helperText={errors?.companyName}
+          error={errors?.name ? true : false}
+          helperText={errors?.name}
           sx={InputTheme}
         />{" "}
         <TextField
@@ -166,12 +185,13 @@ const AdminEditCompany = ({
           sx={InputTheme}
           value={company.description}
           onChange={handleChange}
-          // error={errors?.companyDescription ? true : false}
-          // helperText={errors?.companyDescription}
+          error={errors?.description ? true : false}
+          helperText={errors?.description}
         />{" "}
         <Autocomplete
           className="col-span-2"
           freeSolo
+          name="hq"
           id="free-solo-demo"
           sx={InputTheme}
           value={currentCompany.hq}
@@ -192,8 +212,8 @@ const AdminEditCompany = ({
             <TextField
               {...params}
               label="Company HQ"
-              // error={errors?.companyHQ ? true : false}
-              // helperText={errors?.companyHQ}
+              error={errors && errors["hq.name"] ? true : false}
+              helperText={errors && errors["hq.name"]}
             />
           )}
         />
@@ -229,8 +249,8 @@ const AdminEditCompany = ({
               {...params}
               label="Location"
               placeholder="Start typing a location"
-              // error={errors?.location ? true : false}
-              // helperText={errors?.location}
+              error={errors?.countries ? true : false}
+              helperText={errors?.countries}
             />
           )}
         />
@@ -257,8 +277,8 @@ const AdminEditCompany = ({
               fullWidth
               label="Areas of expertise"
               placeholder="Start typing an expertise"
-              // error={errors?.areasOfExperise ? true : false}
-              // helperText={errors?.areasOfExperise}
+              error={errors?.categories ? true : false}
+              helperText={errors?.categories}
             />
           )}
         />
@@ -271,8 +291,8 @@ const AdminEditCompany = ({
           sx={InputTheme}
           value={company.linkedinURL}
           onChange={handleChange}
-          // error={errors?.linkedinUrl ? true : false}
-          // helperText={errors?.linkedinUrl}
+          error={errors?.linkedinURL ? true : false}
+          helperText={errors?.linkedinURL}
         />
         <TextField
           className="sm:col-span-2 lg:col-span-1"
@@ -283,8 +303,8 @@ const AdminEditCompany = ({
           sx={InputTheme}
           value={company.websiteURL}
           onChange={handleChange}
-          // error={errors?.websiteUrl ? true : false}
-          // helperText={errors?.websiteUrl}
+          error={errors?.websiteURL ? true : false}
+          helperText={errors?.websiteURL}
         />{" "}
         <div className="flex col-span-2 items-center  justify-between">
           <h4
@@ -318,8 +338,8 @@ const AdminEditCompany = ({
               {...params}
               label="Category"
               placeholder="Start typing a location"
-              // error={errors?.category ? true : false}
-              // helperText={errors?.category}
+              error={errors?.group ? true : false}
+              helperText={errors?.group}
             />
           )}
         />{" "}
