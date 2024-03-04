@@ -6,16 +6,29 @@ import BanButton from "./BanButton";
 import PromoteToAdmin from "./PromoteToAdmin";
 import DemoteFromAdmin from "./DemoteFromAdmin";
 
-const AdminCard = ({ jwt, user, handleAdmitUser, fetchUsers, type }) => {
+const AdminCard = ({
+  jwt,
+  user,
+  handleAdmitUser,
+  fetchUsers,
+  type,
+  navigate,
+}) => {
   return (
-    <section className="grid w-full px-8 mx-auto access-grid gap-4 ">
-      <div className="h-16  sm:col-span-2 lg:col-span-1  sm:self-center w-16 bg-sky-400 grid place-content-center text-black font-black text-xl ">
+    <section className="grid w-full px-8 mx-auto  access-grid gap-4 ">
+      <div
+        onClick={() => navigate(`/profile/${user._id}`)}
+        className="h-16 cursor-pointer  sm:col-span-2 lg:col-span-1  sm:self-center w-16 bg-sky-400 grid place-content-center text-black font-black text-xl "
+      >
         {" "}
         {getInitials(`${user.name} ${user.surname}`)}
       </div>
       <div className="flex sm:col-span-2 lg:col-span-1 flex-col gap-3 w-full text-content">
-        <h2 className="text-xl font-bold">{`${user.name} ${user.surname}`}</h2>
-        <h3 className="text-base font-light">Email: {user.email}</h3>
+        <h2
+          onClick={() => navigate(`/profile/${user._id}`)}
+          className="text-xl font-bold"
+        >{`${user.name} ${user.surname}`}</h2>
+        <h3 className="text-base font-light ">Email: {user.email}</h3>
         <h4 className="text-base font-light">Date: {user.createdAt}</h4>
       </div>
       <div className="flex items-center gap-4">
