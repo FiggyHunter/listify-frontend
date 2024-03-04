@@ -12,6 +12,8 @@ import Fuse from "fuse.js";
 import { fuseOptions } from "@/config/fuse";
 import MobileCompanyFilters from "@/components/dashboard/MobileCompanyFilters";
 import useJWT from "@/hooks/userNavigationGuard";
+import DashboardTimeDate from "@/components/dashboard/DashboardTimeDate";
+import { getAllCategories } from "@/api/category";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -23,26 +25,10 @@ const Dashboard = () => {
   const [filters, setFilters] = useState({ category: null, location: null });
   const { token } = useJWT();
   const { searchTerm } = useSearchStore();
-
-  function getCurrentDay() {
-    const daysOfWeek = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-    const currentDate = new Date();
-    const dayIndex = currentDate.getDay();
-
-    return daysOfWeek[dayIndex];
-  }
-
-  const currentDay = getCurrentDay();
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
+    document.title = "Listify | Dashboard";
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") setIsAddCompanyOpen(false);
     });
@@ -51,6 +37,7 @@ const Dashboard = () => {
   useEffect(() => {
     getAllCompanies(jwt, setCompanies);
     getAllCountries(jwt, setLocations);
+    getAllCategories(jwt, setCategories);
   }, [jwt]);
 
   useEffect(() => {
@@ -62,7 +49,9 @@ const Dashboard = () => {
       setDisplayedCompanies(companies);
     if (!filters.category && filters.location)
       setDisplayedCompanies(() =>
-        companies?.filter((company) => filters.location.includes(company.hq))
+        companies?.filter((company) =>
+          filters.location.includes(company.hq.name)
+        )
       );
     if (filters.category && !filters.location) {
       setDisplayedCompanies(() =>
@@ -73,7 +62,7 @@ const Dashboard = () => {
       setDisplayedCompanies(() =>
         companies
           ?.filter((company) => company.group === filters.category)
-          ?.filter((company) => filters.location.includes(company.hq))
+          ?.filter((company) => filters.location.includes(company.hq.name))
       );
     }
     if (searchTerm !== "") {
@@ -89,9 +78,11 @@ const Dashboard = () => {
     <>
       {isAddCompanyOpen && (
         <AddCompanyPopup
+          categories={categories}
           locations={locations}
           setIsAddCompanyOpen={setIsAddCompanyOpen}
           jwt={jwt}
+          setCompanies={setCompanies}
         />
       )}
       <Navigation />
@@ -104,22 +95,10 @@ const Dashboard = () => {
         </div>
         <div className="mx-auto sm:w-5/6  lg:w-4/5">
           <section className="flex flex-col gap-2 mb-6 text-content bg-bkgContrast  rounded-2xl city">
-            <div className="custom-grad h-full self-stretch p-6">
-              <h1 className="sm:text-center sm:text-3xl md:text-5xl md:text-right font-bold text-white ">
-                Good afternoon{" "}
-                {token.decodedToken ? token.decodedToken.name : ""}.
-              </h1>
-              <h2 className="sm:text-center md:text-right text-content text-white">
-                It's{" "}
-                {`${new Date().getHours()}:${
-                  new Date().getMinutes() > 0 && new Date().getMinutes() < 10
-                    ? `0${new Date().getMinutes()}`
-                    : new Date().getMinutes()
-                }`}{" "}
-                on a {currentDay}
-              </h2>
-            </div>
-          </section>{" "}
+            <article className="custom-grad h-full self-stretch p-6">
+              <DashboardTimeDate token={token} />
+            </article>
+          </section>
           <div className="flex flex-col gap-2 sm:flex md:hidden lg:hidden">
             {" "}
             <MobileCompanyFilters
@@ -161,7 +140,7 @@ const Dashboard = () => {
                     className="w-1/3"
                     width={64}
                     height={64}
-                    src={"/cat_search.webp"}
+                    src={"/search.svg"}
                     alt="cat holding a magnifying glass"
                   />
                   <p className="text-content font-bold">

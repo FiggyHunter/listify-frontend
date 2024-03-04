@@ -1,16 +1,15 @@
-import { getAllCompanies } from "@/api/company";
-import { getAllCountries } from "@/api/country";
+import { formatExistingCompany, getAllCompanies } from "@/api/company";
+import { getAllRequests } from "@/api/request";
 import { getAllUsers } from "@/api/user";
-import AccessRequest from "@/components/admin/AccessRequest";
+import AdminCard from "@/components/admin/AdminCard";
 import AdminCompany from "@/components/admin/AdminCompany";
-import AddCompanyPopup from "@/components/dashboard/AddCompanyPopup";
+import AdminEditCompany from "@/components/admin/AdminEditCompany";
+import AdminRequestCard from "@/components/admin/AdminRequestCard";
 import Navigation from "@/components/shared/Navigation";
 import adminNavigationGuard from "@/hooks/adminNavigationGuard";
 import { useJwtStore } from "@/stores/useUserStore";
 import { useEffect, useState } from "react";
-import { useJwt } from "react-jwt";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 
 const Admin = () => {
   const { jwt, setJwt } = useJwtStore();
@@ -18,9 +17,17 @@ const Admin = () => {
   const [companies, setCompanies] = useState([]);
   const [focusedTab, setFocusedTab] = useState("users");
   const { token } = adminNavigationGuard() || null;
-  const [locations, setLocations] = useState([]);
-  const [isAddCompanyOpen, setIsAddCompanyOpen] = useState(false);
+  const [isEditCompany, setIsEditCompany] = useState(false);
   const [currentCompany, setCurrentCompany] = useState({});
+  const [requests, setRequests] = useState([]);
+  const navigate = useNavigate();
+
+  document.title = "Listify | Admin";
+
+  useEffect(() => {
+    if (Object.entries(currentCompany).length !== 0)
+      formatExistingCompany(currentCompany);
+  }, [currentCompany]);
 
   const fetchUsers = async () => {
     try {
@@ -39,6 +46,14 @@ const Admin = () => {
     }
   };
 
+  const fetchRequests = async () => {
+    try {
+      await getAllRequests(jwt, setRequests);
+    } catch (error) {
+      return error;
+    }
+  };
+
   const handleAdmitUser = (userId) => {
     setUsers((prevUsers) => {
       return prevUsers.map((user) => {
@@ -53,61 +68,69 @@ const Admin = () => {
   useEffect(() => {
     fetchUsers();
     fetchCompanies();
-  }, []);
-  useEffect(() => {
-    getAllCountries(jwt, setLocations);
+    fetchRequests();
   }, [jwt]);
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />{" "}
-      {isAddCompanyOpen && (
-        <AddCompanyPopup
+      {isEditCompany && (
+        <AdminEditCompany
           jwt={jwt}
-          locations={locations}
-          setIsAddCompanyOpen={setIsAddCompanyOpen}
           currentCompany={currentCompany}
+          setIsEditCompany={setIsEditCompany}
+          setCompanies={setCompanies}
         />
       )}
       <Navigation />
-      <main className="sm:w-5/5 lg:w-4/5 mx-auto min-h-96 mt-28 gap-10 grid pb-4">
-        <section className="bg-bkgContrast w-4/5 mx-auto min-h-96 rounded-3xl shadow-md">
+      <main className="sm:w-5/5 lg:w-4/5 mx-auto  mt-28 gap-10 grid pb-4">
+        <section className="bg-bkgContrast w-4/5 mx-auto rounded-3xl shadow-md">
           <h2 className="text-content text-2xl w-full mx-auto sm:text-md lg:text-2xl pt-4 pb-8 px-8 font-bold flex flex-col">
             Access Requests (
             {document.getElementById("requests")?.childElementCount})
           </h2>{" "}
-          <article id={"requests"} className="flex flex-col gap-4 pb-8 ">
+          <article id={"requests"} className="flex flex-col gap-4 pb-8">
             {users.map((user) => {
-              if (!user.isAdmitted)
+              if (!user.isAdmitted && !user.isBanned)
                 return (
-                  <AccessRequest
+                  <AdminCard
                     key={user._id}
                     jwt={jwt}
                     user={user}
                     handleAdmitUser={handleAdmitUser}
+                    fetchUsers={fetchUsers}
+                    type={"list"}
                   />
                 );
             })}
           </article>{" "}
-        </section>
-        <section className="bg-bkgContrast w-4/5 mx-auto min-h-96 rounded-tr-xl bg-bkgContrast mb-20 ">
+        </section>{" "}
+        {requests.length !== 0 && (
+          <section className="bg-bkgContrast w-4/5 mx-auto rounded-3xl shadow-md">
+            <h2 className="text-content text-2xl w-full mx-auto sm:text-md lg:text-2xl pt-4 pb-8 px-8 font-bold flex flex-col">
+              Company Modification Requests (
+              {document.getElementById("changes")?.childElementCount})
+            </h2>{" "}
+            <article id={"changes"} className="flex flex-col gap-4 pb-8 px-8">
+              {requests.map((request) => {
+                return (
+                  <AdminRequestCard
+                    key={request._id}
+                    request={request}
+                    jwt={jwt}
+                    setRequests={setRequests}
+                  />
+                );
+              })}
+            </article>{" "}
+          </section>
+        )}
+        <section className=" w-4/5 mx-auto  rounded-2xl overflow-hidden bg-bkgContrast mb-20 ">
           <div
             className={`flex ${
               focusedTab !== "companies" ? "bg-bkgContrast" : "bg-white"
             } `}
           >
-            <div className="flex justify-between w-full pb-8">
+            <div className="flex justify-between w-full ">
               {" "}
               <button
                 onClick={() => setFocusedTab("users")}
@@ -118,7 +141,7 @@ const Admin = () => {
                 }   text-left rounded-tl-none rounded-bl-none `}
               >
                 List of Users
-              </button>{" "}
+              </button>
               <button
                 onClick={() => setFocusedTab("companies")}
                 className={` sm:text-md lg:text-2xl min-w-max text-right ${
@@ -137,27 +160,32 @@ const Admin = () => {
             }`}
           >
             {" "}
-            <article className="flex flex-col gap-4 pb-8">
+            <article className="flex flex-col gap-4 py-8">
               {focusedTab === "users" &&
                 users.map((user) => {
-                  if (user.isAdmitted)
+                  if (user.isAdmitted || user.isBanned)
                     return (
-                      <AccessRequest
+                      <AdminCard
+                        key={user._id}
                         jwt={jwt}
                         user={user}
                         handleAdmitUser={handleAdmitUser}
+                        fetchUsers={fetchUsers}
+                        navigate={navigate}
                       />
                     );
                 })}
               {focusedTab === "companies" &&
-                companies.map((company) => {
+                companies?.map((company) => {
                   return (
                     <AdminCompany
+                      key={company._id}
                       jwt={jwt}
                       company={company}
                       setCompanies={setCompanies}
-                      setIsCompanyOpen={setIsAddCompanyOpen}
+                      setIsEditCompany={setIsEditCompany}
                       setCurrentCompany={setCurrentCompany}
+                      navigate={navigate}
                     />
                   );
                 })}

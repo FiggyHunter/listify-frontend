@@ -1,9 +1,17 @@
 import { AddReview } from "@/api/review";
+import { useButtonLoadingStore } from "@/stores/useButtonLoadingStore";
 import InputTheme from "@/themes/InputTheme";
 import { Rating, TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import LoaderButton from "../shared/LoaderButton";
 
-const ReviewPopup = ({ setIsWriteReviewOpen, companyId, userId, jwt }) => {
+const ReviewPopup = ({
+  setIsWriteReviewOpen,
+  companyId,
+  userId,
+  jwt,
+  setReviews,
+}) => {
   const [popupData, setPopupData] = useState({
     userId: userId,
     companyId: companyId,
@@ -11,24 +19,41 @@ const ReviewPopup = ({ setIsWriteReviewOpen, companyId, userId, jwt }) => {
     text: "",
   });
 
+  const [reviewErrors, setReviewErrors] = useState(null);
+
+  const { buttonLoading, setButtonLoading } = useButtonLoadingStore();
+  const isLoading = buttonLoading[`addReviewBtn`] || false;
+
+  useEffect(() => {
+    const escListener = (e) => {
+      if (e.key === "Escape") setIsWriteReviewOpen(false);
+    };
+
+    window.addEventListener("keydown", escListener);
+
+    return () => {
+      window.removeEventListener("keydown", escListener);
+    };
+  }, []);
+
   return (
     <div
       onClick={() => {
         setIsWriteReviewOpen(false);
       }}
-      className="top-0 grid place-content-center h-screen w-screen bg-slate-300 bg-opacity-80 z-30 fixed  "
+      className="top-0 grid place-content-center h-screen w-screen bg-black bg-opacity-50 z-30 fixed  "
     >
       <div
         onClick={(e) => e.stopPropagation()}
         className="min-h-96 min-w-96 bg-bkgContrast flex flex-col justify-between px-4 py-4 rounded-3xl gap-2"
       >
         <div className="flex cursor-default items-center justify-between w-full text-content   pt-4">
-          <h3 className="text-2xl font-bold">WRITE A REVIEW</h3>
+          <h3 className="text-xl font-bold">WRITE A REVIEW</h3>
           <span
             onClick={() => setIsWriteReviewOpen(false)}
             className="text-lg cursor-pointer self-center font-bold block"
           >
-            X
+            <button className="bg-content text-bkg"> X </button>
           </span>
         </div>
         <Rating
@@ -68,7 +93,9 @@ const ReviewPopup = ({ setIsWriteReviewOpen, companyId, userId, jwt }) => {
           required
           multiline
           value={popupData.text}
-          inputProps={{ style: { color: "var(--color-content)" } }} // Set the input text color directly
+          error={reviewErrors}
+          helperText={reviewErrors}
+          inputProps={{ style: { color: "var(--color-content)" } }}
           onChange={(e) =>
             setPopupData((prevData) => {
               return {
@@ -80,11 +107,23 @@ const ReviewPopup = ({ setIsWriteReviewOpen, companyId, userId, jwt }) => {
         />
 
         <button
-          onClick={() => {
-            AddReview(popupData, jwt);
-          }}
+          className="bg-content text-bkg"
+          onClick={
+            isLoading
+              ? () => {}
+              : () => {
+                  AddReview(
+                    popupData,
+                    jwt,
+                    setReviews,
+                    "addReviewBtn",
+                    setButtonLoading,
+                    setReviewErrors
+                  );
+                }
+          }
         >
-          PUBLISH{" "}
+          {isLoading ? <LoaderButton /> : "PUBLISH"}
         </button>
       </div>
     </div>

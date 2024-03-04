@@ -9,9 +9,7 @@ export const useJwtStore = create(
     }),
     {
       name: "jwtStore",
-      onRehydrateStorage: (state) => {
-        console.log("Rehydrated jwtStore:", state);
-      },
+      onRehydrateStorage: (state) => {},
     }
   )
 );

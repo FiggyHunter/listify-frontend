@@ -20,8 +20,6 @@ const useUserChangeState = () => {
 
   const [userDataErrors, setUserDataErrors] = useState({});
 
-  console.log(userDataErrors);
-
   const handleChange = (fieldName, value) => {
     if (
       fieldName === "oldPassword" ||
@@ -56,21 +54,9 @@ const useUserChangeState = () => {
         setJwt
       );
 
-      // await loginValidation(loginFormData, setLoginErrors);
-      // const token = await logInUser(loginFormData);
-      // await setJwt(token);
-      // navigate("/dashboard");
       setButtonLoading(buttonId, false);
     } catch (e) {
-      // MOZDA BUDE TREBALO KADA BUDEM CHECKIRAO DA LI JE DOBAR PASSWORD USERU
-      //if (e.message === "Validation failed") {
-      //   setButtonLoading(buttonId, false);
-      // setLoginErrors({
-      //     email: "Invalid creditentials",
-      //     password: "Invalid creditentials",
-      //   });
-      //   return;
-      // }
+      return;
     }
   };
   const handleUserPasswordUpdate = async (
@@ -96,22 +82,9 @@ const useUserChangeState = () => {
         userPasswordData,
         setJwt
       );
-      // await loginValidation(loginFormData, setLoginErrors);
-      // const token = await logInUser(loginFormData);
-      // await setJwt(token);
-      // navigate("/dashboard");
       setButtonLoading(buttonId, false);
     } catch (e) {
-      console.log(e);
-      // MOZDA BUDE TREBALO KADA BUDEM CHECKIRAO DA LI JE DOBAR PASSWORD USERU
-      //if (e.message === "Validation failed") {
-      //   setButtonLoading(buttonId, false);
-      // setLoginErrors({
-      //     email: "Invalid creditentials",
-      //     password: "Invalid creditentials",
-      //   });
-      //   return;
-      // }
+      return;
     }
   };
 

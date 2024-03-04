@@ -15,12 +15,11 @@ export const changePasswordValidation = async (
     });
     setButtonLoading(buttonId, false);
   } catch (errors) {
-    console.log(errors);
+
     setButtonLoading(buttonId, false);
     if (errors instanceof ValidationError) {
-      console.log(errors);
+
       errors.inner.forEach((error) => {
-        console.log(error.path);
 
         setUserDataErrors((prevErrors) => ({
           ...prevErrors,

@@ -8,9 +8,6 @@ const MobileCompanyFilters = ({ locations, setFilters }) => {
     category: "",
     locations: [],
   });
-
-  console.log(selectedFilters);
-
   useEffect(() => {
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -37,7 +34,6 @@ const MobileCompanyFilters = ({ locations, setFilters }) => {
         value={selectedFilters.category ? selectedFilters.category : ""}
         sx={InputTheme}
         onChange={(_, selectedOption) => {
-          console.log(selectedOption);
           setSelectedFilters((prevValue) => ({
             ...prevValue,
             category: selectedOption ? selectedOption : "",
