@@ -13,7 +13,11 @@ const CompanyCard: React.FC<Props> = ({ navigate, company }) => {
       <img
         alt={`logo for ${company.name}`}
         onClick={() => navigate(`/company/${company._id}`)}
-        src={company.logo || "/logo.svg"}
+        src={
+          company.logo == null || company.logo === "/neki_logo.webp"
+            ? "/logo.svg"
+            : company.logo
+        }
         className="sm:w-4/4 lg:w-3/4 rounded-xl h-24 lg:h-32 self-center bg-gray-300 cursor-pointer"
       ></img>
       <div className="flex flex-col items-center justify-between">
