@@ -1,4 +1,4 @@
-import imageValidation from "@/utilities/validators/imageValidation";
+import imageValidation from "@/utilities/validators/ImageValidation";
 import { useState } from "react";
 
 export default function FileUpload({ setCompanyImage }) {
