@@ -53,7 +53,7 @@ const AddCompanyPopup = ({
           </p>
           <button
             onClick={() => setIsAddCompanyOpen(false)}
-            className="text-bkg"
+            className="text-white"
             aria-label="Close popup"
           >
             X
